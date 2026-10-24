@@ -110,8 +110,8 @@ async function send() {
   input.value = "";
   addMessage("user", text);
 
-  const { wrap, bubble } = addMessage("assistant", "");
-  bubble.classList.add("streaming");
+  const { wrap, bubble } = addMessage("assistant", "思考中…");
+  bubble.classList.add("streaming", "placeholder");
   const status = document.createElement("div");
   status.className = "meta";
   status.textContent = "正在判断难度…";
@@ -153,6 +153,10 @@ async function send() {
             null
           );
         } else if (event.type === "delta") {
+          if (bubble.classList.contains("placeholder")) {
+            bubble.textContent = "";
+            bubble.classList.remove("placeholder");
+          }
           answer += event.text;
           bubble.textContent = answer;
           bubble.classList.remove("streaming");
@@ -160,6 +164,7 @@ async function send() {
         } else if (event.type === "reset") {
           answer = "";
           bubble.textContent = "";
+          bubble.classList.remove("placeholder");
           bubble.classList.add("streaming");
         } else if (event.type === "status") {
           status.textContent = event.text;
