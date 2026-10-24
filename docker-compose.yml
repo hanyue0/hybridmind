@@ -1,0 +1,26 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama-models:/root/.ollama
+    ports:
+      - "11434:11434"
+
+  app:
+    build: .
+    depends_on:
+      - ollama
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+      LOCAL_MODEL: ${LOCAL_MODEL:-qwen2.5:1.5b}
+      CLOUD_MODEL: ${CLOUD_MODEL:-deepseek-chat}
+      CLOUD_BASE_URL: ${CLOUD_BASE_URL:-https://api.deepseek.com/v1}
+      CLOUD_API_KEY: ${CLOUD_API_KEY:-}
+      THETA_LOCAL: ${THETA_LOCAL:-0.45}
+      TAU_CONFIDENCE: ${TAU_CONFIDENCE:-0.55}
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+volumes:
+  ollama-models:
