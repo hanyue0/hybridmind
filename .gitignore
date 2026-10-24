@@ -1,0 +1,28 @@
+# 环境与密钥
+.env
+*.env.local
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# 数据与产物（评测结果按需保留，避免仓库膨胀）
+data/results/*.json
+data/results/*.jsonl
+
+# 系统与编辑器
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# 视频与临时文件
+*.mp4
+*.mov
+*.wav
+*.m4a
+raw_footage/
