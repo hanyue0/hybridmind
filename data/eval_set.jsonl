@@ -1,0 +1,160 @@
+{"id": "q001", "question": "计算 87 + 8 的值为多少？", "answer": "95", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q002", "question": "计算 21 + 12 的值为多少？", "answer": "33", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q003", "question": "计算 95 + 3 的值为多少？", "answer": "98", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q004", "question": "计算 36 + 19 的值为多少？", "answer": "55", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q005", "question": "计算 19 + 5 的值为多少？", "answer": "24", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q006", "question": "计算 55 + 19 的值为多少？", "answer": "74", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q007", "question": "计算 95 + 19 的值为多少？", "answer": "114", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q008", "question": "计算 90 + 14 的值为多少？", "answer": "104", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q009", "question": "计算 63 + 19 的值为多少？", "answer": "82", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q010", "question": "计算 32 + 8 的值为多少？", "answer": "40", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q011", "question": "计算 72 + 16 的值为多少？", "answer": "88", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q012", "question": "计算 74 + 11 的值为多少？", "answer": "85", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q013", "question": "计算 44 + 14 的值为多少？", "answer": "58", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q014", "question": "计算 54 + 12 的值为多少？", "answer": "66", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q015", "question": "计算 21 + 4 的值为多少？", "answer": "25", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q016", "question": "计算 65 + 4 的值为多少？", "answer": "69", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q017", "question": "计算 30 + 12 的值为多少？", "answer": "42", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q018", "question": "计算 76 + 8 的值为多少？", "answer": "84", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q019", "question": "计算 29 + 11 的值为多少？", "answer": "40", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q020", "question": "计算 23 + 14 的值为多少？", "answer": "37", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q021", "question": "60 乘以 2 等于多少？", "answer": "120", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q022", "question": "69 乘以 7 等于多少？", "answer": "483", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q023", "question": "88 乘以 2 等于多少？", "answer": "176", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q024", "question": "34 乘以 8 等于多少？", "answer": "272", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q025", "question": "54 乘以 3 等于多少？", "answer": "162", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q026", "question": "93 乘以 9 等于多少？", "answer": "837", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q027", "question": "44 乘以 2 等于多少？", "answer": "88", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q028", "question": "93 乘以 4 等于多少？", "answer": "372", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q029", "question": "75 乘以 5 等于多少？", "answer": "375", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q030", "question": "31 乘以 2 等于多少？", "answer": "62", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q031", "question": "97 乘以 2 等于多少？", "answer": "194", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q032", "question": "82 乘以 3 等于多少？", "answer": "246", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q033", "question": "66 乘以 4 等于多少？", "answer": "264", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q034", "question": "51 乘以 2 等于多少？", "answer": "102", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q035", "question": "89 乘以 4 等于多少？", "answer": "356", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q036", "question": "63 乘以 8 等于多少？", "answer": "504", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q037", "question": "43 乘以 5 等于多少？", "answer": "215", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q038", "question": "68 乘以 4 等于多少？", "answer": "272", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q039", "question": "60 乘以 2 等于多少？", "answer": "120", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q040", "question": "99 乘以 4 等于多少？", "answer": "396", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q041", "question": "364 除以 13 的商是多少？", "answer": "28", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q042", "question": "234 除以 13 的商是多少？", "answer": "18", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q043", "question": "364 除以 13 的商是多少？", "answer": "28", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q044", "question": "189 除以 9 的商是多少？", "answer": "21", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q045", "question": "144 除以 12 的商是多少？", "answer": "12", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q046", "question": "203 除以 7 的商是多少？", "answer": "29", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q047", "question": "50 除以 5 的商是多少？", "answer": "10", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q048", "question": "392 除以 14 的商是多少？", "answer": "28", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q049", "question": "125 除以 5 的商是多少？", "answer": "25", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q050", "question": "231 除以 11 的商是多少？", "answer": "21", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q051", "question": "273 除以 13 的商是多少？", "answer": "21", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q052", "question": "243 除以 9 的商是多少？", "answer": "27", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q053", "question": "36 除以 4 的商是多少？", "answer": "9", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q054", "question": "209 除以 11 的商是多少？", "answer": "19", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q055", "question": "96 除以 6 的商是多少？", "answer": "16", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q056", "question": "160 除以 8 的商是多少？", "answer": "20", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q057", "question": "252 除以 14 的商是多少？", "answer": "18", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q058", "question": "72 除以 9 的商是多少？", "answer": "8", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q059", "question": "210 除以 14 的商是多少？", "answer": "15", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q060", "question": "112 除以 7 的商是多少？", "answer": "16", "aliases": [], "tier": 1, "type": "numeric"}
+{"id": "q061", "question": "先算 33 乘以 7，再加上 11，结果是多少？", "answer": "242", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q062", "question": "先算 44 乘以 7，再加上 12，结果是多少？", "answer": "320", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q063", "question": "先算 16 乘以 5，再加上 10，结果是多少？", "answer": "90", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q064", "question": "先算 58 乘以 2，再加上 5，结果是多少？", "answer": "121", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q065", "question": "先算 22 乘以 9，再加上 15，结果是多少？", "answer": "213", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q066", "question": "先算 10 乘以 2，再加上 19，结果是多少？", "answer": "39", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q067", "question": "先算 38 乘以 3，再加上 10，结果是多少？", "answer": "124", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q068", "question": "先算 38 乘以 2，再加上 12，结果是多少？", "answer": "88", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q069", "question": "先算 36 乘以 3，再加上 14，结果是多少？", "answer": "122", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q070", "question": "先算 26 乘以 2，再加上 6，结果是多少？", "answer": "58", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q071", "question": "先算 55 乘以 5，再加上 17，结果是多少？", "answer": "292", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q072", "question": "先算 16 乘以 4，再加上 4，结果是多少？", "answer": "68", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q073", "question": "先算 45 乘以 2，再加上 4，结果是多少？", "answer": "94", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q074", "question": "先算 36 乘以 9，再加上 15，结果是多少？", "answer": "339", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q075", "question": "先算 53 乘以 9，再加上 20，结果是多少？", "answer": "497", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q076", "question": "先算 33 乘以 8，再加上 14，结果是多少？", "answer": "278", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q077", "question": "先算 43 乘以 8，再加上 10，结果是多少？", "answer": "354", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q078", "question": "先算 32 乘以 7，再加上 10，结果是多少？", "answer": "234", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q079", "question": "先算 30 乘以 3，再加上 16，结果是多少？", "answer": "106", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q080", "question": "先算 33 乘以 9，再加上 7，结果是多少？", "answer": "304", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q081", "question": "一件商品单价 55 元，买 10 件，商家给 5% 的折扣（按总价打折），实际需要支付多少元？", "answer": "522.5", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q082", "question": "一件商品单价 68 元，买 7 件，商家给 5% 的折扣（按总价打折），实际需要支付多少元？", "answer": "452.2", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q083", "question": "一件商品单价 86 元，买 9 件，商家给 5% 的折扣（按总价打折），实际需要支付多少元？", "answer": "735.3", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q084", "question": "一件商品单价 31 元，买 3 件，商家给 5% 的折扣（按总价打折），实际需要支付多少元？", "answer": "88.35", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q085", "question": "一件商品单价 35 元，买 4 件，商家给 5% 的折扣（按总价打折），实际需要支付多少元？", "answer": "133.0", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q086", "question": "一件商品单价 61 元，买 6 件，商家给 15% 的折扣（按总价打折），实际需要支付多少元？", "answer": "311.1", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q087", "question": "一件商品单价 53 元，买 6 件，商家给 10% 的折扣（按总价打折），实际需要支付多少元？", "answer": "286.2", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q088", "question": "一件商品单价 21 元，买 6 件，商家给 15% 的折扣（按总价打折），实际需要支付多少元？", "answer": "107.1", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q089", "question": "一件商品单价 75 元，买 7 件，商家给 10% 的折扣（按总价打折），实际需要支付多少元？", "answer": "472.5", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q090", "question": "一件商品单价 49 元，买 8 件，商家给 5% 的折扣（按总价打折），实际需要支付多少元？", "answer": "372.4", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q091", "question": "一个长方形的长是 46 厘米，宽是 28 厘米，它的周长是多少厘米？", "answer": "148", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q092", "question": "一个长方形的长是 128 厘米，宽是 39 厘米，它的周长是多少厘米？", "answer": "334", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q093", "question": "一个长方形的长是 52 厘米，宽是 14 厘米，它的周长是多少厘米？", "answer": "132", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q094", "question": "一个长方形的长是 111 厘米，宽是 34 厘米，它的周长是多少厘米？", "answer": "290", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q095", "question": "一个长方形的长是 49 厘米，宽是 38 厘米，它的周长是多少厘米？", "answer": "174", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q096", "question": "一个长方形的长是 59 厘米，宽是 12 厘米，它的周长是多少厘米？", "answer": "142", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q097", "question": "一个长方形的长是 90 厘米，宽是 5 厘米，它的周长是多少厘米？", "answer": "190", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q098", "question": "一个长方形的长是 189 厘米，宽是 18 厘米，它的周长是多少厘米？", "answer": "414", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q099", "question": "一个长方形的长是 62 厘米，宽是 7 厘米，它的周长是多少厘米？", "answer": "138", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q100", "question": "一个长方形的长是 119 厘米，宽是 18 厘米，它的周长是多少厘米？", "answer": "274", "aliases": [], "tier": 2, "type": "numeric"}
+{"id": "q101", "question": "某商品原价 629 元，先涨价 10%，之后再降价 15%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "588.12", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q102", "question": "某商品原价 749 元，先涨价 25%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "749.0", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q103", "question": "某商品原价 679 元，先涨价 25%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "679.0", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q104", "question": "某商品原价 416 元，先涨价 25%，之后再降价 15%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "442.0", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q105", "question": "某商品原价 196 元，先涨价 10%，之后再降价 10%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "194.04", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q106", "question": "某商品原价 305 元，先涨价 20%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "292.8", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q107", "question": "某商品原价 424 元，先涨价 20%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "407.04", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q108", "question": "某商品原价 745 元，先涨价 10%，之后再降价 10%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "737.55", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q109", "question": "某商品原价 364 元，先涨价 10%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "320.32", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q110", "question": "某商品原价 611 元，先涨价 20%，之后再降价 15%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "623.22", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q111", "question": "某商品原价 172 元，先涨价 25%，之后再降价 10%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "193.5", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q112", "question": "某商品原价 642 元，先涨价 25%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "642.0", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q113", "question": "某商品原价 259 元，先涨价 10%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "227.92", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q114", "question": "某商品原价 278 元，先涨价 25%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "278.0", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q115", "question": "某商品原价 675 元，先涨价 25%，之后再降价 20%（按涨价后的价格计算），最终售价是多少元？保留两位小数。", "answer": "675.0", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q116", "question": "一辆汽车以每小时 56 公里的速度行驶 4 小时，之后又行驶了 39 公里，总共行驶多少公里？", "answer": "263", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q117", "question": "一辆汽车以每小时 61 公里的速度行驶 4 小时，之后又行驶了 35 公里，总共行驶多少公里？", "answer": "279", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q118", "question": "一辆汽车以每小时 55 公里的速度行驶 3 小时，之后又行驶了 35 公里，总共行驶多少公里？", "answer": "200", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q119", "question": "一辆汽车以每小时 52 公里的速度行驶 4 小时，之后又行驶了 18 公里，总共行驶多少公里？", "answer": "226", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q120", "question": "一辆汽车以每小时 75 公里的速度行驶 5 小时，之后又行驶了 19 公里，总共行驶多少公里？", "answer": "394", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q121", "question": "一辆汽车以每小时 43 公里的速度行驶 3 小时，之后又行驶了 13 公里，总共行驶多少公里？", "answer": "142", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q122", "question": "一辆汽车以每小时 58 公里的速度行驶 2 小时，之后又行驶了 36 公里，总共行驶多少公里？", "answer": "152", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q123", "question": "一辆汽车以每小时 56 公里的速度行驶 3 小时，之后又行驶了 32 公里，总共行驶多少公里？", "answer": "200", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q124", "question": "一辆汽车以每小时 72 公里的速度行驶 4 小时，之后又行驶了 34 公里，总共行驶多少公里？", "answer": "322", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q125", "question": "一辆汽车以每小时 73 公里的速度行驶 3 小时，之后又行驶了 33 公里，总共行驶多少公里？", "answer": "252", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q126", "question": "一辆汽车以每小时 49 公里的速度行驶 4 小时，之后又行驶了 37 公里，总共行驶多少公里？", "answer": "233", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q127", "question": "一辆汽车以每小时 61 公里的速度行驶 4 小时，之后又行驶了 13 公里，总共行驶多少公里？", "answer": "257", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q128", "question": "一辆汽车以每小时 72 公里的速度行驶 4 小时，之后又行驶了 18 公里，总共行驶多少公里？", "answer": "306", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q129", "question": "一辆汽车以每小时 88 公里的速度行驶 4 小时，之后又行驶了 29 公里，总共行驶多少公里？", "answer": "381", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q130", "question": "一辆汽车以每小时 68 公里的速度行驶 5 小时，之后又行驶了 38 公里，总共行驶多少公里？", "answer": "378", "aliases": [], "tier": 3, "type": "numeric"}
+{"id": "q131", "question": "一项工程由 8 名工人做，需要 7 天完成。如果增加 6 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "4.0", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q132", "question": "一项工程由 4 名工人做，需要 10 天完成。如果增加 6 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "4.0", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q133", "question": "一项工程由 8 名工人做，需要 15 天完成。如果增加 5 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "9.23", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q134", "question": "一项工程由 5 名工人做，需要 8 天完成。如果增加 3 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "5.0", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q135", "question": "一项工程由 9 名工人做，需要 8 天完成。如果增加 5 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "5.14", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q136", "question": "一项工程由 6 名工人做，需要 13 天完成。如果增加 5 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "7.09", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q137", "question": "一项工程由 9 名工人做，需要 12 天完成。如果增加 6 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "7.2", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q138", "question": "一项工程由 9 名工人做，需要 8 天完成。如果增加 4 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "5.54", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q139", "question": "一项工程由 9 名工人做，需要 12 天完成。如果增加 5 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "7.71", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q140", "question": "一项工程由 8 名工人做，需要 9 天完成。如果增加 4 名工人，且所有人效率相同，需要多少天完成？保留两位小数。", "answer": "6.0", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q141", "question": "有一个两位数，十位数字是 9，个位数字是 7。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "110", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q142", "question": "有一个两位数，十位数字是 6，个位数字是 3。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "27", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q143", "question": "有一个两位数，十位数字是 4，个位数字是 4。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "24", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q144", "question": "有一个两位数，十位数字是 8，个位数字是 5。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "67", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q145", "question": "有一个两位数，十位数字是 3，个位数字是 4。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "17", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q146", "question": "有一个两位数，十位数字是 3，个位数字是 7。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "32", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q147", "question": "有一个两位数，十位数字是 5，个位数字是 7。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "58", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q148", "question": "有一个两位数，十位数字是 5，个位数字是 8。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "67", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q149", "question": "有一个两位数，十位数字是 8，个位数字是 9。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "127", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q150", "question": "有一个两位数，十位数字是 5，个位数字是 6。先把这个数乘以 2，再减去它的各位数字之和，最终结果是多少？", "answer": "49", "aliases": [], "tier": 4, "type": "numeric"}
+{"id": "q151", "question": "中国的首都是哪座城市？", "answer": "北京", "aliases": ["北京"], "tier": 2, "type": "short"}
+{"id": "q152", "question": "世界上最高的山峰叫什么名字？", "answer": "珠穆朗玛峰", "aliases": ["珠峰", "珠穆朗玛"], "tier": 2, "type": "short"}
+{"id": "q153", "question": "水的标准沸点（一个大气压下）是多少摄氏度？", "answer": "100", "aliases": ["100"], "tier": 2, "type": "short"}
+{"id": "q154", "question": "一年中哪个月份的天数最少（不考虑闰年）？", "answer": "二月", "aliases": ["2月", "二月"], "tier": 2, "type": "short"}
+{"id": "q155", "question": "太阳系中距离太阳最近的行星是哪一颗？", "answer": "水星", "aliases": ["水星"], "tier": 2, "type": "short"}
+{"id": "q156", "question": "光在真空中的传播速度约为每秒多少公里？", "answer": "30万", "aliases": ["300000", "30万"], "tier": 2, "type": "short"}
+{"id": "q157", "question": "中国农历中一年通常有多少个月？", "answer": "12", "aliases": ["十二"], "tier": 2, "type": "short"}
+{"id": "q158", "question": "人体最大的器官是什么？", "answer": "皮肤", "aliases": ["皮肤"], "tier": 2, "type": "short"}
+{"id": "q159", "question": "圆周率 π 保留两位小数是多少？", "answer": "3.14", "aliases": ["3.14"], "tier": 2, "type": "short"}
+{"id": "q160", "question": "中国的陆地面积约为多少万平方公里？", "answer": "960", "aliases": ["960", "九百六十"], "tier": 2, "type": "short"}
