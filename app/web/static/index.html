@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HybridMind · 端云协同模型路由</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◈</span>
+      <div>
+        <h1>HybridMind</h1>
+        <p class="subtitle">端云协同的自适应模型路由</p>
+      </div>
+    </div>
+    <div class="badges" id="badges">
+      <span class="badge" data-role="local">本地 · —</span>
+      <span class="badge" data-role="cloud">云端 · —</span>
+      <span class="badge" data-role="theta">阈值 —</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="panel chat-panel">
+      <div class="panel-head">
+        <h2>对话</h2>
+        <div class="modes" role="group" aria-label="路由模式">
+          <button class="mode active" data-mode="auto">自动路由</button>
+          <button class="mode" data-mode="local">强制本地</button>
+          <button class="mode" data-mode="cloud">强制云端</button>
+        </div>
+      </div>
+
+      <div class="thread" id="thread">
+        <div class="empty" id="empty">
+          输入一个问题开始。试试对比：
+          <code>1+1 等于几</code> 与 <code>请证明根号2是无理数，并说明反证法的步骤</code>
+        </div>
+      </div>
+
+      <form class="composer" id="composer">
+        <textarea id="input" rows="2" placeholder="问点什么…（Enter 发送，Shift+Enter 换行）"></textarea>
+        <button type="submit" id="send">发送</button>
+      </form>
+    </section>
+
+    <aside class="panel trace-panel">
+      <div class="panel-head">
+        <h2>路由决策</h2>
+        <span class="hint" id="trace-hint">等待请求</span>
+      </div>
+
+      <div class="route-badge" id="route-badge" data-route="none">—</div>
+
+      <div class="meter">
+        <div class="meter-label">
+          <span>难度分</span>
+          <span id="difficulty-value">—</span>
+        </div>
+        <div class="meter-track">
+          <div class="meter-fill" id="difficulty-fill"></div>
+          <div class="meter-threshold" id="threshold-mark"></div>
+        </div>
+      </div>
+
+      <ul class="reasons" id="reasons"></ul>
+
+      <div class="metrics" id="metrics"></div>
+    </aside>
+  </main>
+
+  <footer class="statusbar">
+    <span>请求 <b id="stat-requests">0</b></span>
+    <span>本地占比 <b id="stat-local">0%</b></span>
+    <span>累计成本 <b id="stat-cost">¥0.000000</b></span>
+    <span>升级次数 <b id="stat-escalation">0</b></span>
+    <span class="spacer"></span>
+    <span id="conn">连接中…</span>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
