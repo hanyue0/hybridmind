@@ -69,6 +69,14 @@ class MetricsTest(unittest.TestCase):
     def test_percentile(self) -> None:
         self.assertAlmostEqual(metrics.percentile([1, 2, 3, 4], 0.5), 2.5)
 
+    def test_remainder_clause_is_stripped(self) -> None:
+        """问商答「商 18，余数 4」应判对：余数是题面外的附带量。"""
+        self.assertTrue(metrics.is_correct("商是 18，余数是 4。", "18"))
+
+    def test_wrong_quotient_still_fails(self) -> None:
+        """剥离余数不能掩盖商本身算错。"""
+        self.assertFalse(metrics.is_correct("商是 20，余数是 7。", "21"))
+
 
 if __name__ == "__main__":
     unittest.main()

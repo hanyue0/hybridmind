@@ -18,11 +18,23 @@ from typing import Iterable, List, Optional
 _PUNCT = re.compile(r"[\s，,。.！!？?；;：:、\"'“”‘’（）()\[\]【】·—_/]+")
 _NUMBER = re.compile(r"-?\d+(?:\.\d+)?")
 _PURE_NUMBER = re.compile(r"-?\d+(?:\.\d+)?")
+# 「商 18，余数 4」这类回答里，余数是题面之外的附带量，不该被当成最终答案
+_REMAINDER = re.compile(r"[，,；;]?\s*(?:余数|余|剩下)[^0-9]{0,6}\d+.*$")
 
 
 def normalize(text: str) -> str:
     text = unicodedata.normalize("NFKC", text or "").lower()
     return _PUNCT.sub("", text)
+
+
+def strip_remainder(text: str) -> str:
+    """去掉"余数/余…"从句。
+
+    动机：问「商是多少」而模型答「商 18，余数 4」时，商是对的；
+    若直接取最后一个数字会把 4 当成答案，造成假阴性。
+    注意：只剥离从句，不改变商本身的判定——商答错时仍会判错。
+    """
+    return _REMAINDER.sub("", text or "")
 
 
 def numbers_in(text: str) -> List[float]:
@@ -49,7 +61,7 @@ def is_correct(
 ) -> bool:
     """数值题比最后一个数值；短答题做别名包含匹配（任一别名命中即算对）。"""
     if is_numeric_gold(gold):
-        predicted = last_number(prediction)
+        predicted = last_number(strip_remainder(prediction))
         if predicted is None:
             return False
         return abs(predicted - float(gold.strip())) <= tol
