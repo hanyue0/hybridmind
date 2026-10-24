@@ -6,10 +6,11 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 from fastapi import FastAPI, HTTPException
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
 from .. import __version__
@@ -70,3 +71,25 @@ def chat(request: ChatRequest) -> ChatResponse:
         return pipeline.answer(messages, mode=request.mode)
     except ProviderError as exc:
         raise HTTPException(status_code=502, detail=str(exc)) from exc
+
+
+@app.post("/api/chat/stream")
+def chat_stream(request: ChatRequest) -> StreamingResponse:
+    messages = [message.model_dump() for message in request.messages]
+
+    def event_source():
+        try:
+            for event in pipeline.answer_stream(messages, mode=request.mode):
+                yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
+        except ProviderError as exc:
+            payload = {"type": "error", "detail": str(exc)}
+            yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+        except Exception as exc:  # 兜底：任何未预期异常都要让前端知道，而不是静默断流
+            payload = {"type": "error", "detail": f"服务端异常：{exc}"}
+            yield f"data: {json.dumps(payload, ensure_ascii=False)}\n\n"
+
+    return StreamingResponse(
+        event_source(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )

@@ -114,6 +114,17 @@ body {
 }
 .msg.user .bubble { background: #1c3a63; border: 1px solid #26507f; }
 .msg.assistant .bubble { background: #131b25; border: 1px solid var(--border); }
+
+/* 流式过程中的光标：空气泡会显得像渲染失败，给一个明确的"正在写"信号 */
+.bubble.streaming::after {
+  content: "▍";
+  margin-left: 2px;
+  color: var(--cloud);
+  animation: blink 1s steps(2, start) infinite;
+}
+@keyframes blink { to { visibility: hidden; } }
+
+.msg .meta { margin-top: 2px; }
 .meta { font-size: 11px; color: var(--muted); display: flex; gap: 10px; }
 
 .route-badge {
