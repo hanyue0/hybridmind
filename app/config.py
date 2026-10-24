@@ -58,7 +58,8 @@ class Settings:
     budget_cny: float = float(os.getenv("BUDGET_CNY", "20.0"))
 
     # 生成参数
-    max_tokens: int = int(os.getenv("MAX_TOKENS", "512"))
+    # 默认 256：本地 CPU 推理约 4 tok/s，上限过高只会让单次请求拖到一分钟
+    max_tokens: int = int(os.getenv("MAX_TOKENS", "256"))
     temperature: float = float(os.getenv("TEMPERATURE", "0.2"))
     timeout_s: float = float(os.getenv("TIMEOUT_S", "60"))
 

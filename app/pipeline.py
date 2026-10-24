@@ -2,12 +2,17 @@
 
 这一层刻意保持薄——它只做决策与记账，不碰具体推理细节，
 这样换模型、加后端都不需要动编排逻辑。
+
+提供两个入口：
+- `answer()`：一次性返回，评测脚本走这条，便于统计与复现；
+- `answer_stream()`：逐 token 产出事件，演示界面走这条，
+  因为本地 CPU 推理只有个位数 tok/s，一次性返回会让界面冻住十几秒。
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import List, Optional, Sequence
+from typing import Iterator, List, Optional, Sequence
 
 from .config import Settings
 from .providers.base import Generation, Provider, ProviderError
@@ -16,8 +21,9 @@ from .router.policy import decide
 from .schemas import ChatResponse, RouteTrace, Usage
 
 SYSTEM_PROMPT = (
-    "你是一个简洁、准确的中文助手。"
-    "回答尽量精炼：先给结论，再给必要的步骤或依据，不要重复题干。"
+    "你是简洁的中文助手。默认不超过三句话。"
+    "数学题只给最终数值和一行算式，不复述题干、不解释规则。"
+    "被明确要求论证时才展开步骤。"
 )
 
 
@@ -88,32 +94,32 @@ class HybridPipeline:
 
     def _ask_local(self, messages: List[dict]) -> Generation:
         return self.local.generate(
-            messages,
-            max_tokens=self.settings.max_tokens,
-            temperature=self.settings.temperature,
+            messages, max_tokens=self.settings.max_tokens, temperature=self.settings.temperature
         )
 
     def _ask_cloud(self, messages: List[dict]) -> Generation:
         return self.cloud.generate(
-            messages,
-            max_tokens=self.settings.max_tokens,
-            temperature=self.settings.temperature,
+            messages, max_tokens=self.settings.max_tokens, temperature=self.settings.temperature
         )
 
-    # ---------- 主流程 ----------
-
-    def answer(self, messages: Sequence[dict], mode: str = "auto") -> ChatResponse:
+    def _prepare(self, messages: Sequence[dict], mode: str):
+        """决策与降级判断，两个入口共用。"""
         chat = self._with_system(messages)
         question = chat[-1].get("content", "")
         decision = decide(question, self.settings.theta_local, force=mode if mode != "auto" else None)
         reasons = list(decision.reasons)
         route = decision.route
-        escalated = False
-        confidence: Optional[float] = None
-
         if route == "cloud" and not self.settings.cloud_ready:
             route = "local"
             reasons.append("云端密钥未配置 → 降级本地推理")
+        return chat, decision, reasons, route
+
+    # ---------- 一次性返回（评测） ----------
+
+    def answer(self, messages: Sequence[dict], mode: str = "auto") -> ChatResponse:
+        chat, decision, reasons, route = self._prepare(messages, mode)
+        escalated = False
+        confidence: Optional[float] = None
 
         try:
             generation = self._ask_cloud(chat) if route == "cloud" else self._ask_local(chat)
@@ -125,7 +131,6 @@ class HybridPipeline:
             route = fallback
             generation = self._ask_cloud(chat) if route == "cloud" else self._ask_local(chat)
 
-        # 置信度兜底：只在本地作答且开启开关时触发
         if (
             route == "local"
             and self.settings.enable_escalation
@@ -134,7 +139,9 @@ class HybridPipeline:
         ):
             confidence = conf_mod.estimate(self.local, chat, generation.text)
             if confidence is not None:
-                reasons.append(f"本地自评置信度 {confidence:.2f} / 阈值 {self.settings.tau_confidence:.2f}")
+                reasons.append(
+                    f"本地自评置信度 {confidence:.2f} / 阈值 {self.settings.tau_confidence:.2f}"
+                )
                 if confidence < self.settings.tau_confidence:
                     try:
                         generation = self._ask_cloud(chat)
@@ -145,7 +152,6 @@ class HybridPipeline:
                         reasons.append(f"升级失败（{exc}），保留本地结果")
 
         self.ledger.record(route, generation, escalated)
-
         return ChatResponse(
             answer=generation.text.strip(),
             model=generation.model,
@@ -164,3 +170,113 @@ class HybridPipeline:
                 cost_cny=round(generation.cost_cny, 6),
             ),
         )
+
+    # ---------- 流式（演示） ----------
+
+    def answer_stream(self, messages: Sequence[dict], mode: str = "auto") -> Iterator[dict]:
+        """产出事件流。前端按 type 分别处理：trace / delta / escalate / done / error。"""
+        chat, decision, reasons, route = self._prepare(messages, mode)
+
+        yield {
+            "type": "trace",
+            "route": route,
+            "difficulty": decision.difficulty,
+            "threshold": decision.threshold,
+            "reasons": reasons,
+        }
+
+        start = 0.0
+        text_parts: List[str] = []
+        generation: Optional[Generation] = None
+        escalated = False
+        confidence: Optional[float] = None
+
+        if route == "local":
+            try:
+                for event in self.local.stream(  # type: ignore[attr-defined]
+                    chat,
+                    max_tokens=self.settings.max_tokens,
+                    temperature=self.settings.temperature,
+                ):
+                    if event["type"] == "delta":
+                        text_parts.append(event["text"])
+                        yield event
+                    elif event["type"] == "done":
+                        generation = Generation(
+                            text="".join(text_parts),
+                            model=self.settings.local_model,
+                            prompt_tokens=event["prompt_tokens"],
+                            completion_tokens=event["completion_tokens"],
+                            latency_ms=event["latency_ms"],
+                            cost_cny=0.0,
+                        )
+                        start = generation.latency_ms
+            except ProviderError as exc:
+                reasons.append(f"本地流式失败（{exc}），降级云端")
+                yield {"type": "reasons", "reasons": reasons}
+                route = "cloud"
+
+        if route == "local" and generation is not None:
+            if self.settings.enable_escalation and self.settings.cloud_ready and mode == "auto":
+                yield {"type": "status", "text": "本地作答完成，正在自评置信度…"}
+                confidence = conf_mod.estimate(self.local, chat, generation.text, max_tokens=12)
+                if confidence is not None:
+                    reasons.append(
+                        f"本地自评置信度 {confidence:.2f} / 阈值 {self.settings.tau_confidence:.2f}"
+                    )
+                if confidence is not None and confidence < self.settings.tau_confidence:
+                    yield {
+                        "type": "escalate",
+                        "text": f"置信度 {confidence:.2f} 低于阈值 {self.settings.tau_confidence:.2f}，升级云端重答",
+                    }
+                    try:
+                        cloud_gen = self._ask_cloud(chat)
+                        text_parts = [cloud_gen.text]
+                        yield {"type": "reset"}
+                        yield {"type": "delta", "text": cloud_gen.text}
+                        generation = cloud_gen
+                        route = "cloud"
+                        escalated = True
+                        reasons.append("置信度不足 → 已升级云端重答")
+                    except ProviderError as exc:
+                        reasons.append(f"升级失败（{exc}），保留本地结果")
+
+        if route == "cloud" and (generation is None or escalated):
+            if escalated:
+                pass  # 上面已生成
+            else:
+                try:
+                    cloud_gen = self._ask_cloud(chat)
+                except ProviderError as exc:
+                    yield {"type": "error", "detail": str(exc)}
+                    return
+                text_parts = [cloud_gen.text]
+                yield {"type": "delta", "text": cloud_gen.text}
+                generation = cloud_gen
+
+        if generation is None:
+            yield {"type": "error", "detail": "推理未产出结果"}
+            return
+
+        generation.text = "".join(text_parts) if text_parts else generation.text
+        self.ledger.record(route, generation, escalated)
+
+        yield {
+            "type": "done",
+            "answer": generation.text.strip(),
+            "model": generation.model,
+            "trace": {
+                "route": route,
+                "difficulty": decision.difficulty,
+                "threshold": decision.threshold,
+                "reasons": reasons,
+                "escalated": escalated,
+                "confidence": confidence,
+                "latency_ms": round(generation.latency_ms, 1),
+            },
+            "usage": {
+                "prompt_tokens": generation.prompt_tokens,
+                "completion_tokens": generation.completion_tokens,
+                "cost_cny": round(generation.cost_cny, 6),
+            },
+        }
