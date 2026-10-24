@@ -26,3 +26,6 @@ Thumbs.db
 *.wav
 *.m4a
 raw_footage/
+
+# 临时脚本与日志
+scratch/
