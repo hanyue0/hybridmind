@@ -16,11 +16,11 @@
   <div class="meta">
     <div><b>赛道</b>AI 大模型创新应用挑战赛（技术应用赛 · 个人赛）</div>
     <div><b>组别</b>B 组（普通本科）</div>
-    <div><b>参赛者</b>＿＿＿＿＿＿＿＿</div>
-    <div><b>所在院校</b>＿＿＿＿＿＿＿＿</div>
+    <div><b>参赛者</b>张云迪</div>
+    <div><b>所在院校</b>商洛学院</div>
     <div><b>提交日期</b>2026 年 10 月</div>
   </div>
-  <div class="foot">代码仓库：https://github.com/hanyue0/AMC--</div>
+  <div class="foot">代码仓库：https://github.com/hanyue0/hybridmind</div>
 </section>
 
 <!-- ================= 摘要 ================= -->
@@ -42,23 +42,49 @@
 <section>
 <h1>目 录</h1>
 <div class="toc">
-  <div class="l1">1　问题与动机</div>
-  <div class="l2">1.1 端侧推理为何再次成为焦点　1.2 一个被误判的前提　1.3 本文要回答的三个问题　1.4 主要贡献</div>
-  <div class="l1">2　相关工作</div>
-  <div class="l2">2.1 模型级联与预算感知推理　2.2 大模型路由　2.3 端侧小模型　2.4 与本文的差异</div>
-  <div class="l1">3　系统设计</div>
-  <div class="l2">3.1 总体架构　3.2 推理后端抽象　3.3 编排与降级　3.4 可观测性与成本账本　3.5 交互与可视化</div>
-  <div class="l1">4　路由方法</div>
-  <div class="l2">4.1 问题形式化　4.2 规则基线　4.3 学习型路由　4.4 置信度兜底与触发条件</div>
-  <div class="l1">5　实验设置</div>
-  <div class="l2">5.1 评测集构造　5.2 判分口径　5.3 对照与指标　5.4 硬件与超参</div>
-  <div class="l1">6　结果与分析</div>
-  <div class="l2">6.1 本机推理能力　6.2 全本地与全云端基线　6.3 路由质量　6.4 分布外检验　6.5 失败分析</div>
-  <div class="l1">7　讨论</div>
-  <div class="l2">7.1 为什么"省钱"不是好理由　7.2 阈值的业务含义　7.3 局限性　7.4 改进方向</div>
-  <div class="l1">8　工程实现与复现</div>
-  <div class="l2">8.1 代码结构　8.2 部署　8.3 复现步骤　8.4 开发过程留痕</div>
-  <div class="l1">参考文献</div>
+<div class="toc-row toc-l1"><span class="toc-title">1　问题与动机</span><span class="toc-dots"></span><span class="toc-page">5</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">1.1　端侧推理为何再次成为焦点</span><span class="toc-dots"></span><span class="toc-page">5</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">1.2　一个被误判的前提</span><span class="toc-dots"></span><span class="toc-page">5</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">1.3　本文要回答的三个问题</span><span class="toc-dots"></span><span class="toc-page">5</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">1.4　主要贡献</span><span class="toc-dots"></span><span class="toc-page">6</span></div>
+<div class="toc-row toc-l1"><span class="toc-title">2　相关工作</span><span class="toc-dots"></span><span class="toc-page">7</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">2.1　模型级联与预算感知推理</span><span class="toc-dots"></span><span class="toc-page">7</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">2.2　大模型路由</span><span class="toc-dots"></span><span class="toc-page">7</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">2.3　端侧小模型</span><span class="toc-dots"></span><span class="toc-page">7</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">2.4　与本文的差异</span><span class="toc-dots"></span><span class="toc-page">8</span></div>
+<div class="toc-row toc-l1"><span class="toc-title">3　系统设计</span><span class="toc-dots"></span><span class="toc-page">9</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">3.1　总体架构</span><span class="toc-dots"></span><span class="toc-page">9</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">3.2　推理后端抽象</span><span class="toc-dots"></span><span class="toc-page">9</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">3.3　编排与降级</span><span class="toc-dots"></span><span class="toc-page">9</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">3.4　可观测性与成本账本</span><span class="toc-dots"></span><span class="toc-page">10</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">3.5　交互与可视化</span><span class="toc-dots"></span><span class="toc-page">10</span></div>
+<div class="toc-row toc-l1"><span class="toc-title">4　路由方法</span><span class="toc-dots"></span><span class="toc-page">11</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">4.1　问题形式化</span><span class="toc-dots"></span><span class="toc-page">11</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">4.2　规则基线</span><span class="toc-dots"></span><span class="toc-page">11</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">4.3　学习型路由</span><span class="toc-dots"></span><span class="toc-page">12</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">4.4　置信度兜底与触发条件</span><span class="toc-dots"></span><span class="toc-page">12</span></div>
+<div class="toc-row toc-l1"><span class="toc-title">5　实验设置</span><span class="toc-dots"></span><span class="toc-page">14</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">5.1　评测集构造</span><span class="toc-dots"></span><span class="toc-page">14</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">5.2　判分口径</span><span class="toc-dots"></span><span class="toc-page">14</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">5.3　对照与指标</span><span class="toc-dots"></span><span class="toc-page">14</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">5.4　硬件与超参</span><span class="toc-dots"></span><span class="toc-page">15</span></div>
+<div class="toc-row toc-l1"><span class="toc-title">6　结果与分析</span><span class="toc-dots"></span><span class="toc-page">16</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">6.1　本机推理能力</span><span class="toc-dots"></span><span class="toc-page">16</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">6.2　全本地与全云端基线</span><span class="toc-dots"></span><span class="toc-page">16</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">6.3　路由质量</span><span class="toc-dots"></span><span class="toc-page">17</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">6.4　分布外检验</span><span class="toc-dots"></span><span class="toc-page">18</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">6.5　失败分析</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l1"><span class="toc-title">7　讨论</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">7.1　为什么"省钱"不是好理由</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">7.2　阈值的业务含义</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">7.3　局限性</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">7.4　改进方向</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l1"><span class="toc-title">8　工程实现与复现</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">8.1　代码结构</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">8.2　部署</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">8.3　复现步骤</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l2"><span class="toc-title">8.4　开发过程留痕</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+<div class="toc-row toc-l1"><span class="toc-title">参考文献</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
 </div>
 </section>
 
@@ -68,7 +94,7 @@
 
 <h2>1.1 端侧推理为何再次成为焦点</h2>
 
-<p class="lead">2025 年以来，大模型的竞争重心从「参数规模」转向「单位成本下的可用性」。一方面，Qwen2.5、Phi、Gemma 等开源小模型在 0.5B–3B 量级上已能稳定完成指令跟随、抽取与简单推理；另一方面，消费级设备的算力与内存普遍停留在 8–16 GB，无法承载 7B 以上的模型。于是出现了一个现实的工程问题：<b>当一个应用既要覆盖简单请求、又要处理复杂请求时，应该把哪些请求放在本地？</b></p>
+<p class="lead">2025 年以来，大模型的竞争重心从「参数规模」转向「单位成本下的可用性」。一方面，Qwen2.5、Phi、Gemma 等开源小模型在 0.5B–3B 量级上已能稳定完成指令跟随、抽取与简单推理；另一方面，消费级设备的算力与内存普遍停留在 8–16 GB，无法承载 7B 以上的模型。边缘计算方向的系统性综述指出，端侧部署的核心矛盾在于「在严格的内存与算力预算下保持多步推理能力」，而弹性卸载与云端协同正是缓解这一矛盾的主要手段<sup>[1]</sup>。于是出现了一个现实的工程问题：<b>当一个应用既要覆盖简单请求、又要处理复杂请求时，应该把哪些请求放在本地？</b></p>
 
 <p class="lead">这不是一个纯学术问题。对一个面向个人用户的应用，云端调用意味着三件事同时发生：账单随调用量线性增长、响应时间多一次网络往返、用户数据离开设备。而对一个面向企业内网的应用，第三点往往是硬约束——数据不出内网，本地模型就是唯一选项，哪怕它更笨。路由层因此成为端云协同的枢纽：它决定了成本、隐私与质量三者的实际分配比例。</p>
 
@@ -111,17 +137,21 @@
 
 <h2>2.1 模型级联与预算感知推理</h2>
 
-<p class="lead">用便宜模型处理简单请求、贵模型兜底难请求，这一思路在文献中通常称为<b>模型级联（cascade）</b>。FrugalGPT 系统化地研究了级联的三种省钱手段——提示词压缩、答案缓存与级联调用，并在多个数据集上报告了「同等准确率下成本降低一个数量级」的结果<sup>[1]</sup>。这类工作的共同前提是：<b>存在一个可靠的质量信号，能判断便宜模型的输出是否可接受</b>。FrugalGPT 的做法是用一个打分器或规则阈值；本文则把这个信号建模为「本地答对概率」，并直接用真实作答结果训练它。</p>
+<p class="lead">用便宜模型处理简单请求、贵模型兜底难请求，这一思路在文献中通常称为<b>模型级联（cascade）</b>。FrugalGPT 系统化地研究了级联的三种省钱手段——提示词压缩、答案缓存与级联调用，并在多个数据集上报告了「同等准确率下成本降低一个数量级」的结果<sup>[2]</sup>。这类工作的共同前提是：<b>存在一个可靠的质量信号，能判断便宜模型的输出是否可接受</b>。FrugalGPT 的做法是用一个打分器或规则阈值；本文则把这个信号建模为「本地答对概率」，并直接用真实作答结果训练它。</p>
 
-<p class="lead">与级联相邻的另一个概念是<b>混合专家（MoE）</b>中的路由：门控网络在层内决定激活哪些专家<sup>[2]</sup>。本文的"路由"发生在<b>系统层</b>而非模型层，选择的是推理后端而非神经元子集，因此两者在实现与优化目标上都不同——MoE 优化的是模型容量与计算量的比，本文优化的是应用侧的准确率、成本与隐私的分配。</p>
+<p class="lead">与级联相邻的另一个概念是<b>混合专家（MoE）</b>中的路由：门控网络在层内决定激活哪些专家<sup>[3]</sup>。本文的"路由"发生在<b>系统层</b>而非模型层，选择的是推理后端而非神经元子集，因此两者在实现与优化目标上都不同——MoE 优化的是模型容量与计算量的比，本文优化的是应用侧的准确率、成本与隐私的分配。</p>
+
+<p class="lead">更系统的梳理见 Varangot-Reille 等人的综述<sup>[4]</sup>：该文把路由形式化为「性能—成本」优化问题，按"何时路由、路由到什么、如何实现"三个维度归纳了相似度匹配、监督学习、强化学习与生成式四类方法，并指出当前研究的主要短板是<b>实验缺乏标准化、以及很少考虑非财务成本</b>。本文的规则基线对应其中"规则/相似度"一档，学习型路由对应"监督学习"一档，两者在同一评测集上的对照，正是对该综述所呼吁的"可比较实验"的一次小规模响应。</p>
 
 <h2>2.2 大模型路由</h2>
 
-<p class="lead">RouteLLM 将路由形式化为二分类问题：用偏好数据训练一个分类器，预测「强模型是否显著优于弱模型」，从而在调用前决定去向<sup>[3]</sup>。它在 MT-Bench、MMLU 等公开基准上验证了"用 20%–50% 的强模型调用量保留 95% 以上的质量"。本文与它的差别有三点：其一，本文的判断对象是<b>本地小模型是否会答错</b>，标签直接来自真实作答而非人类偏好；其二，本文关注的是<b>单机、消费级硬件</b>这一受限场景，特征必须能在毫秒内算出、且不依赖额外模型；其三，本文额外检验了<b>分布外泛化</b>，而这一点在多数路由工作报告中并未单独评估。</p>
+<p class="lead">RouteLLM 将路由形式化为二分类问题：用偏好数据训练一个分类器，预测「强模型是否显著优于弱模型」，从而在调用前决定去向<sup>[5]</sup>。它在 MT-Bench、MMLU 等公开基准上验证了"用 20%–50% 的强模型调用量保留 95% 以上的质量"。本文与它的差别有三点：其一，本文的判断对象是<b>本地小模型是否会答错</b>，标签直接来自真实作答而非人类偏好；其二，本文关注的是<b>单机、消费级硬件</b>这一受限场景，特征必须能在毫秒内算出、且不依赖额外模型；其三，本文额外检验了<b>分布外泛化</b>，而这一点在多数路由工作报告中并未单独评估。</p>
 
 <h2>2.3 端侧小模型</h2>
 
-<p class="lead">Qwen2.5 系列在 0.5B–72B 的多个规模上开源，其 1.5B 版本在指令跟随与中文任务上具备基本可用性，且 4-bit 量化后模型体积约 1 GB，可放入普通笔记本内存<sup>[4]</sup>。这为"在消费级设备上跑本地推理"提供了现实基础。但也要看到：<b>小模型的失败模式往往是静默的</b>——它不会说"我不会"，而是给出一个语法通顺但数值错误的答案。这使"事后检测错误"比"事前预测错误"更难，也是本文选择在<b>调用前</b>做判断的原因之一。</p>
+<p class="lead">Qwen2.5 系列在 0.5B–72B 的多个规模上开源，其 1.5B 版本在指令跟随与中文任务上具备基本可用性，且 4-bit 量化后模型体积约 1 GB，可放入普通笔记本内存<sup>[6]</sup>。这为"在消费级设备上跑本地推理"提供了现实基础。但也要看到：<b>小模型的失败模式往往是静默的</b>——它不会说"我不会"，而是给出一个语法通顺但数值错误的答案。这使"事后检测错误"比"事前预测错误"更难，也是本文选择在<b>调用前</b>做判断的原因之一。</p>
+
+<p class="lead">近来的工作进一步把"大小模型如何配合"推进到 token 粒度。R2R 的观察是：大模型与小模型的推理路径只有少数关键 token 会真正分叉，其余 token 要么相同、要么只是表述差异；因此只需在这些分叉点上调用大模型<sup>[7]</sup>。这类方法能在同等平均激活参数下逼近大模型效果，但需要模型白盒访问与专门的训练管线。本文工作在<b>请求级</b>路由，粒度更粗、效果上限更低，代价是它可以跨厂商、跨部署形态直接落地——两者的关系类似"编译期优化"与"运行时调度"。</p>
 
 <h2>2.4 与本文的差异</h2>
 
@@ -281,7 +311,7 @@ class Generation:
 <p class="lead">但实测中这条机制出过一次洋相：问「1+1 等于几」时，路由判本地（本地答对概率 0.99），兜底却因为小模型自评不足而把它拖去云端，白花了一次调用。<b>问题不在兜底本身，而在于它忽略了一个已经存在的先验</b>。修正方案是：学习型路由下，只有当概率落在 [阈值, 阈值 + margin) 的不确定区间时才启用自评，margin 默认 0.10。这样"很有把握的简单题"不会再被二次检查，而"擦边判给本地"的题目仍保留兜底。</p>
 
 <div class="note">
-这也解释了为什么本文不把"模型自评置信度"当作主信号。已有研究表明现代神经网络普遍存在过度自信的问题<sup>[5]</sup>，小模型尤甚；本文的实测也印证了这一点——它在「1+1」上给出的置信度低于阈值。因此自评只能作为<b>辅助</b>，主判据必须是来自真实作答的统计量。
+这也解释了为什么本文不把"模型自评置信度"当作主信号。已有研究表明现代神经网络普遍存在过度自信的问题<sup>[8]</sup>，小模型尤甚；本文的实测也印证了这一点——它在「1+1」上给出的置信度低于阈值。因此自评只能作为<b>辅助</b>，主判据必须是来自真实作答的统计量。
 </div>
 </section>
 
@@ -548,6 +578,8 @@ scripts/
   build_doc.py       本文档的 PDF 构建
 tests/               路由与判分的单元测试（22 项，全绿）</pre>
 
+<p class="lead">这套结构是对"机器学习系统技术债"的一次刻意规避。Sculley 等人指出，ML 系统的维护成本主要来自纠缠（entanglement）、未受控的配置蔓延与隐藏的反馈环<sup>[9]</sup>。本项目的对应做法是：所有后端共享同一协议（解纠缠）、所有决策共享同一凭证结构与同一份 <code>Settings</code>（抑制配置蔓延）、所有路由决策与费用都落盘可查（让反馈环显式化）。</p>
+
 <h2>8.2 部署</h2>
 
 <p class="lead">提供两种部署方式。本地演示用 <code>make demo</code> 直接起服务；容器化部署用 <code>docker compose up</code>，编排文件同时拉起 Ollama 与应用，模型卷持久化，应用内置健康检查。<b>单 worker</b> 是刻意的——多进程会各自加载一份模型，在 16 GB 内存的机器上会直接打爆。</p>
@@ -586,10 +618,13 @@ python -m uvicorn app.web.main:app --port 8000</pre>
 <section>
 <h1>参考文献</h1>
 <ol class="refs">
+  <li>Wang X, Li Q, Jia W. Cognitive Edge Computing: A Comprehensive Survey on Optimizing Large Models and AI Agents for Pervasive Deployment[J]. arXiv preprint arXiv:2501.03265, 2025.</li>
   <li>Chen L, Zaharia M, Zou J. FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance[J]. arXiv preprint arXiv:2305.05176, 2023.</li>
   <li>Shazeer N, Mirhoseini A, Maziarz K, et al. Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer[C]//International Conference on Learning Representations (ICLR). 2017.</li>
+  <li>Varangot-Reille C, Bouvard C, Gourru A, et al. Doing More with Less: A Survey on Routing Strategies for Resource Optimisation in Large Language Model-Based Systems[J]. Journal of Artificial Intelligence Research, 2025. DOI: 10.1613/jair.1.19801. arXiv:2502.00409.</li>
   <li>Ong I, Almahairi A, Wu V, et al. RouteLLM: Learning to Route LLMs with Preference Data[J]. arXiv preprint arXiv:2406.18665, 2024.</li>
   <li>Qwen Team. Qwen2.5 Technical Report[J]. arXiv preprint arXiv:2412.15115, 2024.</li>
+  <li>Fu T, Ge Y, You Y, et al. R2R: Efficiently Navigating Divergent Reasoning Paths with Small-Large Model Token Routing[C]//Advances in Neural Information Processing Systems (NeurIPS). 2025. arXiv:2505.21600.</li>
   <li>Guo C, Pleiss G, Sun Y, et al. On Calibration of Modern Neural Networks[C]//International Conference on Machine Learning (ICML). 2017: 1321-1330.</li>
   <li>Sculley D, Holt G, Golovin D, et al. Hidden Technical Debt in Machine Learning Systems[C]//Advances in Neural Information Processing Systems (NeurIPS). 2015: 2503-2511.</li>
 </ol>

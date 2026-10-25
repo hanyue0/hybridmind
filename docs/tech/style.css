@@ -154,9 +154,13 @@ figure img { width: 100%; display: block; }
 .keywords { margin-top: 10pt; font-size: 10pt; }
 .keywords b { font-family: "Microsoft YaHei", sans-serif; }
 
-.toc { font-size: 10pt; line-height: 2; }
-.toc .l1 { font-family: "Microsoft YaHei", sans-serif; font-weight: bold; margin-top: 6pt; }
-.toc .l2 { padding-left: 2em; color: #333; }
+.toc { font-size: 10pt; line-height: 2.05; }
+.toc-row { display: flex; align-items: baseline; }
+.toc-row.toc-l1 { font-family: "Microsoft YaHei", sans-serif; font-weight: bold; margin-top: 7pt; color: #0b3a67; }
+.toc-row.toc-l2 { padding-left: 2em; color: #2b2b2b; }
+.toc-title { white-space: nowrap; }
+.toc-dots { flex: 1; border-bottom: 1px dotted #9aa7b5; margin: 0 6pt 3pt; }
+.toc-page { font-family: "Times New Roman", "SimSun", serif; min-width: 2.2em; text-align: right; }
 
 .refs { font-size: 9pt; line-height: 1.7; }
 .refs li { margin-bottom: 5pt; }

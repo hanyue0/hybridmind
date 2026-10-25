@@ -209,6 +209,8 @@ scripts/
   build_doc.py       本文档的 PDF 构建
 tests/               路由与判分的单元测试（22 项，全绿）</pre>
 
+<p class="lead">这套结构是对"机器学习系统技术债"的一次刻意规避。Sculley 等人指出，ML 系统的维护成本主要来自纠缠（entanglement）、未受控的配置蔓延与隐藏的反馈环<sup>[9]</sup>。本项目的对应做法是：所有后端共享同一协议（解纠缠）、所有决策共享同一凭证结构与同一份 <code>Settings</code>（抑制配置蔓延）、所有路由决策与费用都落盘可查（让反馈环显式化）。</p>
+
 <h2>8.2 部署</h2>
 
 <p class="lead">提供两种部署方式。本地演示用 <code>make demo</code> 直接起服务；容器化部署用 <code>docker compose up</code>，编排文件同时拉起 Ollama 与应用，模型卷持久化，应用内置健康检查。<b>单 worker</b> 是刻意的——多进程会各自加载一份模型，在 16 GB 内存的机器上会直接打爆。</p>
@@ -247,10 +249,13 @@ python -m uvicorn app.web.main:app --port 8000</pre>
 <section>
 <h1>参考文献</h1>
 <ol class="refs">
+  <li>Wang X, Li Q, Jia W. Cognitive Edge Computing: A Comprehensive Survey on Optimizing Large Models and AI Agents for Pervasive Deployment[J]. arXiv preprint arXiv:2501.03265, 2025.</li>
   <li>Chen L, Zaharia M, Zou J. FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance[J]. arXiv preprint arXiv:2305.05176, 2023.</li>
   <li>Shazeer N, Mirhoseini A, Maziarz K, et al. Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer[C]//International Conference on Learning Representations (ICLR). 2017.</li>
+  <li>Varangot-Reille C, Bouvard C, Gourru A, et al. Doing More with Less: A Survey on Routing Strategies for Resource Optimisation in Large Language Model-Based Systems[J]. Journal of Artificial Intelligence Research, 2025. DOI: 10.1613/jair.1.19801. arXiv:2502.00409.</li>
   <li>Ong I, Almahairi A, Wu V, et al. RouteLLM: Learning to Route LLMs with Preference Data[J]. arXiv preprint arXiv:2406.18665, 2024.</li>
   <li>Qwen Team. Qwen2.5 Technical Report[J]. arXiv preprint arXiv:2412.15115, 2024.</li>
+  <li>Fu T, Ge Y, You Y, et al. R2R: Efficiently Navigating Divergent Reasoning Paths with Small-Large Model Token Routing[C]//Advances in Neural Information Processing Systems (NeurIPS). 2025. arXiv:2505.21600.</li>
   <li>Guo C, Pleiss G, Sun Y, et al. On Calibration of Modern Neural Networks[C]//International Conference on Machine Learning (ICML). 2017: 1321-1330.</li>
   <li>Sculley D, Holt G, Golovin D, et al. Hidden Technical Debt in Machine Learning Systems[C]//Advances in Neural Information Processing Systems (NeurIPS). 2015: 2503-2511.</li>
 </ol>
