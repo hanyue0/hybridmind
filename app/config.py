@@ -60,6 +60,9 @@ class Settings:
     # 路由策略：rule=可解释的题面规则；learned=预测本地答对概率
     router_mode: str = os.getenv("ROUTER_MODE", "rule")
     router_model_path: str = os.getenv("ROUTER_MODEL_PATH", "data/router_model.json")
+    # 学习型路由下，本地答对概率高于「阈值 + margin」时不再做置信度自评，
+    # 避免把已经很有把握的简单题又送去云端
+    escalation_margin: float = float(os.getenv("ESCALATION_MARGIN", "0.10"))
 
     # 生成参数
     # 默认 256：本地 CPU 推理约 4 tok/s，上限过高只会让单次请求拖到一分钟

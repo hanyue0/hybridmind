@@ -103,6 +103,19 @@ class HybridPipeline:
             messages, max_tokens=self.settings.max_tokens, temperature=self.settings.temperature
         )
 
+    def _escalation_applies(self, decision) -> bool:
+        """是否值得再问一次"你确定吗"。
+
+        学习型路由已经给出"本地答对概率"，只有落在**不确定区间**时才值得再花一次
+        自评开销。否则会出现「1+1 概率 0.99 却被自评拖去云端」这种明明有先验
+        还要多花钱的情况——实测里真实发生过。
+        """
+        if not (self.settings.enable_escalation and self.settings.cloud_ready):
+            return False
+        if decision.score_kind == "p_local_correct":
+            return decision.score < decision.threshold + self.settings.escalation_margin
+        return True
+
     def _prepare(self, messages: Sequence[dict], mode: str):
         """决策与降级判断，两个入口共用。"""
         chat = self._with_system(messages)
@@ -134,8 +147,7 @@ class HybridPipeline:
 
         if (
             route == "local"
-            and self.settings.enable_escalation
-            and self.settings.cloud_ready
+            and self._escalation_applies(decision)
             and mode == "auto"
         ):
             confidence = conf_mod.estimate(self.local, chat, generation.text)
@@ -219,7 +231,7 @@ class HybridPipeline:
                 route = "cloud"
 
         if route == "local" and generation is not None:
-            if self.settings.enable_escalation and self.settings.cloud_ready and mode == "auto":
+            if self._escalation_applies(decision) and mode == "auto":
                 yield {"type": "status", "text": "本地作答完成，正在自评置信度…"}
                 confidence = conf_mod.estimate(self.local, chat, generation.text, max_tokens=12)
                 if confidence is not None:
