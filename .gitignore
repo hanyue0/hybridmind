@@ -29,3 +29,7 @@ raw_footage/
 
 # 临时脚本与日志
 scratch/
+
+# 视频中间产物（可重生成）
+docs/video/
+
