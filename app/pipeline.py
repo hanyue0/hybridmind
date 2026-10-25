@@ -197,6 +197,7 @@ class HybridPipeline:
             "difficulty": decision.difficulty,
             "threshold": decision.threshold,
             "reasons": reasons,
+            "score_kind": decision.score_kind,
         }
 
         start = 0.0
