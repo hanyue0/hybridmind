@@ -1,0 +1,190 @@
+@page {
+  size: A4;
+  margin: 20mm 18mm 22mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "SimSun", "宋体", serif;
+  font-size: 10.5pt;
+  line-height: 1.75;
+  color: #111;
+  margin: 0;
+}
+
+h1, h2, h3, h4 {
+  font-family: "Microsoft YaHei", "黑体", sans-serif;
+  color: #0b3a67;
+  line-height: 1.4;
+}
+
+h1 {
+  font-size: 17pt;
+  margin: 0 0 10pt;
+  padding-bottom: 6pt;
+  border-bottom: 2pt solid #0b3a67;
+  page-break-before: always;
+  page-break-after: avoid;
+}
+
+h2 {
+  font-size: 13pt;
+  margin: 16pt 0 8pt;
+  page-break-after: avoid;
+}
+
+h3 {
+  font-size: 11.5pt;
+  margin: 12pt 0 6pt;
+  color: #1a4f80;
+  page-break-after: avoid;
+}
+
+p { margin: 0 0 8pt; text-align: justify; }
+
+.lead { text-indent: 2em; }
+
+ul, ol { margin: 0 0 8pt; padding-left: 22pt; }
+li { margin-bottom: 4pt; text-align: justify; }
+
+code {
+  font-family: "Consolas", monospace;
+  font-size: 9.5pt;
+  background: #f2f4f7;
+  padding: 1pt 4pt;
+  border-radius: 2pt;
+}
+
+pre {
+  font-family: "Consolas", monospace;
+  font-size: 8.2pt;
+  line-height: 1.45;
+  background: #f6f8fa;
+  border: 0.6pt solid #d8dee6;
+  border-left: 3pt solid #0b3a67;
+  padding: 8pt 10pt;
+  margin: 8pt 0;
+  white-space: pre-wrap;
+  page-break-inside: avoid;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9pt;
+  margin: 8pt 0 10pt;
+  page-break-inside: avoid;
+}
+
+th {
+  background: #e8eef5;
+  color: #0b3a67;
+  font-family: "Microsoft YaHei", sans-serif;
+  font-weight: bold;
+  padding: 5pt 6pt;
+  border: 0.6pt solid #b8c6d6;
+  text-align: center;
+}
+
+td {
+  padding: 4pt 6pt;
+  border: 0.6pt solid #cfd8e3;
+  vertical-align: middle;
+}
+
+td.num { text-align: center; }
+tr:nth-child(even) td { background: #fafbfc; }
+
+.caption {
+  font-family: "Microsoft YaHei", sans-serif;
+  font-size: 9pt;
+  color: #445;
+  text-align: center;
+  margin: -4pt 0 10pt;
+}
+
+figure {
+  margin: 10pt 0 12pt;
+  page-break-inside: avoid;
+}
+figure img { width: 100%; display: block; }
+
+.note {
+  background: #f4f8fd;
+  border-left: 3pt solid #2f6fb0;
+  padding: 7pt 10pt;
+  margin: 9pt 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+.warn {
+  background: #fdf6ec;
+  border-left: 3pt solid #d9822b;
+  padding: 7pt 10pt;
+  margin: 9pt 0;
+  font-size: 9.5pt;
+  page-break-inside: avoid;
+}
+
+/* ---------- 封面 ---------- */
+
+.cover {
+  page-break-after: always;
+  height: 245mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.cover .kicker { font-family: "Microsoft YaHei", sans-serif; font-size: 11pt; color: #445; letter-spacing: 2pt; }
+.cover .title { font-family: "Microsoft YaHei", sans-serif; font-size: 24pt; font-weight: bold; color: #0b3a67; margin: 14pt 0 6pt; }
+.cover .subtitle { font-family: "Microsoft YaHei", sans-serif; font-size: 12pt; color: #33507a; margin-bottom: 34pt; }
+.cover .rule { width: 60%; height: 1.2pt; background: #0b3a67; margin: 0 auto 26pt; }
+.cover .meta { font-size: 10.5pt; line-height: 2.1; color: #222; }
+.cover .meta b { display: inline-block; width: 78pt; text-align: right; margin-right: 10pt; color: #445; font-weight: normal; }
+.cover .foot { margin-top: 46pt; font-size: 9pt; color: #667; }
+
+/* ---------- 摘要 ---------- */
+
+.abstract h1 { border-bottom-width: 1.2pt; }
+.abstract p { font-size: 10pt; }
+.keywords { margin-top: 10pt; font-size: 10pt; }
+.keywords b { font-family: "Microsoft YaHei", sans-serif; }
+
+.toc { font-size: 10pt; line-height: 2; }
+.toc .l1 { font-family: "Microsoft YaHei", sans-serif; font-weight: bold; margin-top: 6pt; }
+.toc .l2 { padding-left: 2em; color: #333; }
+
+.refs { font-size: 9pt; line-height: 1.7; }
+.refs li { margin-bottom: 5pt; }
+
+/* ---------- 架构图（纯 CSS，打印为矢量，不糊） ---------- */
+.arch {
+  margin: 10pt 0 6pt;
+  padding: 10pt 8pt;
+  background: #f7f9fc;
+  border: 0.6pt solid #cfd8e3;
+  page-break-inside: avoid;
+}
+.arch-row { display: flex; gap: 6pt; margin-bottom: 6pt; justify-content: center; }
+.arch-row:last-child { margin-bottom: 0; }
+.arch-row.split > .arch-box { flex: 1; }
+.arch-box {
+  flex: 1;
+  padding: 7pt 6pt;
+  text-align: center;
+  font-family: "Microsoft YaHei", sans-serif;
+  font-size: 8.8pt;
+  line-height: 1.5;
+  background: #fff;
+  border: 0.8pt solid #9fb3c8;
+  border-radius: 3pt;
+  color: #16324f;
+}
+.arch-box.wide { flex: 1; max-width: 100%; }
+.arch-box span { font-size: 7.8pt; color: #5a6b7c; }
+.arch-box.local { border-color: #2f9e5f; background: #f2fbf5; }
+.arch-box.cloud { border-color: #3d7fd6; background: #f2f7fe; }
