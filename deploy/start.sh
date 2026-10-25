@@ -6,7 +6,7 @@ set -euo pipefail
 MODEL_PATH="${LOCAL_MODEL_PATH:-/app/models/model.gguf}"
 MODEL_NAME="${LOCAL_SERVED_MODEL:-qwen2.5-1.5b}"
 N_THREADS="${N_THREADS:-2}"
-APP_PORT="${PORT:-8000}"
+APP_PORT="${PORT:-7860}"   # ModelScope Docker 空间端口固定 7860
 
 echo "[start] 本地推理服务启动：${MODEL_PATH}"
 python -m llama_cpp.server \

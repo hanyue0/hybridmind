@@ -44,9 +44,9 @@ COPY data/router_model.json ./data/router_model.json
 COPY deploy/start.sh /start.sh
 RUN chmod +x /start.sh
 
-EXPOSE 8000
+EXPOSE 7860
 
 HEALTHCHECK --interval=30s --timeout=6s --start-period=120s \
-    CMD curl -fsS http://127.0.0.1:8000/api/health || exit 1
+    CMD curl -fsS http://127.0.0.1:7860/api/health || exit 1
 
 CMD ["/start.sh"]
