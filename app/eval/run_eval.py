@@ -17,7 +17,7 @@ from typing import Dict, List
 
 from ..config import ROOT, settings
 from ..pipeline import HybridPipeline, Ledger
-from ..providers import OllamaProvider, OpenAICompatProvider, ProviderError
+from ..providers import OpenAICompatProvider, ProviderError, build_local_provider
 from . import metrics
 
 DEFAULT_DATASET = ROOT / "data" / "eval_set.jsonl"
@@ -36,7 +36,7 @@ def load_dataset(path: Path) -> List[dict]:
 def build_pipeline(theta: float | None = None) -> HybridPipeline:
     if theta is not None:
         settings.theta_local = theta
-    local = OllamaProvider(settings.ollama_host, settings.local_model)
+    local = build_local_provider(settings)
     cloud = OpenAICompatProvider(
         settings.cloud_base_url,
         settings.cloud_api_key,

@@ -16,7 +16,7 @@ from fastapi.staticfiles import StaticFiles
 from .. import __version__
 from ..config import settings
 from ..pipeline import HybridPipeline, Ledger
-from ..providers import OllamaProvider, OpenAICompatProvider, ProviderError
+from ..providers import OpenAICompatProvider, ProviderError, build_local_provider
 from ..schemas import ChatRequest, ChatResponse
 
 STATIC_DIR = Path(__file__).parent / "static"
@@ -25,7 +25,7 @@ app = FastAPI(title="HybridMind", version=__version__)
 ledger = Ledger()
 
 pipeline = HybridPipeline(
-    local=OllamaProvider(settings.ollama_host, settings.local_model, timeout_s=settings.timeout_s),
+    local=build_local_provider(settings),
     cloud=OpenAICompatProvider(
         settings.cloud_base_url,
         settings.cloud_api_key,
