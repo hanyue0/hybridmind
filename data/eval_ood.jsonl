@@ -1,0 +1,40 @@
+{"id": "o001", "question": "小林带了 98 元，买了 5 本单价 12 元的练习册，付完钱后口袋里还剩几元？", "answer": "38", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o002", "question": "小林带了 129 元，买了 7 本单价 9 元的练习册，付完钱后口袋里还剩几元？", "answer": "66", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o003", "question": "小林带了 91 元，买了 5 本单价 7 元的练习册，付完钱后口袋里还剩几元？", "answer": "56", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o004", "question": "小林带了 83 元，买了 7 本单价 8 元的练习册，付完钱后口袋里还剩几元？", "answer": "27", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o005", "question": "小林带了 90 元，买了 4 本单价 6 元的练习册，付完钱后口袋里还剩几元？", "answer": "66", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o006", "question": "小林带了 103 元，买了 7 本单价 12 元的练习册，付完钱后口袋里还剩几元？", "answer": "19", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o007", "question": "一个班 47 人，男生 27 人、女生 19 人。把男生平均分成 3 组，每组几人？", "answer": "9", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o008", "question": "一个班 58 人，男生 39 人、女生 17 人。把男生平均分成 3 组，每组几人？", "answer": "13", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o009", "question": "一个班 55 人，男生 33 人、女生 20 人。把男生平均分成 3 组，每组几人？", "answer": "11", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o010", "question": "一个班 39 人，男生 25 人、女生 10 人。把男生平均分成 5 组，每组几人？", "answer": "5", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o011", "question": "一个班 49 人，男生 32 人、女生 17 人。把男生平均分成 4 组，每组几人？", "answer": "8", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o012", "question": "一个班 51 人，男生 39 人、女生 10 人。把男生平均分成 3 组，每组几人？", "answer": "13", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o013", "question": "有一个数，它和 27 相加的结果正好是 79，这个数是几？", "answer": "52", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o014", "question": "有一个数，它和 31 相加的结果正好是 119，这个数是几？", "answer": "88", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o015", "question": "有一个数，它和 36 相加的结果正好是 84，这个数是几？", "answer": "48", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o016", "question": "有一个数，它和 27 相加的结果正好是 78，这个数是几？", "answer": "51", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o017", "question": "有一个数，它和 15 相加的结果正好是 109，这个数是几？", "answer": "94", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o018", "question": "有一个数，它和 36 相加的结果正好是 56，这个数是几？", "answer": "20", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o019", "question": "上午 9 点 15 分到下午 12 点 0 分，中间过了多长时间？请用分钟数回答。", "answer": "165", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o020", "question": "上午 9 点 10 分到下午 16 点 30 分，中间过了多长时间？请用分钟数回答。", "answer": "440", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o021", "question": "上午 9 点 20 分到下午 13 点 30 分，中间过了多长时间？请用分钟数回答。", "answer": "250", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o022", "question": "上午 10 点 5 分到下午 16 点 0 分，中间过了多长时间？请用分钟数回答。", "answer": "355", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o023", "question": "上午 7 点 5 分到下午 12 点 45 分，中间过了多长时间？请用分钟数回答。", "answer": "340", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o024", "question": "上午 7 点 30 分到下午 13 点 30 分，中间过了多长时间？请用分钟数回答。", "answer": "360", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o025", "question": "乙数是 24，甲数是乙数的 3 倍，甲数减掉 24 之后还剩？", "answer": "48", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o026", "question": "乙数是 17，甲数是乙数的 4 倍，甲数减掉 17 之后还剩？", "answer": "51", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o027", "question": "乙数是 34，甲数是乙数的 5 倍，甲数减掉 34 之后还剩？", "answer": "136", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o028", "question": "乙数是 34，甲数是乙数的 2 倍，甲数减掉 34 之后还剩？", "answer": "34", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o029", "question": "乙数是 17，甲数是乙数的 2 倍，甲数减掉 17 之后还剩？", "answer": "17", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o030", "question": "乙数是 36，甲数是乙数的 6 倍，甲数减掉 36 之后还剩？", "answer": "180", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o031", "question": "两个人一共收集了 96 张卡，其中一人比另一人多 10 张，收集多的那人有几张？", "answer": "53", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o032", "question": "两个人一共收集了 87 张卡，其中一人比另一人多 17 张，收集多的那人有几张？", "answer": "52", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o033", "question": "两个人一共收集了 101 张卡，其中一人比另一人多 13 张，收集多的那人有几张？", "answer": "57", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o034", "question": "两个人一共收集了 41 张卡，其中一人比另一人多 11 张，收集多的那人有几张？", "answer": "26", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o035", "question": "两个人一共收集了 99 张卡，其中一人比另一人多 7 张，收集多的那人有几张？", "answer": "53", "aliases": [], "tier": 0, "type": "numeric"}
+{"id": "o036", "question": "地球绕太阳转一圈大约需要多长时间？（用「天」作答）", "answer": "365", "aliases": ["365"], "tier": 0, "type": "short"}
+{"id": "o037", "question": "一个标准足球队同时在场的球员有几人？", "answer": "11", "aliases": ["十一"], "tier": 0, "type": "short"}
+{"id": "o038", "question": "农历八月十五是中国的哪个传统节日？", "answer": "中秋节", "aliases": ["中秋"], "tier": 0, "type": "short"}
+{"id": "o039", "question": "人体正常体温大约是多少摄氏度？", "answer": "37", "aliases": ["三十七"], "tier": 0, "type": "short"}
+{"id": "o040", "question": "一天有多少小时？", "answer": "24", "aliases": ["二十四"], "tier": 0, "type": "short"}
