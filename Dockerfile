@@ -19,7 +19,7 @@ ENV PYTHONUNBUFFERED=1 \
     ROUTER_MODE=learned
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        curl ca-certificates build-essential cmake \
+        curl ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -28,10 +28,14 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 
 # 本地推理服务：llama-cpp-python 自带 OpenAI 兼容的 server 子模块。
-# 优先取预编译轮子，取不到再源码编译（上面已装构建工具链）。
+# 优先取预编译轮子（快，不用编译器）；取不到时才装工具链现编。
 RUN pip install "llama-cpp-python[server]" \
         --extra-index-url https://abetlen.github.io/llama-cpp-python/whl/cpu \
-    || pip install "llama-cpp-python[server]"
+    || (apt-get update \
+        && apt-get install -y --no-install-recommends build-essential cmake \
+        && pip install "llama-cpp-python[server]" \
+        && apt-get purge -y build-essential cmake \
+        && rm -rf /var/lib/apt/lists/*)
 
 # 模型权重：构建期下载，约 1 GB
 RUN mkdir -p /app/models && \
