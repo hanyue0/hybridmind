@@ -163,12 +163,38 @@ async function send() {
             bubble.textContent = "";
             bubble.classList.remove("placeholder");
           }
-          answer += event.text;
-          bubble.textContent = answer;
+          // 网关（如 ModelScope）可能把 SSE 缓冲成一次性下发，
+          // 因此不直接赋值，而是攒进缓冲区、由定时器按固定节奏吐字，
+          // 让观众看到的始终是逐字生成的效果。
+          bubble._target = (bubble._target || "") + event.text;
+          if (!bubble._pump) {
+            bubble._shown = 0;
+            bubble._pump = setInterval(() => {
+              if (bubble._shown >= bubble._target.length) {
+                if (bubble._finish) {
+                  clearInterval(bubble._pump);
+                  bubble._pump = null;
+                  const done = bubble._finish;
+                  bubble._finish = null;
+                  done();
+                }
+                return;
+              }
+              bubble._shown = Math.min(bubble._target.length, bubble._shown + 2);
+              bubble.textContent = bubble._target.slice(0, bubble._shown);
+              thread.scrollTop = thread.scrollHeight;
+            }, 16);
+          }
           bubble.classList.remove("streaming");
           thread.scrollTop = thread.scrollHeight;
         } else if (event.type === "reset") {
           answer = "";
+          bubble._target = "";
+          bubble._shown = 0;
+          if (bubble._pump) {
+            clearInterval(bubble._pump);
+            bubble._pump = null;
+          }
           bubble.textContent = "";
           bubble.classList.remove("placeholder");
           bubble.classList.add("streaming");
@@ -182,13 +208,21 @@ async function send() {
             null
           );
         } else if (event.type === "done") {
-          answer = event.answer;
-          bubble.textContent = answer;
-          bubble.classList.remove("streaming");
-          status.textContent = "";
-          $("trace-hint").textContent = event.model;
-          renderTrace(event.trace, event.usage);
-          refreshStats();
+          const finalize = () => {
+            bubble.textContent = event.answer;
+            bubble.classList.remove("streaming");
+            status.textContent = "";
+            $("trace-hint").textContent = event.model;
+            renderTrace(event.trace, event.usage);
+            refreshStats();
+          };
+          // 若回放还没追上，把最终答案交给缓冲区，结束后再收尾
+          if (bubble._pump) {
+            bubble._target = event.answer;
+            bubble._finish = finalize;
+          } else {
+            finalize();
+          }
         } else if (event.type === "error") {
           throw new Error(event.detail);
         }
