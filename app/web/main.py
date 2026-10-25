@@ -56,6 +56,7 @@ def health() -> dict:
         "theta_local": settings.theta_local,
         "tau_confidence": settings.tau_confidence,
         "escalation": settings.enable_escalation,
+        "router_mode": settings.router_mode,
     }
 
 

@@ -70,6 +70,12 @@ function renderTrace(trace, usage) {
   badge.textContent = trace.escalated ? `${label} · 已升级` : label;
   badge.dataset.route = trace.route;
 
+  // 两种路由策略的分值语义相反：规则是「难度」（越高越该上云），
+  // 学习型是「本地答对概率」（越低越该上云）。标签必须随之切换，否则会误导。
+  const isProbability = trace.score_kind === "p_local_correct";
+  const scoreLabel = $("score-label");
+  if (scoreLabel) scoreLabel.textContent = isProbability ? "本地答对概率" : "难度分";
+
   $("difficulty-value").textContent = trace.difficulty.toFixed(2);
   $("difficulty-fill").style.width = `${Math.min(trace.difficulty, 1) * 100}%`;
   $("threshold-mark").style.left = `${trace.threshold * 100}%`;
@@ -92,7 +98,7 @@ function renderTrace(trace, usage) {
     if (trace.confidence !== null && trace.confidence !== undefined) {
       metrics.push(["本地自评置信度", trace.confidence.toFixed(2)]);
     }
-    metrics.push(["难度分 / 阈值", `${trace.difficulty.toFixed(2)} / ${trace.threshold.toFixed(2)}`]);
+    metrics.push([isProbability ? "本地答对概率 / 阈值" : "难度分 / 阈值", `${trace.difficulty.toFixed(2)} / ${trace.threshold.toFixed(2)}`]);
     $("metrics").innerHTML = metrics
       .map(([k, v]) => `<div class="metric"><span>${k}</span><b>${v}</b></div>`)
       .join("");

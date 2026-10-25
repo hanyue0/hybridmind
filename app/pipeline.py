@@ -17,7 +17,7 @@ from typing import Iterator, List, Optional, Sequence
 from .config import Settings
 from .providers.base import Generation, Provider, ProviderError
 from .router import confidence as conf_mod
-from .router.policy import decide
+from .router import build_decider
 from .schemas import ChatResponse, RouteTrace, Usage
 
 SYSTEM_PROMPT = (
@@ -82,6 +82,7 @@ class HybridPipeline:
         self.cloud = cloud
         self.settings = settings
         self.ledger = ledger or Ledger()
+        self.decider = build_decider(settings)
 
     # ---------- 内部工具 ----------
 
@@ -106,7 +107,7 @@ class HybridPipeline:
         """决策与降级判断，两个入口共用。"""
         chat = self._with_system(messages)
         question = chat[-1].get("content", "")
-        decision = decide(question, self.settings.theta_local, force=mode if mode != "auto" else None)
+        decision = self.decider(question, mode if mode != "auto" else None)
         reasons = list(decision.reasons)
         route = decision.route
         if route == "cloud" and not self.settings.cloud_ready:
@@ -163,6 +164,7 @@ class HybridPipeline:
                 escalated=escalated,
                 confidence=confidence,
                 latency_ms=round(generation.latency_ms, 1),
+                score_kind=decision.score_kind,
             ),
             usage=Usage(
                 prompt_tokens=generation.prompt_tokens,
@@ -273,6 +275,7 @@ class HybridPipeline:
                 "escalated": escalated,
                 "confidence": confidence,
                 "latency_ms": round(generation.latency_ms, 1),
+                "score_kind": decision.score_kind,
             },
             "usage": {
                 "prompt_tokens": generation.prompt_tokens,

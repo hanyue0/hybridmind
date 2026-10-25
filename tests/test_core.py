@@ -5,7 +5,7 @@ from __future__ import annotations
 import unittest
 
 from app.eval import metrics
-from app.router import confidence, features, policy
+from app.router import build_decider, confidence, features, policy
 
 
 class FeaturesTest(unittest.TestCase):
@@ -53,7 +53,6 @@ class ConfidenceTest(unittest.TestCase):
 class MetricsTest(unittest.TestCase):
     def test_numeric_last_number_wins(self) -> None:
         self.assertTrue(metrics.is_correct("先算 3×4=12，答案是 15", "15"))
-
     def test_numeric_mismatch(self) -> None:
         self.assertFalse(metrics.is_correct("答案是 14", "15"))
 
@@ -76,6 +75,48 @@ class MetricsTest(unittest.TestCase):
     def test_wrong_quotient_still_fails(self) -> None:
         """剥离余数不能掩盖商本身算错。"""
         self.assertFalse(metrics.is_correct("商是 20，余数是 7。", "21"))
+
+
+class FakeModel:
+    """替身：固定阈值 0.5，简单题返回高概率。"""
+
+    threshold = 0.5
+
+    def predict_proba(self, text: str) -> float:
+        return 0.9 if "简单" in text else 0.1
+
+
+class LearnedPolicyTest(unittest.TestCase):
+    def test_high_probability_stays_local(self) -> None:
+        decision = policy.decide_learned("这是一道简单题", FakeModel())
+        self.assertEqual(decision.route, "local")
+        self.assertEqual(decision.score_kind, "p_local_correct")
+
+    def test_low_probability_goes_cloud(self) -> None:
+        decision = policy.decide_learned("一道复杂的工程问题", FakeModel())
+        self.assertEqual(decision.route, "cloud")
+
+    def test_force_overrides_probability(self) -> None:
+        decision = policy.decide_learned("一道复杂的工程问题", FakeModel(), force="local")
+        self.assertEqual(decision.route, "local")
+
+    def test_reasons_expose_both_views(self) -> None:
+        decision = policy.decide_learned("一道复杂的工程问题", FakeModel())
+        joined = " ".join(decision.reasons)
+        self.assertIn("本地答对概率", joined)
+        self.assertIn("参考难度分", joined)
+
+
+class DeciderFactoryTest(unittest.TestCase):
+    def test_missing_model_falls_back_to_rule(self) -> None:
+        class S:
+            router_mode = "learned"
+            router_model_path = "data/__not_exist__.json"
+            theta_local = 0.45
+
+        decider = build_decider(S())
+        decision = decider("1+1 等于几？", None)
+        self.assertEqual(decision.score_kind, "difficulty")
 
 
 if __name__ == "__main__":

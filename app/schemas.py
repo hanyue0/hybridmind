@@ -36,6 +36,8 @@ class RouteTrace(BaseModel):
     escalated: bool = False
     confidence: Optional[float] = None
     latency_ms: float = 0.0
+    # 分值语义：difficulty=难度分（越高越难）；p_local_correct=本地答对概率（越低越该上云）
+    score_kind: Literal["difficulty", "p_local_correct"] = "difficulty"
 
 
 class ChatResponse(BaseModel):

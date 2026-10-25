@@ -57,6 +57,10 @@ class Settings:
     enable_escalation: bool = os.getenv("ENABLE_ESCALATION", "1") == "1"
     budget_cny: float = float(os.getenv("BUDGET_CNY", "20.0"))
 
+    # 路由策略：rule=可解释的题面规则；learned=预测本地答对概率
+    router_mode: str = os.getenv("ROUTER_MODE", "rule")
+    router_model_path: str = os.getenv("ROUTER_MODEL_PATH", "data/router_model.json")
+
     # 生成参数
     # 默认 256：本地 CPU 推理约 4 tok/s，上限过高只会让单次请求拖到一分钟
     max_tokens: int = int(os.getenv("MAX_TOKENS", "256"))
