@@ -33,3 +33,7 @@ scratch/
 # 视频中间产物（可重生成）
 docs/video/
 
+
+# 模型权重（体积大，按需下载）
+models/
+

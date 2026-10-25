@@ -44,6 +44,11 @@ DEFAULT_PRICES: Dict[str, Price] = {
 @dataclass
 class Settings:
     # 推理端
+    # 本地后端：ollama（开发，需守护进程）| llamacpp（部署，进程内推理）
+    local_backend: str = os.getenv("LOCAL_BACKEND", "ollama")
+    local_model_path: str = os.getenv("LOCAL_MODEL_PATH", "models/qwen2.5-1.5b-instruct-q4_k_m.gguf")
+    local_base_url: str = os.getenv("LOCAL_BASE_URL", "http://127.0.0.1:8080/v1").rstrip("/")
+    local_served_model: str = os.getenv("LOCAL_SERVED_MODEL", "qwen2.5-1.5b")
     local_model: str = os.getenv("LOCAL_MODEL", "qwen2.5:1.5b")
     ollama_host: str = os.getenv("OLLAMA_HOST", "http://127.0.0.1:11434")
     cloud_model: str = os.getenv("CLOUD_MODEL", "deepseek-chat")

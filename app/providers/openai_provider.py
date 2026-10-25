@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import time
 from typing import Sequence
 
@@ -27,6 +28,65 @@ class OpenAICompatProvider:
         self.model = model
         self.price = price
         self.timeout_s = timeout_s
+
+    def stream(
+        self,
+        messages: Sequence[dict],
+        max_tokens: int = 512,
+        temperature: float = 0.2,
+    ) -> Iterator[dict]:
+        """逐 token 产出事件，供演示界面使用。
+
+        这个方法同时服务两种后端：云端 API，以及部署形态下由 llama-server 提供的
+        本地 OpenAI 兼容服务——两者协议一致，所以不需要各写一套。
+        """
+        payload = {
+            "model": self.model,
+            "messages": list(messages),
+            "max_tokens": max_tokens,
+            "temperature": temperature,
+            "stream": True,
+        }
+        headers = {"Authorization": f"Bearer {self.api_key or 'local'}"}
+        started = time.perf_counter()
+        prompt_tokens = completion_tokens = 0
+        try:
+            with httpx.stream(
+                "POST",
+                f"{self.base_url}/chat/completions",
+                json=payload,
+                headers=headers,
+                timeout=self.timeout_s,
+            ) as resp:
+                resp.raise_for_status()
+                for line in resp.iter_lines():
+                    if not line or not line.startswith("data:"):
+                        continue
+                    body = line[5:].strip()
+                    if body == "[DONE]":
+                        break
+                    chunk = json.loads(body)
+                    choice = (chunk.get("choices") or [{}])[0]
+                    piece = (choice.get("delta") or {}).get("content")
+                    if piece:
+                        completion_tokens += 1
+                        yield {"type": "delta", "text": piece}
+                    usage = chunk.get("usage")
+                    if usage:
+                        prompt_tokens = int(usage.get("prompt_tokens") or 0)
+                        completion_tokens = int(usage.get("completion_tokens") or 0)
+        except httpx.HTTPError as exc:
+            raise ProviderError(f"流式推理失败：{exc}") from exc
+
+        latency_ms = (time.perf_counter() - started) * 1000.0
+        if not prompt_tokens:
+            prompt_tokens = sum(len(str(m.get("content", ""))) for m in messages) // 2
+        yield {
+            "type": "done",
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "latency_ms": latency_ms,
+        }
 
     def generate(
         self,
