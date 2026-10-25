@@ -1,7 +1,7 @@
-fastapi==0.115.6
-uvicorn[standard]==0.34.0
-httpx==0.28.1
-pydantic==2.10.4
-python-multipart==0.0.20
-gradio==6.30.0
-
+# 版本用范围而不是精确锁定：部署阶段还要装 llama-cpp-python[server]，
+# 它同样依赖 fastapi/starlette，锁死版本会让 pip 直接 ResolutionImpossible。
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+httpx>=0.27,<1.0
+pydantic>=2.7,<3.0
+python-multipart>=0.0.9
