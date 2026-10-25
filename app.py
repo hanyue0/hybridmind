@@ -47,7 +47,10 @@ def run(question: str, mode_label: str):
     try:
         result = pipeline.answer([{"role": "user", "content": question}], mode=mode)
     except ProviderError as exc:
-        return f"推理失败：{exc}", "", ""
+        tip = "\n\n（提示：若提示未配置密钥，请见页面顶部说明）" if not settings.cloud_ready else ""
+        return f"推理失败：{exc}{tip}", "", ""
+    except Exception as exc:
+        return f"服务异常：{type(exc).__name__}: {exc}", "", ""
 
     trace = result.trace
     route_cn = "本地 LOCAL" if trace.route == "local" else "云端 CLOUD"
@@ -72,10 +75,19 @@ def run(question: str, mode_label: str):
 
 
 with gr.Blocks(title="HybridMind") as demo:
+    if not settings.cloud_ready:
+        _hint = "> ⚠️ **本实例未配置云端密钥**：云端一档不可用。请在空间设置中注入 `CLOUD_API_KEY` 环境变量。"
+    elif settings.local_backend == "ollama":
+        _hint = ("> ℹ️ **本地模型未在本实例部署**（Gradio 空间无 Ollama 服务）。"
+                 "本演示展示的是云端路径与路由决策逻辑；本地一档在完整部署中可用。")
+    else:
+        _hint = "> ✅ 本地与云端两档均可用。"
+
     gr.Markdown(
         "# HybridMind · 端云协同的自适应模型路由\n"
         "预测「本地模型能否答对这道题」：判得准留在本地（零费用），判不准才升级云端。\n\n"
-        f"当前策略：`{settings.router_mode}` · 本地后端：`{settings.local_backend}`"
+        f"当前策略：`{settings.router_mode}` · 本地后端：`{settings.local_backend}`\n\n"
+        + _hint
     )
     with gr.Row():
         with gr.Column(scale=3):
