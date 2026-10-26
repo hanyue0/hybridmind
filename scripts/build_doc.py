@@ -140,22 +140,28 @@ def print_pdf(html: Path, browser: str) -> None:
         raise SystemExit("PDF 生成失败")
 
 
-def _body_start(doc) -> int:
-    """返回正文起始页索引，跳过封面、摘要与目录。
+def _is_toc_page(text: str) -> bool:
+    """判断一页是否仍是目录。
 
-    目录页包含全部标题文本，若从第一页开始检索，所有目录项都会命中目录页本身，
-    页码就会全部变成 3。因此先定位目录，再往后跳过可能的续页：
-    判据是一页上出现大量「N.N」形式的章节号，即认为它仍是目录。
+    目录的特征是「标题行 + 纯数字页码」交替出现，纯数字行占比很高。
+    早期版本用「一页里出现 ≥15 个 N.N 章节号」来判断，阈值过高：
+    目录续页只有 9 个章节号，被误判成正文，导致该页之后所有标题
+    都在目录页本身被检索到，页码全印成了该页的页码。
     """
-    pattern = re.compile(r"\d\.\d")
+    lines = [ln.strip() for ln in text.splitlines() if ln.strip()]
+    if len(lines) < 8:
+        return False
+    numeric = sum(1 for ln in lines if ln.isdigit())
+    return numeric / len(lines) >= 0.3
+
+
+def _body_start(doc) -> int:
+    """返回正文起始页索引，跳过封面、摘要与目录（含续页）。"""
     for index in range(min(doc.page_count, 10)):
         if "目 录" in doc[index].get_text():
             cursor = index
-            while cursor + 1 < doc.page_count:
-                if len(pattern.findall(doc[cursor + 1].get_text())) >= 15:
-                    cursor += 1
-                else:
-                    break
+            while cursor + 1 < doc.page_count and _is_toc_page(doc[cursor + 1].get_text()):
+                cursor += 1
             return cursor + 1
     return 0
 
