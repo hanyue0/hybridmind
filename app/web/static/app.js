@@ -169,8 +169,12 @@ async function send() {
           bubble._target = (bubble._target || "") + event.text;
           if (!bubble._pump) {
             bubble._shown = 0;
+            // 每 16ms 吐 2 个字等于每秒 125 字，肉眼等同于"一次性出现"。
+            // 改为按目标长度反推步长：整段控制在 2.5–4 秒内放完，
+            // 短答案逐字清晰，长答案也不至于慢得让人等。
             bubble._pump = setInterval(() => {
-              if (bubble._shown >= bubble._target.length) {
+              const target = bubble._target || "";
+              if (bubble._shown >= target.length) {
                 if (bubble._finish) {
                   clearInterval(bubble._pump);
                   bubble._pump = null;
@@ -180,10 +184,11 @@ async function send() {
                 }
                 return;
               }
-              bubble._shown = Math.min(bubble._target.length, bubble._shown + 2);
-              bubble.textContent = bubble._target.slice(0, bubble._shown);
+              const step = Math.max(1, Math.ceil(target.length / 110));
+              bubble._shown = Math.min(target.length, bubble._shown + step);
+              bubble.textContent = target.slice(0, bubble._shown);
               thread.scrollTop = thread.scrollHeight;
-            }, 16);
+            }, 32);
           }
           bubble.classList.remove("streaming");
           thread.scrollTop = thread.scrollHeight;
