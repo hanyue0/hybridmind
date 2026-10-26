@@ -215,6 +215,16 @@ tests/               路由与判分的单元测试（22 项，全绿）</pre>
 
 <p class="lead">提供两种部署方式。本地演示用 <code>make demo</code> 直接起服务；容器化部署用 <code>docker compose up</code>，编排文件同时拉起 Ollama 与应用，模型卷持久化，应用内置健康检查。<b>单 worker</b> 是刻意的——多进程会各自加载一份模型，在 16 GB 内存的机器上会直接打爆。</p>
 
+<p class="lead">面向公网的形态换了一种组织方式：多数托管平台只允许一个容器、不保证能常驻第二个服务，因此生产镜像把「应用 + 本地推理」装进同一个镜像——本地推理改用 llama.cpp 提供的 OpenAI 兼容服务，应用侧复用云端那套 Provider，不必为本地单独写客户端；模型权重在构建期下载，运行期离线。当前在线演示部署于 ModelScope 创空间（Docker SDK，2 vCPU / 8 GB），地址见封面。</p>
+
+<table>
+<tr><th>形态</th><th>本地推理</th><th>适用场景</th></tr>
+<tr><td>本机 venv + Ollama</td><td>Ollama 守护进程</td><td>开发、录屏</td></tr>
+<tr><td>docker compose</td><td>Ollama 容器</td><td>本地一键复现</td></tr>
+<tr><td>单容器生产镜像</td><td>llama.cpp server（同容器）</td><td>公网演示、评审复现</td></tr>
+</table>
+<div class="caption">表 8-1　三种部署形态</div>
+
 <table>
 <tr><th>部署形态</th><th>依赖</th><th>适用场景</th></tr>
 <tr><td>本机 venv</td><td>Python 3.10+、Ollama</td><td>开发、录屏演示</td></tr>

@@ -46,18 +46,32 @@ def parse_srt(path: Path) -> list[tuple[float, float]]:
 
 
 def script_narrations() -> list[str]:
-    """从拍摄脚本里取出 7 段口播文字（去掉 markdown 引用符与提示行）。"""
+    """从拍摄脚本里取出 7 段口播文字。
+
+    只在「**口播**」标记之后收集引用行——段 4 前面还有一行"按画面节奏念"
+    的数字提示（> 0.97 / 95 / …），如果不加限定会被当成正文，
+    导致该段之后全部字幕错位。
+    """
     text = SCRIPT.read_text(encoding="utf-8")
     blocks = re.split(r"^### 段 ", text, flags=re.M)[1:]
     out: list[str] = []
     for block in blocks:
-        lines = []
+        lines: list[str] = []
+        collecting = False
         for raw in block.splitlines():
             line = raw.strip()
-            if line.startswith(">"):
-                line = line.lstrip(">").strip()
-                if line and not line.startswith("**") and not line.startswith("⚠") and "口播" not in line:
-                    lines.append(line)
+            if "口播" in line:
+                collecting = True
+                continue
+            if not collecting:
+                continue
+            if not line:
+                continue          # 口播标记与正文之间有空行
+            if not line.startswith(">"):
+                break
+            cleaned = line.lstrip(">").strip()
+            if cleaned:
+                lines.append(cleaned)
         out.append("".join(lines))
     return out
 
