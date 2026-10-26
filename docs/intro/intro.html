@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>HybridMind 作品介绍</title>
+<link rel="stylesheet" href="../tech/style.css">
+</head>
+<body>
+
+<section class="cover">
+  <div class="kicker">2026 第九届传智杯全国大学生数智创新与 AI 应用大赛</div>
+  <div class="title">HybridMind</div>
+  <div class="subtitle">作品介绍文档<br>端云协同的自适应大模型路由</div>
+  <div class="rule"></div>
+  <div class="meta">
+    <div><b>赛道</b>AI 大模型创新应用挑战赛（技术应用赛 · 个人赛）</div>
+    <div><b>组别</b>B 组（普通本科）</div>
+    <div><b>参赛者</b>张云迪</div>
+    <div><b>所在院校</b>商洛学院</div>
+    <div><b>在线演示</b>https://hanyue0-hybridmind.ms.show</div>
+    <div><b>代码仓库</b>https://github.com/hanyue0/hybridmind</div>
+  </div>
+  <div class="foot">本文档对应预指导报名表中「作品介绍文档」的七项要求</div>
+</section>
+
+<section>
+<h1>一、项目详情及使用方式</h1>
+
+<h2>1.1 这个项目解决什么问题</h2>
+
+<p class="lead">把一个 AI 应用装到普通人的电脑上，会立刻撞上一个两难：全用云端大模型，答得准、回得快，但每次调用都要付费、要联网、数据要离开本机；全用本地小模型，零边际成本、数据不出设备、断网可用，却会在稍微复杂的问题上出错。</p>
+
+<p class="lead">HybridMind 在用户与大模型之间加了一层<b>路由</b>：每次请求到达时，先预测「本地模型能不能答对这道题」，判得准就留在本地，判不准才升级到云端；本地答完还会自评置信度，仅在不确信时才重答。整个决策连同理由、耗时、费用一起展示给使用者。</p>
+
+<h2>1.2 怎么用（在线演示）</h2>
+
+<p class="lead">打开 <b>https://hanyue0-hybridmind.ms.show</b>，不需要注册、不需要任何配置：</p>
+
+<ol>
+  <li>在左下输入框里提问，回车发送；</li>
+  <li>右侧「路由决策」面板实时显示：走到哪一档（本地 / 云端）、预测的本地答对概率、判定阈值、判定理由、延迟、费用、token 数；</li>
+  <li>顶部三个按钮可以现场对比：<b>自动路由</b>（默认）、<b>强制本地</b>、<b>强制云端</b>。同一道题用三种模式各问一次，差异一目了然；</li>
+  <li>底部状态栏累计：请求数、本地占比、累计花费、升级次数。</li>
+</ol>
+
+<p class="lead">建议试这两题：<code>计算 87 + 8 的值。</code>（会走本地，费用 ¥0）与<code>某商品原价 520 元，先涨价 25%，再降价 20%，最终售价是多少？</code>（会走云端，费用约 ¥0.0002）。</p>
+
+<h2>1.3 怎么在本地跑起来</h2>
+
+<pre>git clone https://github.com/hanyue0/hybridmind
+cd hybridmind
+python -m venv .venv && .venv\Scripts\pip install -r requirements.txt
+ollama pull qwen2.5:1.5b
+copy .env.example .env          # 填入自己的云端 API 密钥
+python -m uvicorn app.web.main:app --port 8000</pre>
+
+<p class="lead">浏览器打开 <code>http://127.0.0.1:8000</code> 即可。也支持 <code>docker compose up</code> 一键起「Ollama + 应用」，或使用根目录的 <code>Dockerfile</code> 构建单容器镜像（应用与 llama.cpp 推理服务同容器，无需外部守护进程）。</p>
+</section>
+
+<section>
+<h1>二、项目亮点</h1>
+
+<h2>2.1 把「题目难不难」换成「本地会不会答错」</h2>
+
+<p class="lead">多数同类方案用关键词或文本长度判断难度。本文的实测证明这条路走不通：在 40 条<b>全新句式</b>的分布外题目上，规则路由的难度分从均值 0.33 塌到 0.14（特征词表一个都没命中），路由形同虚设，准确率停留在全本地的 75.0%。</p>
+
+<p class="lead">改为用<b>本地模型的真实作答结果</b>当标签训练分类器（5 折交叉验证 AUC 0.9355）后，同等云端预算下准确率达到 87.5%–90.0%，<b>领先规则路由 12.5 个百分点</b>，甚至超过全云端方案（87.5%）——因为有些题本地答对而云端答错，路由把它们留在了本地。</p>
+
+<h2>2.2 敢报告对自己不利的结果</h2>
+
+<p class="lead">项目最初的立论是「本地更便宜更快，所以把简单请求留在本地」。实测推翻了它：在同一台机器上，云端准确率高 32.5 个百分点、延迟只有 1/8、千次调用只要 ¥0.19。</p>
+
+<p class="lead">文档没有回避这个结论，而是把它写进正文第一章，并据此重构了问题的定义——路由的价值在<b>隐私、离线可用与规模化成本</b>，而不是省下那两毛钱。答辩时这是加分项：作者知道自己的方案边界在哪。</p>
+
+<h2>2.3 全链路可复算</h2>
+
+<p class="lead">评测集由脚本按固定随机种子生成，标准答案由生成过程精确计算；判分<b>不使用大模型当裁判</b>（数值题取最后一个数字并剥离余数从句，短答题做别名匹配），评委可以逐条复算；每一张图、每一张表都有对应脚本，一条命令重跑。</p>
+
+<h2>2.4 在无显卡的普通笔记本上跑通全链路</h2>
+
+<p class="lead">开发与录屏环境为 i5-13420H / 16 GB 单通道内存 / Intel 核显，本地推理纯 CPU 约 3–4 token/s。公网演示部署在 2 vCPU / 8 GB 的免费实例上，单容器同时跑应用与 1.5B 模型。</p>
+</section>
+
+<section>
+<h1>三、AI 能力的测试与评估落地情况</h1>
+
+<p class="lead">本项目不仅是「用 AI」，还包含一套针对 AI 输出质量的<b>评测体系</b>，这也是我们把结论说得有底气的依据。</p>
+
+<table>
+<tr><th>评测要素</th><th>做法</th><th>为什么这样做</th></tr>
+<tr><td>评测集</td><td>160 条四难度档封闭答案题 + 40 条分布外题</td><td>封闭答案才能自动判分，且可被第三方复算</td></tr>
+<tr><td>判分</td><td>数值取末位数字（剥离余数从句）、短答比别名</td><td>避免"用大模型证明大模型"，无额外费用、可逐条复核</td></tr>
+<tr><td>对照</td><td>全本地 / 全云端 / 规则路由 / 学习型路由 / oracle 上界</td><td>没有基线就没有说服力</td></tr>
+<tr><td>一致性指标</td><td>准确率、云端占比、千次成本、P50/P95 延迟</td><td>路由是取舍问题，单指标会误导</td></tr>
+<tr><td>泛化检验</td><td>40 条全新句式，两端均不重训</td><td>只看训练分布内的数字会得出完全错误的结论</td></tr>
+<tr><td>工程回归</td><td>22 项单元测试（路由、判分口径、置信度解析、回退逻辑）</td><td>改阈值/改判分规则时防止行为漂移</td></tr>
+</table>
+<div class="caption">表 1　评测体系构成</div>
+
+<p class="lead">这套体系的直接产出是一组可对照的数字：全本地 60.0%、全云端 92.5%、规则路由 91.9%（云端占比 57%）、学习型路由 91.9%（56%）、oracle 上界 93.8%；分布外场景下学习型路由 90.0%，规则路由 75.0%。</p>
+</section>
+
+<section>
+<h1>四、项目中涉及的关键技术</h1>
+
+<h2>4.1 双后端同构抽象</h2>
+<p class="lead">本地（Ollama / llama.cpp）与云端（OpenAI 兼容）实现同一套 <code>generate()</code> 接口，返回同一种 <code>Generation</code> 结构。正因为同构，路由切换对编排层透明，成本账本才能用同一套代码统计两种后端。</p>
+
+<h2>4.2 学习型路由</h2>
+<p class="lead">14 维题面特征（长度、语句数、数字个数、运算符数、是否含百分号、数学/应用题/推理词命中数等）+ 标准化逻辑回归。训练期用 scikit-learn，<b>运行期导出为纯 Python 点积</b>，部署端不需要 sklearn；导出结果与 sklearn 预测的最大偏差经脚本校验为 0.000000。</p>
+
+<h2>4.3 分层降级与置信度兜底</h2>
+<p class="lead">任一端推理失败自动切到另一端并在界面说明；本地作答后可自评置信度，仅在「本地答对概率落在不确定区间」时才触发重答——这条规则是被一次真实事故逼出来的：问「1+1」时概率 0.99 却仍被自评拖去云端，白花一次调用。</p>
+
+<h2>4.4 单容器部署</h2>
+<p class="lead">托管平台一般只给一个容器。因此生产镜像内同时运行应用与 llama.cpp 的 OpenAI 兼容服务，模型权重在构建期下载、运行期离线，按平台注入的端口监听。</p>
+</section>
+
+<section>
+<h1>五、项目相关的图片</h1>
+
+<figure>
+  <img src="../figures/fig_ood.png" alt="分布外检验">
+</figure>
+<div class="caption">图 1　分布外检验：40 条全新句式，两端均不重训。规则路由（75.0%）与"完全不做路由"相同，学习型路由 90.0% 超过纯云端。</div>
+
+<figure>
+  <img src="../figures/fig_router_budget.png" alt="等预算曲线">
+</figure>
+<div class="caption">图 2　训练分布内两种路由的准确率—预算曲线。橙线在 15%–40% 预算区反而更高——这一点如实保留，因为正是它与分布外结果的反差构成了全文的主要发现。</div>
+</section>
+
+<section>
+<h1>六、项目是否发表过或获奖</h1>
+
+<p class="lead"><b>未发表、未获奖。</b>本项目为 2026 第九届传智杯参赛作品，从选题、设计、实现到评测均在赛期内完成，代码仓库保留了 49 次提交的完整过程记录。</p>
+
+<p class="lead">其中的分布外检验结论（规则路由在表述变化下静默失效、学习型路由可跨表述泛化）未见公开发表，属于本次工作的独立发现。</p>
+</section>
+
+<section>
+<h1>七、是否在其他项目基础上优化</h1>
+
+<p class="lead"><b>不是。</b>本项目为独立开发，没有基于任何既有项目或往届作品修改。为便于评审核实，下表明确列出所用开源组件与自研部分的边界：</p>
+
+<table>
+<tr><th>部分</th><th>来源</th></tr>
+<tr><td>路由策略、置信度兜底、编排与账本、评测体系、前端、部署脚本</td><td><b>自研</b></td></tr>
+<tr><td>Qwen2.5-1.5B-Instruct 模型权重</td><td>阿里通义千问开源，Apache-2.0</td></tr>
+<tr><td>llama.cpp / llama-cpp-python</td><td>开源推理引擎，MIT</td></tr>
+<tr><td>FastAPI / uvicorn / Pydantic / httpx</td><td>开源 Web 框架与工具库</td></tr>
+<tr><td>云端模型 deepseek-chat</td><td>DeepSeek 开放平台 API</td></tr>
+</table>
+<div class="caption">表 2　自研与第三方组件的边界</div>
+
+<p class="lead">作品的差异化不在模型本身，而在<b>何时调用哪一个模型</b>这一层决策逻辑，以及用于验证该逻辑的评测方法。</p>
+</section>
+
+<section>
+<h1>附：配套材料索引</h1>
+
+<table>
+<tr><th>材料</th><th>位置</th></tr>
+<tr><td>在线演示</td><td>https://hanyue0-hybridmind.ms.show</td></tr>
+<tr><td>技术文档（25 页，含实验数据与复现步骤）</td><td>HybridMind_技术文档.pdf</td></tr>
+<tr><td>演示视频（5:02，1080p，配音+字幕）</td><td>HybridMind_演示视频_最终版.mp4</td></tr>
+<tr><td>源代码仓库</td><td>https://github.com/hanyue0/hybridmind</td></tr>
+</table>
+</section>
+
+</body>
+</html>
