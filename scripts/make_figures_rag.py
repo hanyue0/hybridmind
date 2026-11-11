@@ -59,10 +59,12 @@ def main() -> None:
                     f"{r.get_height():.1%}", ha="center", va="bottom", fontsize=8.5)
     ax.set_xticks(x)
     ax.set_xticklabels(names, fontsize=9)
-    ax.set_ylim(0, 1.08)
+    ax.set_ylim(0, 1.12)
     ax.set_ylabel("比例")
-    ax.set_title("三类策略：答案准确率与证据召回（n=68，含 6 道不可答题）", fontsize=10)
-    ax.legend(fontsize=8, frameon=False, loc="lower right", ncol=2)
+    ax.set_title("三类策略：答案准确率与证据召回（n=68，含 6 道不可答题）", fontsize=10, pad=26)
+    # 图例放到坐标区上方：柱子占满下半区，放里面会压住数据
+    ax.legend(fontsize=8, frameon=False, loc="upper center",
+              bbox_to_anchor=(0.5, 1.02), ncol=2)
     ax.grid(axis="y", alpha=0.25)
     ax.set_axisbelow(True)
     fig.tight_layout()
