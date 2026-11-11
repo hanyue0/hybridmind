@@ -202,11 +202,16 @@ def paper_ask_stream(req: PaperAsk) -> StreamingResponse:
 def paper_page(name: str, page: int, dpi: int = 110) -> Response:
     name = _safe_paper(name)
     pdf = _pdf_path(name)
-    IMAGE_CACHE.mkdir(parents=True, exist_ok=True)
+    # 缓存目录可能只读（托管平台的镜像层），写不进去就每次现渲染，不能因此 500
     cached = IMAGE_CACHE / f"{name}_p{page}_{dpi}.png"
-    if not cached.exists():
+    try:
+        IMAGE_CACHE.mkdir(parents=True, exist_ok=True)
+        if cached.exists():
+            return Response(content=cached.read_bytes(), media_type="image/png")
         cached.write_bytes(render_page_png(pdf, page, dpi=dpi))
-    return Response(content=cached.read_bytes(), media_type="image/png")
+        return Response(content=cached.read_bytes(), media_type="image/png")
+    except OSError:
+        return Response(content=render_page_png(pdf, page, dpi=dpi), media_type="image/png")
 
 
 @app.get("/api/paper/{name}/meta")

@@ -114,9 +114,13 @@ class PaperStore:
             paper = Paper.from_dict(json.loads(cache.read_text(encoding="utf-8")))
         else:
             paper = parse_pdf(self.root / f"{name}.pdf", name=name)
-            cache.write_text(
-                json.dumps(paper.to_dict(), ensure_ascii=False), encoding="utf-8"
-            )
+            try:
+                cache.write_text(
+                    json.dumps(paper.to_dict(), ensure_ascii=False), encoding="utf-8"
+                )
+            except OSError:
+                # 只读文件系统（托管平台镜像层）时跳过缓存，不能因此让请求失败
+                pass
         self._papers[name] = paper
         return paper
 
