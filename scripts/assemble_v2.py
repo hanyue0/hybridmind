@@ -139,7 +139,9 @@ def main() -> int:
 
     pieces = []
     idx = 0
-    for name, items in PLAN.items():
+    names = list(PLAN)
+    for order, name in enumerate(names):
+        items = PLAN[name]
         seg_total = durations[name]
         fixed = sum(d for _, _, d in items if isinstance(d, float) and d >= 1.0)
         remain = max(0.5, seg_total - fixed)
@@ -163,6 +165,16 @@ def main() -> int:
                 encode_clip(VIDEO / res, 2.0, dur, target)
             pieces.append((target, dur))
             print(f"  {name} · {kind}:{res} {dur:.1f}s")
+
+        # 段间停顿：配音里有 0.6s 空白，画面必须同样留白，否则整条时间轴会提前
+        if order < len(names) - 1:
+            idx += 1
+            gap_png = work / f"gap{idx}.png"
+            run([ffmpeg(), "-y", "-sseof", "-0.15", "-i", str(pieces[-1][0]),
+                 "-frames:v", "1", str(gap_png)])
+            gap_mp4 = work / f"p{idx:02d}.mp4"
+            encode_still(gap_png, GAP, gap_mp4)
+            pieces.append((gap_mp4, GAP))
 
     listfile = work / "list.txt"
     listfile.write_text(

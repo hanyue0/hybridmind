@@ -1,4 +1,4 @@
-# HybridMind · 论文精读问答与证据锚点
+﻿# HybridMind · 论文精读问答与证据锚点
 
 > 2026 第九届传智杯 · AI 大模型创新应用挑战赛（个人赛 · B 组）参赛作品
 > 参赛者：张云迪（商洛学院）
@@ -10,7 +10,7 @@
 | 交付物 | 位置 | 说明 |
 | --- | --- | --- |
 | 在线演示 | <https://hanyue0-hybridmind.ms.show/paper> | ModelScope 创空间，2 vCPU / 8 GB |
-| 演示视频 | `docs/HybridMind_演示视频_最终版.mp4` | 5 分 14 秒，1920×1080，字幕 |
+| 演示视频 | `docs/HybridMind_演示视频_最终版.mp4` | 5 分 17 秒，1920×1080，含字幕 |
 | 技术文档 | [`docs/HybridMind_技术文档.pdf`](docs/HybridMind_技术文档.pdf) | 23 页 |
 | 作品介绍 | [`docs/HybridMind_作品介绍.pdf`](docs/HybridMind_作品介绍.pdf) | 11 页，对应报名表七项 |
 | 代码仓库 | 本仓库 | 46 项单元测试（旧 22 + 新 24） |
