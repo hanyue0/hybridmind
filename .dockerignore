@@ -3,6 +3,8 @@ __pycache__/
 *.pyc
 .git/
 data/results/
+data/papers/.cache/
+data/papers/uploads/
 docs/
 tests/
 .env

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HybridMind · 论文精读问答</title>
+  <style>html,body{margin:0;padding:0;background:#0a0e14;color:#e6edf3;}</style>
+  <link rel="stylesheet" href="/static/paper.css?v=1" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">◈</span>
+      <div>
+        <h1>HybridMind<span class="tag">论文精读</span></h1>
+        <p class="subtitle">中文提问 · 答案回指原文句子 · 本地/云端自动分流</p>
+      </div>
+    </div>
+
+    <div class="controls">
+      <select id="paper-select" aria-label="选择论文"></select>
+      <div class="modes" role="group" aria-label="路由模式">
+        <button class="mode active" data-mode="auto">自动路由</button>
+        <button class="mode" data-mode="local">强制本地</button>
+        <button class="mode" data-mode="cloud">强制云端</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="layout">
+    <!-- 左：原文 -->
+    <section class="panel viewer-panel">
+      <div class="panel-head">
+        <h2>原文</h2>
+        <div class="pager">
+          <button id="prev-page" title="上一页">‹</button>
+          <span id="page-indicator">— / —</span>
+          <button id="next-page" title="下一页">›</button>
+        </div>
+      </div>
+      <div class="viewer" id="viewer">
+        <div class="page-holder" id="page-holder">
+          <img id="page-img" alt="论文页面" />
+          <div class="highlights" id="highlights"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 右：问答 + 证据 -->
+    <section class="panel work-panel">
+      <div class="route-bar" id="route-bar" data-route="none">
+        <div class="route-main">
+          <span class="route-dot"></span>
+          <b id="route-name">等待提问</b>
+          <span class="route-meta" id="route-meta"></span>
+        </div>
+        <div class="features" id="features"></div>
+      </div>
+
+      <div class="thread" id="thread">
+        <div class="empty" id="empty">
+          选一篇论文，用中文提问。例如：<br />
+          <code>RAG 用了多少篇 Wikipedia 文档？</code><br />
+          <code>LoRA 是怎么减少可训练参数量的？</code>
+        </div>
+      </div>
+
+      <form class="composer" id="composer">
+        <textarea id="input" rows="2" placeholder="用中文提问（Enter 发送，Shift+Enter 换行）"></textarea>
+        <button type="submit" id="send">提问</button>
+      </form>
+
+      <div class="evidence" id="evidence">
+        <div class="evidence-head">
+          <h2>证据锚点</h2>
+          <span class="hint" id="evidence-hint">回答后显示，点击可跳转到原文</span>
+        </div>
+        <ul class="anchors" id="anchors"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="statusbar">
+    <span>请求 <b id="stat-requests">0</b></span>
+    <span>云端占比 <b id="stat-cloud">0%</b></span>
+    <span>累计成本 <b id="stat-cost">¥0.000000</b></span>
+    <span class="spacer"></span>
+    <span id="conn">就绪</span>
+  </footer>
+
+  <script src="/static/paper.js?v=1"></script>
+</body>
+</html>

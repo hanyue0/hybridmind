@@ -65,6 +65,10 @@ class Settings:
     # 路由策略：rule=可解释的题面规则；learned=预测本地答对概率
     router_mode: str = os.getenv("ROUTER_MODE", "rule")
     router_model_path: str = os.getenv("ROUTER_MODEL_PATH", "data/router_model.json")
+    # 论文场景单独一份模型：它多了 4 维检索特征，和算术题的 14 维模型不能混用
+    router_model_path_paper: str = os.getenv(
+        "ROUTER_MODEL_PATH_PAPER", "data/router_model_paper.json"
+    )
     # 学习型路由下，本地答对概率高于「阈值 + margin」时不再做置信度自评，
     # 避免把已经很有把握的简单题又送去云端
     escalation_margin: float = float(os.getenv("ESCALATION_MARGIN", "0.10"))

@@ -1,274 +1,224 @@
-<!-- ================= 6 结果与分析 ================= -->
+﻿<!-- ================= 6 结果与分析 ================= -->
 <section>
 <h1>6　结果与分析</h1>
 
-<h2>6.1 本机推理能力</h2>
+<h2>6.1　检索质量</h2>
 
-<p class="lead">先回答 Q1 的一半：本地模型在这台机器上到底能跑多快。用三条典型提示做基准，模型已预热（排除首次加载开销）：</p>
+<p class="lead">先看上限：如果检索没把正确段落取回来，后面所有环节都无从谈起。在 62 道可答题上，正确页落在 <b>top-1 的比例为 91.9%，top-5 为 96.8%</b>——只有 2 道题的前 5 个片段里没有正确页。</p>
 
-<table>
-<tr><th>提示类型</th><th>输出 token</th><th>延迟</th><th>吞吐</th></tr>
-<tr><td>单步运算</td><td class="num">13</td><td class="num">10.1 s</td><td class="num">1.3 tok/s</td></tr>
-<tr><td>两步应用题</td><td class="num">103</td><td class="num">23.9 s</td><td class="num">4.3 tok/s</td></tr>
-<tr><td>证明类长回答</td><td class="num">256</td><td class="num">62.9 s</td><td class="num">4.1 tok/s</td></tr>
-</table>
-<div class="caption">表 6-1　本机推理基准（qwen2.5:1.5b，Q4_K_M，纯 CPU）</div>
+<p class="lead">这个结果说明"中文问、英文原文"的词面失配问题被离线双语索引解决了：BM25 本身没有跨语言能力，真正起作用的是建库期把每块译文并入索引。代价是建库成本——328 块译文共 <b>¥0.34</b>，一次性开销，运行期为 0。</p>
 
-<p class="lead">稳定态吞吐为 <b>3.2–4.1 token/s</b>。这个数字远低于同类硬件的常见报告值（15–25 token/s），我们做了归因排查：</p>
+<p class="lead">两道未命中的题值得记录，因为它们在 6.5 节再次出现：一道问 "GPT-2 L (LoRA) 的可训练参数量"，正确页在第 7 页的表格中，而索引把它切成了图注与正文两半；另一道问 "Llama-2 的最大上下文长度"，正确页第 16 页的数值被表头切走。<b>表格跨行、跨页是当前分块策略的已知短板。</b></p>
 
-<ul>
-  <li><code>ollama ps</code> 显示 100% CPU、无 GPU 卸载，排除集显拖累；</li>
-  <li>线程数从 4 试到 12，吞吐仅从 2.4 升到 3.1 token/s，说明瓶颈不在算力；</li>
-  <li>电源计划由"平衡"切到"高性能"，无明显改善，说明不是降频；</li>
-  <li><code>Win32_PhysicalMemory</code> 显示<b>只插了一条 16 GB 内存</b>。</li>
-</ul>
+<h2>6.2　三类策略基线</h2>
 
-<p class="lead">大模型自回归解码每生成一个 token 都要把权重完整过一遍，属典型的内存带宽受限任务。单通道 DDR4-3200 的有效带宽约为双通道的一半，正是这个数量级的差距。这也解释了一个反直觉现象：<b>增加算力收益有限，增加内存通道收益明显</b>。</p>
-
-<h2>6.2 全本地与全云端基线</h2>
-
-<p class="lead">同一评测集、同一判分口径下，两个极端策略的对比（表 6-2）。这是全文最重要的一张表，因为它决定了后续所有讨论的前提。</p>
+<p class="lead">在 68 道题上运行三种策略，判分口径完全一致（数字题比数词、短答题比别名、引用编号先剥离）：</p>
 
 <table>
-<tr><th>指标</th><th>全本地</th><th>全云端</th></tr>
-<tr><td>准确率</td><td class="num">60.0%</td><td class="num"><b>92.5%</b></td></tr>
-<tr><td>单条成本</td><td class="num">¥0</td><td class="num">¥0.000194</td></tr>
-<tr><td>千次成本</td><td class="num">¥0</td><td class="num">¥0.194</td></tr>
-<tr><td>平均延迟</td><td class="num">6271 ms</td><td class="num"><b>753 ms</b></td></tr>
-<tr><td>P95 延迟</td><td class="num">16263 ms</td><td class="num"><b>1012 ms</b></td></tr>
+<tr><th>策略</th><th>准确率</th><th>证据召回</th><th>引用有效</th><th>数字一致</th><th>误拒率</th><th>锚定率</th><th>云端占比</th><th>千次成本</th><th>平均延迟</th></tr>
+<tr><td>全本地 1.5B</td><td>63.2%</td><td>64.5%</td><td>100%</td><td>98.5%</td><td>22.6%</td><td>63.2%</td><td>0%</td><td>¥0.00</td><td>10.9 s</td></tr>
+<tr><td>全云端 DeepSeek</td><td><b>86.8%</b></td><td>91.9%</td><td>100%</td><td>97.1%</td><td>8.1%</td><td>86.8%</td><td>100%</td><td>¥1.69</td><td>0.86 s</td></tr>
+<tr><td>证据门控路由</td><td>85.3%</td><td><b>93.5%</b></td><td>100%</td><td>97.1%</td><td><b>3.2%</b></td><td><b>89.7%</b></td><td><b>39.7%</b></td><td><b>¥0.66</b></td><td>5.26 s</td></tr>
 </table>
-<div class="caption">表 6-2　两个极端策略的端到端表现（n=160）</div>
-
-<p class="lead">按难度档拆开看，本地模型的失效边界非常清晰：</p>
-
-<table>
-<tr><th>难度档</th><th>样本</th><th>本地准确率</th><th>典型失败</th></tr>
-<tr><td>tier1 单步</td><td class="num">60</td><td class="num"><b>98.3%</b></td><td>几乎无</td></tr>
-<tr><td>tier2 两步</td><td class="num">50</td><td class="num">68.0%</td><td>33×7+11 答成 260</td></tr>
-<tr><td>tier3 三步</td><td class="num">30</td><td class="num">10.0%</td><td>百分比连乘几乎全错</td></tr>
-<tr><td>tier4 多步推理</td><td class="num">20</td><td class="num">0%</td><td>工程问题全部失手</td></tr>
-</table>
-<div class="caption">表 6-3　本地准确率随难度单调崩塌</div>
-
-<p class="lead"><b>这是本作品最干净的一个实验结果</b>：1.5B 模型在单步算术上接近满分，一旦需要保持中间结果就断崖式下跌。这条曲线不需要任何解释性话术——它本身就说明了"为什么需要路由"：不是所有请求都值得送去云端，但两步以上必须送。</p>
-
-<h2>6.3 路由质量</h2>
-
-<h3>6.3.1 规则路由：能分，但分不细</h3>
-
-<p class="lead">在 θ=0.45（初始默认值）下，160 条中只有 <b>1 条</b>被判给云端，路由形同虚设。把阈值下调到 0.20 才有实际效果：云端占比 57%，准确率 91.9%，千次成本 ¥0.134，相比纯云端<b>准确率只降 0.6 个百分点、成本降 31%</b>。阈值扫描结果见表 6-4。</p>
-
-<table>
-<tr><th>θ</th><th>云端占比</th><th>准确率</th><th>千次成本</th></tr>
-<tr><td>0.00</td><td class="num">100%</td><td class="num">92.5%</td><td class="num">¥0.194</td></tr>
-<tr><td><b>0.20</b></td><td class="num"><b>57%</b></td><td class="num"><b>91.9%</b></td><td class="num"><b>¥0.134</b></td></tr>
-<tr><td>0.30</td><td class="num">16%</td><td class="num">76.2%</td><td class="num">¥0.043</td></tr>
-<tr><td>0.40</td><td class="num">1%</td><td class="num">60.6%</td><td class="num">¥0.001</td></tr>
-<tr><td>0.45（原默认）</td><td class="num">1%</td><td class="num">60.6%</td><td class="num">¥0.001</td></tr>
-</table>
-<div class="caption">表 6-4　规则路由的阈值扫描（离线模拟，零成本）</div>
-
-<p class="lead">注意 θ 从 0.20 到 0.30 时准确率从 91.9% 猛跌到 76.2%——曲线是断崖而非平滑。原因是规则特征只能把题目粗略分堆，阈值一旦收紧就整档丢失。</p>
-
-<h3>6.3.2 学习型路由：分布内打平</h3>
-
-<p class="lead">学习型路由的 5 折交叉验证 <b>AUC = 0.9355</b>，说明特征确实携带了"本地是否会答错"的信息。但在训练分布内，它的端到端表现与规则路由几乎相同（云端 56%、准确率 91.9%），并未带来可观测的收益（图 6-1 蓝线与橙线大段重合）。</p>
+<div class="caption">表 6-1　三类策略在同一批题上的对比（n=68，含 6 道不可答题）</div>
 
 <figure>
-  <img src="../figures/fig_router_budget.png" alt="等预算曲线">
+<img src="../figures/fig_paper_strategies.png" alt="三类策略的准确率与证据召回">
+<div class="caption">图 6-1　答案准确率与证据召回：门控路由的证据召回最高，准确率与全云端只差 1 题</div>
 </figure>
-<div class="caption">图 6-1　训练分布内两种路由的准确率—预算曲线（n=160）。橙线在 15%–40% 预算区反而更高。</div>
 
-<p class="lead">如果实验到此为止，结论会是"学习型路由没有必要"。这个结论是错的，原因在第 6.4 节。</p>
-
-<h2>6.4 分布外检验</h2>
-
-<p class="lead">我们另外构造 40 条全新句式的题目，两个路由器<b>都不在新数据上重训</b>，直接沿用主集训练/调参的结果。结果如表 6-5 与图 6-2。</p>
-
-<table>
-<tr><th>策略</th><th>云端占比</th><th>OOD 准确率</th></tr>
-<tr><td>全本地</td><td class="num">0%</td><td class="num">75.0%</td></tr>
-<tr><td>全云端</td><td class="num">100%</td><td class="num">87.5%</td></tr>
-<tr><td>规则路由 θ=0.20</td><td class="num">32%</td><td class="num"><b>75.0%</b></td></tr>
-<tr><td>学习型路由 p&lt;0.85</td><td class="num">68%</td><td class="num"><b>90.0%</b></td></tr>
-</table>
-<div class="caption">表 6-5　分布外检验（n=40，均未重训）</div>
+<p class="lead">三点观察。其一，<b>全本地在证据指标上明显塌方</b>：证据召回只有 64.5%、锚定率 63.2%，意味着超过三分之一的本地回答连"能指回哪一段"都给不出；其误拒率高达 22.6%，说明本地模型倾向于在不确定时直接说"原文未提及"。其二，<b>全云端的证据质量已经很高</b>，引用有效率 100%、数字一致率 97.1%。其三，<b>门控路由用 39.7% 的云端调用，把准确率维持在 85.3%（与全云端差 1 题），同时把证据召回推到最高、误拒率降到最低</b>。</p>
 
 <figure>
-  <img src="../figures/fig_ood.png" alt="分布外对比">
+<img src="../figures/fig_paper_cost.png" alt="成本—质量对比">
+<div class="caption">图 6-2　成本—质量：门控路由把每千次成本从 ¥1.69 压到 ¥0.66，准确率只差 1 题</div>
 </figure>
-<div class="caption">图 6-2　分布外检验：规则路由的准确率与"完全不做路由"相同，学习型路由甚至超过纯云端。</div>
 
-<p class="lead">同等云端预算下的逐点比较更能说明问题：</p>
+<h2>6.3　门控路由的效果</h2>
+
+<p class="lead">门控的核心是那个判据本身有没有信息量。把本地答案按"是否通过校验"分组，看它们实际答对了多少：</p>
 
 <table>
-<tr><th>云端预算</th><th>规则路由</th><th>学习型路由</th><th>差距</th></tr>
-<tr><td>20%</td><td class="num">75.0%</td><td class="num">77.5%</td><td class="num">+2.5 pt</td></tr>
-<tr><td>30%</td><td class="num">75.0%</td><td class="num">87.5%</td><td class="num"><b>+12.5 pt</b></td></tr>
-<tr><td>40%</td><td class="num">72.5%</td><td class="num">87.5%</td><td class="num"><b>+15.0 pt</b></td></tr>
-<tr><td>50%</td><td class="num">75.0%</td><td class="num">87.5%</td><td class="num"><b>+12.5 pt</b></td></tr>
-<tr><td>60%</td><td class="num">85.0%</td><td class="num">87.5%</td><td class="num">+2.5 pt</td></tr>
+<tr><th>本地答案</th><th>数量</th><th>实际答对率</th></tr>
+<tr><td>校验通过（保留本地）</td><td>43 / 62（69.4%）</td><td><b>81.4%</b></td></tr>
+<tr><td>校验未通过（升级云端）</td><td>19 / 62（30.6%）</td><td><b>10.5%</b></td></tr>
 </table>
-<div class="caption">表 6-6　同预算下两种路由的 OOD 准确率</div>
+<div class="caption">表 6-2　门控信号的判别力（仅计可答题）</div>
 
-<h3>为什么规则路由会失效</h3>
+<figure>
+<img src="../figures/fig_paper_gate.png" alt="门控信号判别力">
+<div class="caption">图 6-3　校验通过时本地答对率 81.4%，未通过时仅 10.5%——两组的差距就是路由的可操作空间</div>
+</figure>
 
-<p class="lead">诊断结果非常直接：规则难度分在 OOD 上<b>均值从 0.33 塌到 0.14，最大值只有 0.22</b>。它的特征词表是「计算 / 求解 / 多少 / 单价 / 折扣」，而 OOD 题目说的是「还剩几元 / 每组几人 / 这个数是几」——<b>一个词都没命中</b>。于是所有题都被判为简单，全部留在本地。</p>
+<p class="lead">两组相差 <b>70.9 个百分点</b>：通过校验的本地答案基本可信，没通过的几乎必错。这就是门控能够工作的原因——它不是在"猜"本地会不会错，而是在"验"这个答案有没有原文背书。</p>
+
+<p class="lead">代价与收益要一起看。门控让每一道最终上云的题都多跑了一次本地推理，平均延迟从 0.86 s 涨到 5.26 s；换回来的是每千次成本从 ¥1.69 降到 ¥0.66（<b>降 61%</b>），以及误拒率从 8.1% 降到 3.2%。<b>如果本地通过率长期低于 30%，这笔开销就不划算了</b>——此时应当直接上云。通过率是部署时必须监控的第一个指标。</p>
+
+<h2>6.4　消融：学习型路由为何失效</h2>
+
+<p class="lead">把前一版本的学习型路由器（14 维题面 + 4 维检索特征，逻辑回归）原样搬到论文场景：<b>5 折交叉验证 AUC 只有 0.6102</b>，接近随机。阈值化后 93% 的请求被判给云端，准确率 85.3%、成本 ¥1.547——与直接全云端（86.8%、¥1.686）相比，省下不到 7% 的调用却丢了 1 题，<b>路由退化为"几乎全上云"</b>。</p>
+
+<p class="lead">逐维看判别力，问题更清楚：<code>top1_score</code> 的 AUC 为 0.43、<code>score_gap</code> 0.44、<code>n_pages_hit</code> 0.49、<code>coverage</code> 0.41——全部在 0.5 附近或以下。<b>检索质量与"本地答对与否"几乎无关</b>。</p>
 
 <div class="warn">
-<b>最危险的地方在于它不会报错。</b>规则路由失效时没有任何异常：服务正常、延迟正常、费用为零，只有准确率悄悄退回到"完全不做路由"的水平。如果这套系统上线运营，这种失效可能几个月都不会被发现。
+<b>为什么会这样？</b>因为错误形态变了。算术题里，本地模型错在"多步推理保持不住中间结果"，这件事与题目长度、运算符号数强相关，所以题面特征能预测。论文题里，本地模型错在<b>"在上下文里挑错了那个数"</b>——它读懂了问题、也找到了段落，只是把 44.1 抄成了 37.4，或者把相邻表格的另一列当成了答案。这类错误与题目写法无关，也与检索分数无关，因此任何"事先估计"都接近随机。<br><br>
+这不是实现问题，而是<b>方法前提失效</b>：级联/路由类方法的立论依赖"存在可事先估计的难度信号"，而这个场景不满足它。
 </div>
 
-<p class="lead">学习型路由学到的是「什么样的题本地会答错」这一更本质的映射，因此能跨表述泛化。特别值得注意的是它在 OOD 上达到 90.0%，<b>超过了纯云端方案的 87.5%</b>——说明它不仅能"少花钱"，还能"挑对模型"：有些题本地答对了而云端答错，路由把这些题留在了本地。</p>
+<p class="lead">这也解释了 oracle 上界为何只有 88.2%（全云端 86.8%）：两端都答错的题有 4 道，路由最多只能再多捡 1 题。<b>在这个场景里，"选对模型"能带来的准确率空间本来就很小</b>，路由的价值主要在成本与可核对性——而这恰好是门控能够提供的。</p>
 
-<p class="lead">作为参照，主评测集上的 <b>oracle 上界为 93.8%</b>——即"每条都挑会做的那个模型"也只有这个水平，因为其中有 <b>10/160</b> 条是本地与云端<b>都答错</b>的。这个数字给出了路由的收益天花板：它决定了继续优化路由最多还能换来 1.3 个百分点，也说明云端模型本身已接近该评测集的能力上限，后续的提升空间更可能来自题目分布而非调度策略。</p>
+<h2>6.5　失败分析</h2>
 
-<h2>6.5 失败分析</h2>
+<p class="lead">门控路由的失误集中在三类，每一类都有明确的改进方向：</p>
 
-<p class="lead">诚实记录三类失败，它们比成功案例更能说明系统的边界。</p>
+<p class="lead"><b>（a）检索未命中导致拒答（2 条）</b>。就是 6.1 节那两道表格题：正确页不在 top-5 里，本地与云端都回答"原文未提及"。这类错误是分块策略造成的，提升方向是表格感知分块与重排序，而不是换模型。</p>
 
-<p><b>其一，本地算错但表述通顺。</b>「先算 33 乘以 7，再加上 11」标准答案 242，模型答 260，且给出了一行看似合理的算式。这类错误无法从文本形式上识别，只能靠统计特征事前预判。</p>
+<p class="lead"><b>（b）本地数字挑错但通过了校验（6 条）</b>。例如问 "RAG-Token 在 TQA 上的分数"，gold 是 44.1，本地答 37.4——而 37.4 确实出现在同一段的其他列里，所以"数字可溯"这条校验通过了。这说明<b>数字可溯只能排除"凭空编造"，不能排除"抄错列"</b>；更强的做法是对表格做结构化解析，把"哪个数属于哪一列"编码进片段。</p>
 
-<p><b>其二，规则路由的特征盲区。</b>「一个班 45 人，把男生平均分成 5 组，每组几人」不含任何难度词，规则给的难度分约 0.12，必然留在本地；而这类题需要先做减法再做除法，本地约有一半概率出错。</p>
+<p class="lead"><b>（c）金标为英文单词、中文作答被判错（2 条）</b>。例如 gold 是 <code>two</code>，模型答"两个 adapter layer"，语义正确但别名匹配不到。这是<b>评测集的语言对齐问题</b>，不是模型错误；改进方向是给这类金标补齐中文别名，或在判分时引入受控的数值/词形归一。</p>
 
-<p><b>其三，自评置信度的不稳定性。</b>在「1+1」这类题目上，本地模型自评置信度低于阈值 τ，触发了一次不必要的升级。这说明模型自评不是一个可靠的校准器，只能作为辅助信号——这也是 4.4 节把兜底限制在不确定区间的原因。</p>
+<h2>6.6　与算术实验的对照</h2>
+
+<p class="lead">本作品前一版本在 160 道算术题上做过完整评测，那批数据没有重跑，结果仍可复现（命令见 8.3 节）。两批实验并列起来看，恰好说明"方法有效性依赖错误结构"这件事：</p>
+
+<table>
+<tr><th>实验</th><th>本地</th><th>云端</th><th>学习型路由</th><th>路由是否有效</th></tr>
+<tr><td>算术问答（160 题）</td><td>60.0%</td><td>92.5%</td><td>91.9%（云端 56%）</td><td>有效：AUC 0.9355，分布外 +12.5 pt</td></tr>
+<tr><td>论文问答（68 题）</td><td>63.2%</td><td>86.8%</td><td>85.3%（云端 93%）</td><td>失效：AUC 0.61，几乎全上云</td></tr>
+</table>
+<div class="caption">表 6-3　同一套路由方法在两类任务上的对照</div>
+
+<p class="lead">在算术题上，学习型路由的 AUC 达到 0.9355，并且在 40 条全新句式的分布外题目上以 30% 的云端预算比规则路由高 12.5 个百分点。同一个模型、同一套特征工程、同一套阈值选择流程，换到论文题上 AUC 掉到 0.61。<b>差别不在方法实现，而在"本地模型的错误是否与题面可观测的特征相关"。</b></p>
 </section>
 
 <!-- ================= 7 讨论 ================= -->
 <section>
 <h1>7　讨论</h1>
 
-<h2>7.1 为什么"省钱"不是好理由</h2>
+<h2>7.1　为什么证据锚点比长上下文划算</h2>
 
-<p class="lead">按表 6-2，云端千次调用仅 ¥0.194。假设一个应用每天 1 万次请求，全部走云端每月约 ¥58——这个量级上，"路由省钱"几乎没有商业意义。因此把省钱的毫秒级端侧推理当作作品卖点是危险的。</p>
+<p class="lead">把整篇论文塞进上下文，单次提问约 1.5 万 token，按本文云端价格约 ¥0.03；检索式方案每次送 5 个片段约 800 token，约 ¥0.0019，差一个数量级。这不是主要理由——主要理由是<b>可核对性</b>：检索结果天然带有片段编号与页码，模型引用编号即可定位；而长上下文里模型看到的是一整片文本，即使它"知道"答案在第三段，也无法给出可供前端绘制高亮框的坐标。</p>
 
-<p class="lead">但把量级放大三个数量级，结论就变了：</p>
+<p class="lead">第二个理由是<b>位置效应</b>。已有实验表明，关键信息位于输入中部时，模型表现显著低于位于首尾的情形<sup>[5]</sup>。论文的"方法"与"实验设置"往往就在全文中部，整篇塞进去恰好把最需要的内容放在了最不利的位置；而检索会把它们提到输入的最前面。</p>
 
-<table>
-<tr><th>日请求量</th><th>全云端月成本</th><th>路由 50% 本地后</th></tr>
-<tr><td>1 万</td><td class="num">¥58</td><td class="num">¥29</td></tr>
-<tr><td>100 万</td><td class="num">¥5,800</td><td class="num">¥2,900</td></tr>
-<tr><td>1 亿</td><td class="num">¥58 万</td><td class="num">¥29 万</td></tr>
-</table>
-<div class="caption">表 7-1　不同量级下的成本结构（按 ¥0.194/千次折算）</div>
+<h2>7.2　门控信号为什么有效</h2>
 
-<p class="lead">真正让本地路由不可替代的是另外三件事，它们都不随规模线性衰减：</p>
+<p class="lead">门控之所以能把 81.4% 与 10.5% 两组分开，是因为它检查的恰好是本地模型最容易出错的那一环：<b>数字有没有抄对</b>。本地模型很少"理解错问题"，它更多是"在正确的段落里挑了错误的那一行"。数字可溯性把这类错误挡住了相当一部分——6.5 节里仍有 6 条漏网，都是同一段的相邻列，说明这条规则的能力边界在"段内歧义"。</p>
 
-<ul>
-  <li><b>隐私</b>：被判为简单的请求根本不出设备。对医疗、法务、内部知识库场景，这不是省钱问题而是合规问题。</li>
-  <li><b>可用性</b>：断网、限流、密钥失效、服务商故障时，本地分支仍能服务。系统的降级路径在设计时就是按"云端一定可能挂"来写的。</li>
-  <li><b>响应确定性</b>：云端延迟受网络与队列影响，P95 可能突然劣化；本地延迟只受本机负载影响，波动可预测。</li>
-</ul>
+<p class="lead">更重要的是，它是一个<b>可解释、可复算</b>的判据：为什么升级，界面上会写明"数字 21 不可溯"或"引用编号 S9 无效"。用户不需要信任一个概率分数，只需要看一眼校验结论。</p>
 
-<h2>7.2 阈值的业务含义</h2>
+<h2>7.3　局限性</h2>
 
-<p class="lead">学习型路由的阈值有一个直接的业务解释：<b>它就是你愿意接受的"本地答错率"水位</b>。阈值 0.85 意味着"只有预测本地答对概率高于 85% 才留在本地"，低于这个把握就花钱上云。</p>
+<p class="lead">（1）<b>样本规模</b>：68 道题、3 篇论文，准确率差 1.5 个百分点只相当于 1 道题，因此"门控与全云端准确率相当"这一结论的置信区间较宽；更严格的做法是扩到 200 题以上并给出 bootstrap 区间。</p>
 
-<p class="lead">这比规则路由的"难度分 0.45"好沟通得多——后者需要解释一堆特征权重，前者只需要问一句"你愿意用多少准确率换多少成本"。在真实产品中，这个阈值应当由业务方按场景设定：客服场景可以设 0.9（宁可多花钱），个人助手可以设 0.7（省钱优先）。</p>
+<p class="lead">（2）<b>语料单一</b>：三篇都是英文 CS 论文，版面规整、表格清晰。扫描版 PDF、双栏排版、公式密集的论文会显著降低解析质量。</p>
 
-<h2>7.3 局限性</h2>
+<p class="lead">（3）<b>金标的语言问题</b>：部分事实题的 gold 是英文单词（two、U-shaped），中文作答无法别名匹配，造成假阴性；这类题在 68 题中约占 3%。</p>
 
-<ol>
-  <li><b>样本量偏小</b>：主集 160 条、OOD 40 条，AUC 的置信区间较宽，未做 bootstrap 估计。</li>
-  <li><b>OOD 集由作者设计</b>：存在设计者偏差的可能。不过失效机制（特征词未命中）是透明且可逐条复核的，不依赖主观判断。</li>
-  <li><b>阈值未在 OOD 上二次校准</b>：直接沿用了主集选择的 0.85，这对学习型路由略保守（云端占比 68%）。</li>
-  <li><b>单轮对话</b>：特征只取当前问题，不含对话历史。多轮场景下"上文是否已给出关键约束"会显著影响本地成功率。</li>
-  <li><b>单机单模型</b>：只验证了一种本地模型规格，未覆盖 0.5B / 3B 或换用其他硬件时的表现差异。</li>
-  <li><b>特征覆盖不全</b>：<code>code_terms</code> 与 <code>reasoning_terms</code> 在评测集中未出现，系数为 0，等于这两个特征未被检验。</li>
-</ol>
+<p class="lead">（4）<b>延迟</b>：本地推理在无 GPU 机器上约 10.9 s/题，门控让最终上云的题也要先等这一次。对交互式产品，这个延迟需要用流式输出与"先出本地草稿"来缓解，而不是靠换更大的本地模型。</p>
 
-<h2>7.4 改进方向</h2>
+<p class="lead">（5）<b>建库依赖云端</b>：离线双语索引需要一次云端翻译（328 块约 ¥0.34）。对完全离线部署的场景，这一步需要预置译文或改用多语种嵌入模型。</p>
 
-<ol>
-  <li><b>扩充真实流量样本</b>：从公开问答集采样并人工标注难度，替代程序化生成的题目，检验结论是否成立。</li>
-  <li><b>引入对话状态特征</b>：把轮次、上文长度、是否重复提问纳入特征，覆盖多轮场景。</li>
-  <li><b>按硬件自适应阈值</b>：启动时测一次本地吞吐，据此调整 θ 或 p 的阈值——换台好机器自动放宽本地配额。</li>
-  <li><b>在线学习</b>：把每次真实请求的对错回流为标签，周期性增量更新路由器，缓解分布漂移。</li>
-  <li><b>多档路由</b>：目前是二分类（本地/云端），可扩展为"本地小模型 / 本地大模型 / 云端"三档。</li>
-</ol>
+<h2>7.4　改进方向</h2>
+
+<p class="lead">最值得做的三件事，按预期收益排序：<b>表格感知分块</b>（把行列结构编码进片段，直接针对 6.5 节的 (a)(b) 两类错误）、<b>重排序</b>（对 top-20 做一次轻量交叉编码，把 Hit@5 的 96.8% 推到 99%）、<b>跨文档检索</b>（一次问多篇论文，例如"这三篇对同一指标的报告分别是多少"）。</p>
+
+<p class="lead">长期看，门控的判据还可以更细：现在只有"通过/不通过"两档，可以按校验失败的严重程度分档——例如"引用无效"直接升级，"数字不可溯"先尝试让本地自我修订一次再决定。</p>
 </section>
 
 <!-- ================= 8 工程实现与复现 ================= -->
 <section>
 <h1>8　工程实现与复现</h1>
 
-<h2>8.1 代码结构</h2>
+<h2>8.1　代码结构</h2>
 
 <pre>app/
-  config.py          全部可调参数（阈值、价格表、预算）
-  schemas.py         请求/响应/路由凭证的数据结构
-  pipeline.py        编排：决策 → 推理 → 兜底 → 记账（含流式）
-  providers/         本地(Ollama) / 云端(OpenAI 兼容) 同构适配
-  router/            特征、策略、分类器、置信度
-  eval/              判分口径、评测执行、结果落盘
-  web/               FastAPI + 零依赖前端
+  config.py            全部可调参数（阈值、价格表、后端选择）
+  pipeline.py          编排：决策 → 推理 → 降级 → 记账（旧场景原样保留）
+  rag/
+    parser.py          PDF → 片段（页码、行级 bbox、章节）
+    retriever.py       BM25 + 中文 bigram + 离线双语索引
+    prompt.py          受约束 prompt
+    anchor.py          确定性对齐 + 三条一致性校验
+    qa.py              端到端：检索 → 门控 → 生成 → 锚点
+  router/              特征、策略、学习型分类器（14/18 维两种模型）
+  eval/
+    metrics.py         旧场景判分口径
+    metrics_rag.py     论文场景判分与证据指标
+    run_eval_rag.py    论文评测入口
+  web/
+    main.py            FastAPI：/api/chat 与 /api/paper/*
+    static/            index.html（旧）与 paper.html（新），零依赖
 scripts/
-  gen_eval_set.py    评测集生成（固定种子，可复现）
-  gen_ood_set.py     分布外评测集生成
-  train_router.py    路由器训练 + 交叉验证 + 阈值选择
-  compare_routers.py 等预算曲线对比
-  make_figures.py    文档图表生成
-  build_doc.py       本文档的 PDF 构建
-tests/               路由与判分的单元测试（22 项，全绿）</pre>
+  fetch_papers.py      下载 3 篇语料（不进 git）
+  build_paper_index.py 解析 + 逐块翻译，建离线双语索引
+  gen_qa_draft.py      生成题目草案并逐字校验
+  select_qa.py         筛选、去重、人工剔除
+  make_figures_rag.py  论文场景的三张图
+  rescore_rag.py       换判分口径后离线重判
+tests/
+  test_core.py         22 项（旧场景，行为未变）
+  test_rag.py          24 项（解析/检索/锚点/指标）</pre>
 
-<p class="lead">这套结构是对"机器学习系统技术债"的一次刻意规避。Sculley 等人指出，ML 系统的维护成本主要来自纠缠（entanglement）、未受控的配置蔓延与隐藏的反馈环<sup>[9]</sup>。本项目的对应做法是：所有后端共享同一协议（解纠缠）、所有决策共享同一凭证结构与同一份 <code>Settings</code>（抑制配置蔓延）、所有路由决策与费用都落盘可查（让反馈环显式化）。</p>
+<h2>8.2　部署</h2>
 
-<h2>8.2 部署</h2>
+<p class="lead">单容器：应用（FastAPI）与本地推理（llama.cpp OpenAI 兼容服务）同容器，由 <code>deploy/start.sh</code> 拉起两个进程。模型权重与语料在构建期下载，运行期不需要外网（云端调用除外）。托管在 ModelScope 创空间，2 vCPU / 8 GB。做过的两处适配：删掉与 fastapi 冲突的 gradio 依赖、端口改 7860。</p>
 
-<p class="lead">提供两种部署方式。本地演示用 <code>make demo</code> 直接起服务；容器化部署用 <code>docker compose up</code>，编排文件同时拉起 Ollama 与应用，模型卷持久化，应用内置健康检查。<b>单 worker</b> 是刻意的——多进程会各自加载一份模型，在 16 GB 内存的机器上会直接打爆。</p>
+<h2>8.3　复现步骤</h2>
 
-<p class="lead">面向公网的形态换了一种组织方式：多数托管平台只允许一个容器、不保证能常驻第二个服务，因此生产镜像把「应用 + 本地推理」装进同一个镜像——本地推理改用 llama.cpp 提供的 OpenAI 兼容服务，应用侧复用云端那套 Provider，不必为本地单独写客户端；模型权重在构建期下载，运行期离线。当前在线演示部署于 ModelScope 创空间（Docker SDK，2 vCPU / 8 GB），地址见封面。</p>
-
-<table>
-<tr><th>形态</th><th>本地推理</th><th>适用场景</th></tr>
-<tr><td>本机 venv + Ollama</td><td>Ollama 守护进程</td><td>开发、录屏</td></tr>
-<tr><td>docker compose</td><td>Ollama 容器</td><td>本地一键复现</td></tr>
-<tr><td>单容器生产镜像</td><td>llama.cpp server（同容器）</td><td>公网演示、评审复现</td></tr>
-</table>
-<div class="caption">表 8-1　三种部署形态</div>
-
-<table>
-<tr><th>部署形态</th><th>依赖</th><th>适用场景</th></tr>
-<tr><td>本机 venv</td><td>Python 3.10+、Ollama</td><td>开发、录屏演示</td></tr>
-<tr><td>Docker Compose</td><td>Docker Desktop</td><td>公网演示、评审复现</td></tr>
-</table>
-<div class="caption">表 8-1　两种部署形态</div>
-
-<h2>8.3 复现步骤</h2>
-
-<pre>git clone https://github.com/hanyue0/hybridmind
-cd hybridmind
-python -m venv .venv && .venv\Scripts\pip install -r requirements.txt
+<pre># 1. 依赖与本地模型
+python -m venv .venv &amp;&amp; .venv\Scripts\pip install -r requirements.txt
 ollama pull qwen2.5:1.5b
-copy .env.example .env            # 填入自己的云端密钥（评审请自备）
-python scripts/gen_eval_set.py    # 重建 160 条评测集
-python -m app.eval.run_eval --mode local
-python -m app.eval.run_eval --mode cloud
-python scripts/train_router.py    # 训练路由器，输出 AUC 与报告
-python scripts/compare_routers.py # 等预算曲线
-python -m uvicorn app.web.main:app --port 8000</pre>
 
-<p class="lead">评测集与图表全部由脚本生成，不手填任何数字。密钥只存放在 <code>.env</code> 中，该文件已在 <code>.gitignore</code> 内；仓库全历史经扫描确认不含任何密钥。</p>
+# 2. 语料与索引（需要 .env 里的云端密钥，约 ¥0.4）
+python scripts/fetch_papers.py
+python scripts/build_paper_index.py
 
-<h2>8.4 开发过程留痕</h2>
+# 3. 评测：三组对照 + 门控
+python -m app.eval.run_eval_rag --mode local
+python -m app.eval.run_eval_rag --mode cloud
+python -m app.eval.run_eval_rag --mode gated
 
-<p class="lead">大赛要求作品保留"完整、细粒度的 Git 提交历史"，并明确禁止一次性提交全部功能。本项目的 40 余次提交按模块推进，每次提交对应一个可验收的单元：初始化骨架 → 配置 → 后端抽象 → 规则路由 → 置信度兜底 → 编排 → 评测集 → Web 层 → 测试 → 容器化 → 流式 → 判分修正 → 学习型路由 → 分布外实验。</p>
+# 4. 重判与出图（不重跑模型）
+python scripts/rescore_rag.py
+python scripts/make_figures_rag.py
 
-<p class="lead"><code>docs/ai-logs/</code> 目录记录了与 AI 协作的关键决策，包括<b>被否决的建议</b>（例如"用大模型判断难度"因成本翻倍被否决）与<b>实测推翻预设</b>的过程（4 tok/s 与 92.5% 这两个数字如何改变了设计）。这些记录构成了原创性与开发过程真实性的证据。</p>
+# 5. 测试与演示
+python -m unittest discover -s tests -t .
+python -m uvicorn app.web.main:app --port 8000    # 打开 /paper</pre>
+
+<p class="lead">旧场景的两组实验仍可复现：<code>python -m app.eval.run_eval --mode local|cloud|auto</code>，数据在 <code>data/eval_set.jsonl</code>。</p>
+
+<h2>8.4　开发过程留痕</h2>
+
+<p class="lead">仓库保留按模块推进的提交历史，并在 <code>docs/ai-logs/</code> 记录与 AI 协作的过程与被推翻的判断。本版本的三次重要转向都留下了证据：</p>
+
+<p class="lead">（1）<b>放弃"用模型预测锚点"</b>：最初打算完全依赖模型标注 <code>[S]</code>，实测本地 1.5B 经常不标，于是补了确定性对齐（4.3 节）。</p>
+
+<p class="lead">（2）<b>放弃"学习型路由"作为主方案</b>：AUC 0.61 的实测结果推翻了"难度可预测"的前提（6.4 节），改用以校验结果作为路由信号。</p>
+
+<p class="lead">（3）<b>修正判分口径</b>：发现"取最后一个数字"会把"2016年12月"判成 12，改为数词子串匹配，并用 <code>rescore_rag.py</code> 在已有结果上重判（6.2 节的数字均为重判后结果）。</p>
 </section>
 
 <!-- ================= 参考文献 ================= -->
 <section>
 <h1>参考文献</h1>
 <ol class="refs">
-  <li>Wang X, Li Q, Jia W. Cognitive Edge Computing: A Comprehensive Survey on Optimizing Large Models and AI Agents for Pervasive Deployment[J]. arXiv preprint arXiv:2501.03265, 2025.</li>
-  <li>Chen L, Zaharia M, Zou J. FrugalGPT: How to Use Large Language Models While Reducing Cost and Improving Performance[J]. arXiv preprint arXiv:2305.05176, 2023.</li>
-  <li>Shazeer N, Mirhoseini A, Maziarz K, et al. Outrageously Large Neural Networks: The Sparsely-Gated Mixture-of-Experts Layer[C]//International Conference on Learning Representations (ICLR). 2017.</li>
-  <li>Varangot-Reille C, Bouvard C, Gourru A, et al. Doing More with Less: A Survey on Routing Strategies for Resource Optimisation in Large Language Model-Based Systems[J]. Journal of Artificial Intelligence Research, 2025. DOI: 10.1613/jair.1.19801. arXiv:2502.00409.</li>
-  <li>Ong I, Almahairi A, Wu V, et al. RouteLLM: Learning to Route LLMs with Preference Data[J]. arXiv preprint arXiv:2406.18665, 2024.</li>
-  <li>Qwen Team. Qwen2.5 Technical Report[J]. arXiv preprint arXiv:2412.15115, 2024.</li>
-  <li>Fu T, Ge Y, You Y, et al. R2R: Efficiently Navigating Divergent Reasoning Paths with Small-Large Model Token Routing[C]//Advances in Neural Information Processing Systems (NeurIPS). 2025. arXiv:2505.21600.</li>
-  <li>Guo C, Pleiss G, Sun Y, et al. On Calibration of Modern Neural Networks[C]//International Conference on Machine Learning (ICML). 2017: 1321-1330.</li>
-  <li>Sculley D, Holt G, Golovin D, et al. Hidden Technical Debt in Machine Learning Systems[C]//Advances in Neural Information Processing Systems (NeurIPS). 2015: 2503-2511.</li>
+<li>LEWIS P, PEREZ E, PIKTUS A, et al. Retrieval-augmented generation for knowledge-intensive NLP tasks[C]//Advances in Neural Information Processing Systems (NeurIPS). 2020. arXiv:2005.11401.</li>
+<li>KARPUKHIN V, OĞUZ B, MIN S, et al. Dense passage retrieval for open-domain question answering[C]//Proceedings of EMNLP. 2020. arXiv:2004.04906.</li>
+<li>ROBERTSON S, ZARAGOZA H. The probabilistic relevance framework: BM25 and beyond[J]. Foundations and Trends in Information Retrieval, 2009, 3(4): 333-389.</li>
+<li>HU E J, SHEN Y, WALLIS P, et al. LoRA: low-rank adaptation of large language models[C]//International Conference on Learning Representations (ICLR). 2022. arXiv:2106.09685.</li>
+<li>LIU N F, LIN K, HEWITT J, et al. Lost in the middle: how language models use long contexts[J]. Transactions of the Association for Computational Linguistics, 2024. arXiv:2307.03172.</li>
+<li>CHEN L, ZAHARIA M, ZOU J. FrugalGPT: how to use large language models while reducing cost and improving performance[EB/OL]. arXiv:2305.05176, 2023.</li>
+<li>ONG I, ALMAHAIRI A, WU V, et al. RouteLLM: learning to route LLMs with preference data[EB/OL]. arXiv:2406.18665, 2024.</li>
+<li>GUU K, LEE K, TUNG Z, et al. Retrieval augmented language model pre-training[C]//International Conference on Machine Learning (ICML). 2020. arXiv:2002.08909.</li>
+<li>LEWIS M, LIU Y, GOYAL N, et al. BART: denoising sequence-to-sequence pre-training for natural language generation, translation, and comprehension[C]//Proceedings of ACL. 2020. arXiv:1910.13461.</li>
+<li>GAO L, DAI Z, PASUPAT P, et al. RARR: researching and revising what language models say, using language models[C]//Proceedings of ACL. 2023. arXiv:2210.08726.</li>
+<li>GAO T, YEN H, YU J, et al. Enabling large language models to generate text with citations[C]//Proceedings of EMNLP. 2023. arXiv:2305.14627.</li>
+<li>JI Z, LEE N, FRIESKE R, et al. Survey of hallucination in natural language generation[J]. ACM Computing Surveys, 2023, 55(12): 1-38.</li>
+<li>Qwen Team. Qwen2.5 technical report[EB/OL]. arXiv:2412.15115, 2024.</li>
+<li>ES S, JAMES J, ESPINOSA-ANKENA L, et al. RAGAS: automated evaluation of retrieval augmented generation[C]//Proceedings of EACL (System Demonstrations). 2024. arXiv:2306.05685.</li>
+<li>MIN S, KRISHNA K, LYU X, et al. FActScore: fine-grained atomic evaluation of factual precision in long form text generation[C]//Proceedings of EMNLP. 2023. arXiv:2305.14251.</li>
 </ol>
 </section>
+

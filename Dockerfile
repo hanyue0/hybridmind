@@ -43,8 +43,11 @@ RUN mkdir -p /app/models && \
     https://hf-mirror.com/Qwen/Qwen2.5-1.5B-Instruct-GGUF/resolve/main/qwen2.5-1.5b-instruct-q4_k_m.gguf
 
 COPY app ./app
-COPY data/eval_set.jsonl ./data/eval_set.jsonl
-COPY data/router_model.json ./data/router_model.json
+# 语料与索引一起进镜像：data/papers 里是 3 篇 PDF + 解析缓存 + 中文译文索引。
+# 公开仓库不含 PDF（arXiv non-exclusive license），全新 clone 构建时由下面一步自动下载。
+COPY data ./data
+COPY scripts/fetch_papers.py ./scripts/fetch_papers.py
+RUN python scripts/fetch_papers.py || echo "语料下载失败，演示页将显示空论文列表"
 COPY deploy/start.sh /start.sh
 RUN chmod +x /start.sh
 

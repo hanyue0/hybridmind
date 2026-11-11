@@ -1,4 +1,4 @@
-# ç¯å¢ƒä¸å¯†é’¥
+ï»¿# ç¯å¢ƒä¸å¯†é’¥
 .env
 *.env.local
 
@@ -14,6 +14,14 @@ venv/
 data/results/*.json
 data/results/*.jsonl
 
+# è®ºæ–‡è¯­æ–™ï¼šPDF ä¸è§£æç¼“å­˜ä¸è¿› git
+# ä¸‰ç¯‡è¯­æ–™æ˜¯ arXiv non-exclusive licenseï¼Œé‡å»ºæ–¹å¼è§ data/papers/README.md
+data/papers/*.pdf
+data/papers/*.chunks.json
+data/papers/*.zh.json
+data/papers/.cache/
+data/papers/uploads/
+
 # ç³»ç»Ÿä¸ç¼–è¾‘å™¨
 .DS_Store
 Thumbs.db
@@ -26,14 +34,8 @@ Thumbs.db
 *.wav
 *.m4a
 raw_footage/
-
-# ÁÙÊ±½Å±¾ÓëÈÕÖ¾
 scratch/
-
-# ÊÓÆµÖĞ¼ä²úÎï£¨¿ÉÖØÉú³É£©
 docs/video/
 
-
-# Ä£ĞÍÈ¨ÖØ£¨Ìå»ı´ó£¬°´ĞèÏÂÔØ£©
+# æ¨¡å‹æƒé‡ï¼ˆä½“ç§¯å¤§ï¼ŒæŒ‰éœ€ä¸‹è½½ï¼‰
 models/
-

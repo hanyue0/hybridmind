@@ -116,11 +116,17 @@ class HybridPipeline:
             return decision.score < decision.threshold + self.settings.escalation_margin
         return True
 
-    def _prepare(self, messages: Sequence[dict], mode: str):
-        """决策与降级判断，两个入口共用。"""
+    def _prepare(self, messages: Sequence[dict], mode: str,
+                 route_text: Optional[str] = None,
+                 rag_features: Optional[dict] = None):
+        """决策与降级判断，两个入口共用。
+
+        ``route_text`` 让「用于路由的文本」与「发给模型的文本」解耦：
+        论文场景里后者带着几千字的检索上下文，拿它算长度特征会把所有问题都判成难题。
+        """
         chat = self._with_system(messages)
-        question = chat[-1].get("content", "")
-        decision = self.decider(question, mode if mode != "auto" else None)
+        question = route_text if route_text is not None else chat[-1].get("content", "")
+        decision = self.decider(question, mode if mode != "auto" else None, rag_features)
         reasons = list(decision.reasons)
         route = decision.route
         if route == "cloud" and not self.settings.cloud_ready:
@@ -130,8 +136,10 @@ class HybridPipeline:
 
     # ---------- 一次性返回（评测） ----------
 
-    def answer(self, messages: Sequence[dict], mode: str = "auto") -> ChatResponse:
-        chat, decision, reasons, route = self._prepare(messages, mode)
+    def answer(self, messages: Sequence[dict], mode: str = "auto",
+               route_text: Optional[str] = None,
+               rag_features: Optional[dict] = None) -> ChatResponse:
+        chat, decision, reasons, route = self._prepare(messages, mode, route_text, rag_features)
         escalated = False
         confidence: Optional[float] = None
 
@@ -187,9 +195,11 @@ class HybridPipeline:
 
     # ---------- 流式（演示） ----------
 
-    def answer_stream(self, messages: Sequence[dict], mode: str = "auto") -> Iterator[dict]:
+    def answer_stream(self, messages: Sequence[dict], mode: str = "auto",
+                      route_text: Optional[str] = None,
+                      rag_features: Optional[dict] = None) -> Iterator[dict]:
         """产出事件流。前端按 type 分别处理：trace / delta / escalate / done / error。"""
-        chat, decision, reasons, route = self._prepare(messages, mode)
+        chat, decision, reasons, route = self._prepare(messages, mode, route_text, rag_features)
 
         yield {
             "type": "trace",

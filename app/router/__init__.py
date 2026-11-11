@@ -9,7 +9,7 @@ from . import confidence, features, policy
 from .classifier import LocalCorrectnessModel
 from .policy import Decision, decide
 
-Decider = Callable[[str, Optional[str]], Decision]
+Decider = Callable[..., Decision]
 
 
 def build_decider(settings) -> Decider:
@@ -17,6 +17,8 @@ def build_decider(settings) -> Decider:
 
     学习型模型文件缺失时安全回退到规则策略——部署时少一个文件不该导致服务起不来，
     但要在日志里说清楚，不能静默改变行为。
+
+    第三个参数 ``rag`` 是论文场景才有的一组检索特征；不传则行为与改造前完全一致。
     """
     if getattr(settings, "router_mode", "rule") == "learned":
         path = Path(settings.router_model_path)
@@ -24,10 +26,10 @@ def build_decider(settings) -> Decider:
             path = Path(__file__).resolve().parent.parent.parent / path
         if path.exists():
             model = LocalCorrectnessModel.load(path)
-            return lambda text, force=None, _m=model: policy.decide_learned(text, _m, force)
+            return lambda text, force=None, rag=None, _m=model: policy.decide_learned(text, _m, force, rag)
         print(f"[router] 未找到模型文件 {path}，回退规则策略")
     theta = settings.theta_local
-    return lambda text, force=None: decide(text, theta, force)
+    return lambda text, force=None, rag=None: decide(text, theta, force, rag)
 
 
 __all__ = [
