@@ -13,7 +13,7 @@
 | 演示视频 | `docs/HybridMind_演示视频_最终版.mp4` | 5 分 17 秒，1920×1080，含字幕 |
 | 技术文档 | [`docs/HybridMind_技术文档.pdf`](docs/HybridMind_技术文档.pdf) | 24 页 |
 | 作品介绍 | [`docs/HybridMind_作品介绍.pdf`](docs/HybridMind_作品介绍.pdf) | 11 页，对应报名表七项 |
-| 代码仓库 | 本仓库 | 46 项单元测试（旧 22 + 新 24） |
+| 代码仓库 | 本仓库 | 48 项单元测试（旧 22 + 新 26） |
 
 ## 实测结果
 
@@ -98,7 +98,7 @@ python -m app.eval.run_eval_rag --mode gated    # 证据门控（本作品）
 
 python scripts/rescore_rag.py        # 换判分口径后离线重判
 python scripts/make_figures_rag.py   # 三张图
-python -m unittest discover -s tests -t .   # 46 项测试
+python -m unittest discover -s tests -t .   # 48 项测试
 ```
 
 旧的算术问答实验仍可复现：`python -m app.eval.run_eval --mode local|cloud|auto`，数据在 `data/eval_set.jsonl`。
@@ -128,7 +128,7 @@ scripts/
   record_demo_v2.py      CDP 录屏（演示视频的真实交互片段）
   make_voiceover.py      机器配音兜底（edge-tts）
   assemble_v2.py         按配音时长合成视频
-tests/                   旧 22 项 + 新 24 项
+tests/                   旧 22 项 + 新 26 项
 docs/                    技术文档、作品介绍、图、AI 协作记录、视频脚本
 data/papers/             语料与索引（PDF 与译文不进 git）
 ```

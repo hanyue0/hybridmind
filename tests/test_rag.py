@@ -226,5 +226,52 @@ class RouterCompatTest(unittest.TestCase):
         self.assertGreater(high, low)
 
 
+class PaperStoreTest(unittest.TestCase):
+    """上传的论文放在 uploads/ 子目录里，必须和内置论文一样能被找到。"""
+
+    def test_resolves_builtin_and_uploaded(self):
+        import json
+        import tempfile
+        from pathlib import Path
+
+        from app.rag.qa import PaperStore
+
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "uploads").mkdir()
+            paper = {
+                "name": "uploaded",
+                "path": "",
+                "n_pages": 1,
+                "chunks": [
+                    {"id": "S1", "page": 1, "text": "hello world", "bbox": [0, 0, 1, 1],
+                     "section": "", "lines": []}
+                ],
+            }
+            (root / "uploads" / "uploaded.chunks.json").write_text(
+                json.dumps(paper), encoding="utf-8"
+            )
+            # 列表以 PDF 为准（页面渲染需要原始文件），这里放个占位文件
+            (root / "uploads" / "uploaded.pdf").write_bytes(b"%PDF-1.4\n")
+            (root / "uploads" / "uploaded.zh.json").write_text(
+                json.dumps({"S1": "你好世界"}), encoding="utf-8"
+            )
+            store = PaperStore(root)
+            self.assertIn("uploaded", store.names())
+            self.assertEqual(len(store.load("uploaded").chunks), 1)
+            self.assertEqual(store.zh_map("uploaded")["S1"], "你好世界")
+
+    def test_missing_paper_raises(self):
+        import tempfile
+        from pathlib import Path
+
+        from app.rag.qa import PaperStore
+
+        with tempfile.TemporaryDirectory() as tmp:
+            store = PaperStore(Path(tmp))
+            with self.assertRaises(FileNotFoundError):
+                store.load("nope")
+
+
 if __name__ == "__main__":
     unittest.main()

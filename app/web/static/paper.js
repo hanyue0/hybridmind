@@ -14,6 +14,7 @@ const state = {
   mode: "auto",
   busy: false,
   stats: { requests: 0, cloud: 0, cost: 0 },
+  papers: {},
 };
 
 const $ = (id) => document.getElementById(id);
@@ -24,16 +25,20 @@ async function loadPapers() {
   const res = await fetch("/api/papers");
   const data = await res.json();
   const select = $("paper-select");
+  const previous = state.paper;
   select.innerHTML = "";
+  state.papers = {};
   (data.papers || []).forEach((p) => {
+    state.papers[p.name] = p;
     const opt = document.createElement("option");
     opt.value = p.name;
     opt.textContent = `${prettyName(p.name)}${p.pages ? ` · ${p.pages} 页` : ""}`;
     select.appendChild(opt);
   });
   if (select.options.length) {
-    state.paper = select.value;
-    await loadMeta();
+    state.paper = previous && state.papers[previous] ? previous : select.value;
+    select.value = state.paper;
+    updateIndexButton();
   }
 }
 
@@ -42,6 +47,54 @@ function prettyName(name) {
   if (name.startsWith("lora_2106")) return "LoRA · 低秩适配";
   if (name.startsWith("lost_in_middle")) return "Lost in the Middle · 长上下文";
   return name.replace(/_\d+\.\d+$/, "");
+}
+
+function updateIndexButton() {
+  const p = state.papers[state.paper];
+  const btn = $("index-btn");
+  const needs = p && (p.zh_coverage || 0) < 0.95;
+  btn.hidden = !needs;
+}
+
+async function uploadPaper(file) {
+  const form = new FormData();
+  form.append("file", file);
+  $("conn").textContent = "上传并解析中…";
+  try {
+    const res = await fetch("/api/paper/upload", { method: "POST", body: form });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || `HTTP ${res.status}`);
+    await loadPapers();
+    state.paper = data.name;
+    $("paper-select").value = data.name;
+    await loadMeta();
+    $("conn").textContent = `已上传《${data.name}》：${data.pages} 页 / ${data.chunks} 个片段`;
+    updateIndexButton();
+  } catch (err) {
+    $("conn").textContent = `上传失败：${err.message}`;
+  }
+}
+
+async function buildIndex() {
+  const btn = $("index-btn");
+  if (!state.paper || btn.disabled) return;
+  btn.disabled = true;
+  const original = btn.textContent;
+  btn.textContent = "建索引中…（约 1–2 分钟）";
+  $("conn").textContent = "正在逐块生成中文译文，请勿关闭页面…";
+  try {
+    const res = await fetch(`/api/paper/${encodeURIComponent(state.paper)}/index`, { method: "POST" });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || `HTTP ${res.status}`);
+    await loadPapers();
+    $("conn").textContent = `索引完成：${data.translated}/${data.chunks} 块，成本 ¥${data.cost_cny}`;
+  } catch (err) {
+    $("conn").textContent = `建索引失败：${err.message}`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = original;
+    updateIndexButton();
+  }
 }
 
 async function loadMeta() {
@@ -392,8 +445,17 @@ $("paper-select").addEventListener("change", async (e) => {
   $("anchors").innerHTML = "";
   $("thread").innerHTML = "";
   $("evidence-hint").textContent = "回答后显示，点击可跳转到原文";
+  updateIndexButton();
   await loadMeta();
 });
+
+$("upload-input").addEventListener("change", (e) => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if (file) uploadPaper(file);
+});
+
+$("index-btn").addEventListener("click", () => buildIndex());
 
 $("prev-page").addEventListener("click", () => renderPage(state.page - 1));
 $("next-page").addEventListener("click", () => renderPage(state.page + 1));
@@ -404,22 +466,17 @@ document.addEventListener("keydown", (e) => {
 });
 
 loadPapers()
-  .then(() => {
+  .then(async () => {
     // 演示/截图用：/paper?paper=xxx&ask=问题 会自动选论文并提问
     const params = new URLSearchParams(location.search);
     const wantPaper = params.get("paper");
     const about = params.get("ask");
     window.__autoJump = params.get("jump") === "1";
-    if (wantPaper) {
-      const select = $("paper-select");
-      if ([...select.options].some((o) => o.value === wantPaper)) {
-        select.value = wantPaper;
-        state.paper = wantPaper;
-        return loadMeta().then(() => {
-          if (about) ask(about);
-        });
-      }
+    if (wantPaper && state.papers[wantPaper]) {
+      state.paper = wantPaper;
+      $("paper-select").value = wantPaper;
     }
+    await loadMeta();
     if (about) ask(about);
   })
   .catch((err) => {

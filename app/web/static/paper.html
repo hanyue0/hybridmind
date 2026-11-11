@@ -19,6 +19,13 @@
 
     <div class="controls">
       <select id="paper-select" aria-label="选择论文"></select>
+      <label class="upload-btn" title="上传自己的 PDF">
+        上传 PDF
+        <input type="file" id="upload-input" accept="application/pdf" hidden />
+      </label>
+      <button id="index-btn" class="upload-btn" hidden title="为新上传的论文生成中文检索索引">
+        建中文索引
+      </button>
       <div class="modes" role="group" aria-label="路由模式">
         <button class="mode active" data-mode="auto">自动路由</button>
         <button class="mode" data-mode="local">强制本地</button>

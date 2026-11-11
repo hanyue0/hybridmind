@@ -1,4 +1,4 @@
-"""Web 层：论文精读演示界面 + 只读统计。
+﻿"""Web 层：论文精读演示界面 + 只读统计。
 
 两个入口并存：
 - ``/api/chat``：改造前的通用问答（算术题演示、旧评测仍在用），行为一行未改；
@@ -26,6 +26,7 @@ from ..pipeline import HybridPipeline, Ledger
 from ..providers import OpenAICompatProvider, ProviderError, build_local_provider
 from ..rag.anchor import extract_anchors, verify_anchors
 from ..rag.parser import parse_pdf, render_page_png
+from ..rag.indexer import build_zh_index
 from ..rag.prompt import build_messages
 from ..rag.qa import PaperQA, PaperStore
 from ..schemas import ChatRequest, ChatResponse
@@ -150,13 +151,15 @@ def papers() -> dict:
                 pages, chunks = meta.n_pages, len(meta.chunks)
             except Exception:  # 损坏的 PDF 不该让列表接口挂掉
                 pages, chunks = None, None
+            zh = store.zh_map(name)
             items.append(
                 {
                     "name": name,
                     "pages": pages,
                     "chunks": chunks,
                     "uploaded": base == UPLOAD_DIR,
-                    "indexed_zh": bool(store.zh_map(name)),
+                    "indexed_zh": bool(zh),
+                    "zh_coverage": round(len(zh) / max(1, chunks or 1), 3),
                 }
             )
     return {"papers": items}
@@ -234,6 +237,21 @@ def paper_meta(name: str) -> dict:
             for c in paper.chunks
         ],
     }
+
+
+@app.post("/api/paper/{name}/index")
+def paper_index(name: str, limit: int = 0) -> dict:
+    """给论文补中文索引（上传的 PDF 靠这个才能用中文检索）。
+
+    同步执行：一篇 20 页论文约 1–2 分钟。演示时前端会显示进度提示，
+    失败也不影响英文提问（BM25 仍能命中英文原文）。
+    """
+    name = _safe_paper(name)
+    if not settings.cloud_ready:
+        raise HTTPException(status_code=400, detail="未配置云端密钥，无法生成中文索引")
+    result = build_zh_index(PAPER_DIR, name, pipeline.cloud, limit=limit or None)
+    store.invalidate(name)
+    return result
 
 
 @app.post("/api/paper/upload")

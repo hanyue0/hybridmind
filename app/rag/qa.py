@@ -78,19 +78,33 @@ class AnswerResult:
 
 
 class PaperStore:
-    """论文库：解析结果与译文都缓存成 JSON，避免每次请求重新解析 PDF。"""
+    """论文库：解析结果与译文都缓存成 JSON，避免每次请求重新解析 PDF。
+
+    论文可以放在 ``data/papers/`` 下，也可以放在 ``data/papers/uploads/``
+    （用户上传的 PDF）——查找时两个位置都试，上传的论文才能和内置论文一样被检索。
+    """
 
     def __init__(self, root: str | Path = "data/papers") -> None:
         self.root = Path(root)
+        self.upload_root = self.root / "uploads"
         self._papers: Dict[str, Paper] = {}
         self._zh: Dict[str, Dict[str, str]] = {}
         self._retrievers: Dict[str, Retriever] = {}
 
+    def resolve(self, name: str, suffix: str) -> Path:
+        for base in (self.root, self.upload_root):
+            candidate = base / f"{name}{suffix}"
+            if candidate.exists():
+                return candidate
+        raise FileNotFoundError(f"{name}{suffix}")
+
     # ---------- 元数据 ----------
     def names(self) -> List[str]:
-        if not self.root.exists():
-            return []
-        return sorted(p.stem for p in self.root.glob("*.pdf"))
+        found = []
+        for base in (self.root, self.upload_root):
+            if base.exists():
+                found.extend(p.stem for p in base.glob("*.pdf"))
+        return sorted(set(found))
 
     def meta(self) -> List[dict]:
         out = []
@@ -103,21 +117,17 @@ class PaperStore:
         return out
 
     # ---------- 解析缓存 ----------
-    def _cache_path(self, name: str) -> Path:
-        return self.root / f"{name}.chunks.json"
-
     def load(self, name: str) -> Paper:
         if name in self._papers:
             return self._papers[name]
-        cache = self._cache_path(name)
-        if cache.exists():
+        try:
+            cache = self.resolve(name, ".chunks.json")
             paper = Paper.from_dict(json.loads(cache.read_text(encoding="utf-8")))
-        else:
-            paper = parse_pdf(self.root / f"{name}.pdf", name=name)
+        except FileNotFoundError:
+            paper = parse_pdf(self.resolve(name, ".pdf"), name=name)
             try:
-                cache.write_text(
-                    json.dumps(paper.to_dict(), ensure_ascii=False), encoding="utf-8"
-                )
+                target = self.root / f"{name}.chunks.json"
+                target.write_text(json.dumps(paper.to_dict(), ensure_ascii=False), encoding="utf-8")
             except OSError:
                 # 只读文件系统（托管平台镜像层）时跳过缓存，不能因此让请求失败
                 pass
@@ -126,16 +136,22 @@ class PaperStore:
 
     def zh_map(self, name: str) -> Dict[str, str]:
         if name not in self._zh:
-            path = self.root / f"{name}.zh.json"
-            self._zh[name] = (
-                json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
-            )
+            try:
+                path = self.resolve(name, ".zh.json")
+                self._zh[name] = json.loads(path.read_text(encoding="utf-8"))
+            except FileNotFoundError:
+                self._zh[name] = {}
         return self._zh[name]
 
     def retriever(self, name: str) -> Retriever:
         if name not in self._retrievers:
             self._retrievers[name] = build_index(self.load(name), self.zh_map(name))
         return self._retrievers[name]
+
+    def invalidate(self, name: str) -> None:
+        """建完索引后清缓存，下一次请求就会重新加载。"""
+        self._zh.pop(name, None)
+        self._retrievers.pop(name, None)
 
 
 class PaperQA:

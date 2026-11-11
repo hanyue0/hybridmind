@@ -113,7 +113,7 @@ CARDS = {
       <h1 style="font-size:64px;margin-bottom:40px">一条命令起服务，所有数字可复算</h1>
       <table>
         <tr><th>项</th><th>状态</th></tr>
-        <tr><td>单元测试</td><td><span class="green">46 项全绿</span>（旧 22 + 新 24）</td></tr>
+        <tr><td>单元测试</td><td><span class="green">48 项全绿</span>（旧 22 + 新 26）</td></tr>
         <tr><td>评测与图表</td><td>脚本生成，换判分口径可离线重判</td></tr>
         <tr><td>部署</td><td>单容器：应用 + 本地模型</td></tr>
         <tr><td>复现</td><td>下载语料 → 建索引 → 跑四组对照</td></tr>

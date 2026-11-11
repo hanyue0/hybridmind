@@ -1,4 +1,4 @@
-﻿"""给 v2 视频做字幕：whisper 逐词时间戳 + 逐字稿强制对齐 → SRT → 烧进视频。
+"""给 v2 视频做字幕：whisper 逐词时间戳 + 逐字稿强制对齐 → SRT → 烧进视频。
 
 为什么不能按字数比例分时间：语速与停顿并不均匀，比例分配在长段落会漂移
 （上一版实测 2:10 之后字幕跑在语音前面）。这里的做法是：
@@ -61,17 +61,24 @@ def script_segments(audio_dir: Path) -> dict:
 
 
 def transcribe(audio_dir: Path) -> dict:
-    if CACHE.exists():
-        cached = json.loads(CACHE.read_text(encoding="utf-8"))
-        if set(cached) >= set(NAMES):
-            print(f"复用转写缓存 {CACHE.name}")
-            return cached
+    """逐段缓存：只转写缺失或时长相符不上的段，改一段不用重跑全部。"""
+    cached = json.loads(CACHE.read_text(encoding="utf-8")) if CACHE.exists() else {}
+    missing = []
+    for name in NAMES:
+        seg_dur = duration(audio_dir / f"{name}.mp3")
+        words = cached.get(name) or []
+        last_end = max((w["e"] for w in words), default=0.0)
+        if not words or abs(last_end - seg_dur) > 2.0:
+            missing.append(name)
+    if not missing:
+        print(f"复用转写缓存 {CACHE.name}")
+        return cached
+
     from faster_whisper import WhisperModel
 
-    print("加载 whisper small …")
+    print(f"加载 whisper small（待转写：{', '.join(missing)}）…")
     model = WhisperModel("small", device="cpu", compute_type="int8")
-    data = {}
-    for name in NAMES:
+    for name in missing:
         src = audio_dir / f"{name}.mp3"
         segments, _ = model.transcribe(
             str(src), language="zh", vad_filter=True, beam_size=5, word_timestamps=True
@@ -80,10 +87,10 @@ def transcribe(audio_dir: Path) -> dict:
         for seg in segments:
             for w in seg.words or []:
                 words.append({"w": w.word, "s": float(w.start), "e": float(w.end)})
-        data[name] = words
+        cached[name] = words
         print(f"  {name}: {len(words)} 词")
-    CACHE.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
-    return data
+        CACHE.write_text(json.dumps(cached, ensure_ascii=False), encoding="utf-8")
+    return cached
 
 
 def char_times(words: list[dict]):
