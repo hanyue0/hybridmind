@@ -69,6 +69,8 @@ select:focus { outline: 1px solid var(--cloud); }
 }
 .upload-btn:hover { color: var(--text); border-color: var(--cloud); }
 .upload-btn[disabled] { opacity: 0.55; cursor: progress; }
+/* display 会把 [hidden] 的默认样式覆盖掉，必须显式关掉 */
+.upload-btn[hidden] { display: none; }
 
 /* ---------- 主区 ---------- */
 .layout {
