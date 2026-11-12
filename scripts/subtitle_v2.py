@@ -232,7 +232,7 @@ def burn(video: Path, srt: Path, out: Path) -> None:
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--audio", default=r"D:\桌面\AMC-传智\配音\v2\ai")
+    ap.add_argument("--audio", default=str(ROOT / "data" / "voiceover_v2"))
     ap.add_argument("--video", default=str(VIDEO / "HybridMind_演示视频_v2.mp4"))
     ap.add_argument("--out", default=str(VIDEO / "HybridMind_演示视频_v2_字幕版.mp4"))
     ap.add_argument("--burn", action="store_true")

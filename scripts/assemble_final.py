@@ -12,6 +12,7 @@
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -20,7 +21,7 @@ ROOT = Path(__file__).resolve().parent.parent
 VIDEO = ROOT / "docs" / "video"
 FRAMES = VIDEO / "frames"
 CLIPS = VIDEO / "clips_final"
-VOICE = Path(r"D:\桌面\AMC-传智\配音")
+VOICE = Path(os.environ.get("HM_VOICE_DIR", ROOT / "data" / "voiceover"))
 OUT = ROOT / "docs" / "HybridMind_演示视频_成片.mp4"
 LIVE = VIDEO / "live_demo.mp4"
 
