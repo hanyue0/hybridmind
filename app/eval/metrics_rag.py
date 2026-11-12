@@ -36,7 +36,7 @@ def numeric_present(prediction: str, gold: str) -> bool:
 
     千分位要先抹掉：原文写 12,288、答案写 12288 是同一件事。
     """
-    body = re.sub(r"(?<=\d)[,，](?=\d{3}\b)", "", prediction)
+    body = re.sub(r"(?<=\d)[,，](?=\d{3}(?!\d))", "", prediction)
     pattern = r"(?<![\d.])" + re.escape(gold.strip()) + r"(?![\d])"
     return re.search(pattern, body) is not None
 

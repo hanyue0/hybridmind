@@ -1,0 +1,268 @@
+{"paper": "lora_2106.09685", "chunk_id": "S1", "page": 1, "question": "论文作者中来自 Microsoft Corporation 的邮箱域名是什么？", "answer": "@microsoft.com"}
+{"paper": "lora_2106.09685", "chunk_id": "S2", "page": 1, "question": "以 GPT-3 175B 为例，部署独立微调模型实例的参数量是多少？", "answer": "175B parameters"}
+{"paper": "lora_2106.09685", "chunk_id": "S3", "page": 1, "question": "与用 Adam 微调的 GPT-3 175B 相比，LoRA 将可训练参数量和 GPU 内存需求分别降低了多少？", "answer": "10,000 times and the GPU memory requirement by 3 times"}
+{"paper": "lora_2106.09685", "chunk_id": "S4", "page": 1, "question": "LoRA 相比 adapters 在推理延迟和可训练参数方面分别有什么优势？", "answer": "no additional inference latency"}
+{"paper": "lora_2106.09685", "chunk_id": "S5", "page": 1, "question": "图1的重参数化中，A 和 B 分别被初始化为什么？", "answer": "B= 0 A= N(0, σ2)"}
+{"paper": "lora_2106.09685", "chunk_id": "S6", "page": 1, "question": "GPT-3 有多少可训练参数，使适配从不便变成关键部署挑战？", "answer": "175 billion trainable parameters"}
+{"paper": "lora_2106.09685", "chunk_id": "S7", "page": 1, "question": "与预训练模型一起为每个任务存储和加载少量任务特定参数，在部署时能带来什么效果？", "answer": "greatly boosting the operational efficiency"}
+{"paper": "lora_2106.09685", "chunk_id": "S8", "page": 2, "question": "现有技术通过扩展模型深度或缩短可用序列长度会引入什么问题，并且在效率与模型质量之间形成什么？", "answer": "inference latency"}
+{"paper": "lora_2106.09685", "chunk_id": "S9", "page": 2, "question": "LoRA通过优化什么矩阵来间接训练稠密层，同时保持预训练权重冻结？", "answer": "rank decomposition matrices"}
+{"paper": "lora_2106.09685", "chunk_id": "S10", "page": 2, "question": "当完整秩高达多少时，极低秩（r为一或二）仍然足够？", "answer": "12,288"}
+{"paper": "lora_2106.09685", "chunk_id": "S11", "page": 2, "question": "使用自适应优化器时，LoRA将硬件准入门槛降低了最多多少倍？", "answer": "3 times"}
+{"paper": "lora_2106.09685", "chunk_id": "S12", "page": 2, "question": "LoRA可与哪种先验方法结合并在附录E中给出示例？", "answer": "prefix-tuning"}
+{"paper": "lora_2106.09685", "chunk_id": "S13", "page": 2, "question": "在自适应过程中，预训练权重矩阵及其累积梯度更新分别用什么符号表示？", "answer": "W or W0 refers to a pre- trained weight matrix and ∆W"}
+{"paper": "lora_2106.09685", "chunk_id": "S14", "page": 2, "question": "以GPT为例，参数化为Φ的预训练自回归语言模型用什么表示？", "answer": "PΦ(y|x)"}
+{"paper": "lora_2106.09685", "chunk_id": "S15", "page": 2, "question": "下游任务由上下文-目标对组成，其训练数据集用什么符号表示？", "answer": "Z = {(xi, yi)}i=1,..,N"}
+{"paper": "lora_2106.09685", "chunk_id": "S16", "page": 3, "question": "全量微调时，每个下游任务学到的参数增量∆Φ的维度与预训练权重Φ0的维度是什么关系？", "answer": "|∆Φ| equals |Φ0|"}
+{"paper": "lora_2106.09685", "chunk_id": "S17", "page": 3, "question": "以GPT-3为例，其预训练权重规模约为多少，因而存储和部署多个独立微调实例会面临挑战？", "answer": "|Φ0| ≈175 Billion"}
+{"paper": "lora_2106.09685", "chunk_id": "S18", "page": 3, "question": "当预训练模型为GPT-3 175B时，可训练参数|Θ|最小可占|Φ0|的多少？", "answer": "0.01% of |Φ0|"}
+{"paper": "lora_2106.09685", "chunk_id": "S22", "page": 3, "question": "在单 GPU 上运行 GPT-2 medium 推理时，使用 adapter 会导致什么现象，即使瓶颈维度很小？", "answer": "noticeable increase in latency"}
+{"paper": "lora_2106.09685", "chunk_id": "S23", "page": 3, "question": "对模型进行分片时，由于额外深度需要更多哪些同步 GPU 操作？", "answer": "AllReduce and Broadcast"}
+{"paper": "lora_2106.09685", "chunk_id": "S24", "page": 3, "question": "prefix tuning 的性能随可训练参数变化呈现什么特征，且为适配保留部分序列长度会带来什么后果？", "answer": "changes non-monotonically in trainable parameters"}
+{"paper": "lora_2106.09685", "chunk_id": "S25", "page": 4, "question": "在序列长度为11M时，AdapterH相比Fine-Tune/LoRA的推理延迟提升了多少百分比？", "answer": "+30.3%"}
+{"paper": "lora_2106.09685", "chunk_id": "S27", "page": 4, "question": "LoRA的设计原则适用于深度学习模型中的哪类层，而实验聚焦于Transformer语言模型的什么？", "answer": "dense layers"}
+{"paper": "lora_2106.09685", "chunk_id": "S28", "page": 4, "question": "对预训练权重矩阵W0∈Rd×k，其更新被约束为W0+BA，其中B和A的维度及秩r满足什么条件？", "answer": "r ≪min(d, k)"}
+{"paper": "lora_2106.09685", "chunk_id": "S29", "page": 4, "question": "A和B分别采用什么初始化方式，使得训练开始时∆W=BA为零？", "answer": "random Gaussian initialization for A and zero for B"}
+{"paper": "lora_2106.09685", "chunk_id": "S30", "page": 4, "question": "在Adam优化下，若适当缩放初始化，调α大致等同于调什么，因此直接把α设为首次尝试的哪个值？", "answer": "the first r we try"}
+{"paper": "lora_2106.09685", "chunk_id": "S31", "page": 4, "question": "将LoRA应用于所有权重矩阵并训练所有偏置时，把LoRA秩r设为预训练权重矩阵的什么，就能大致恢复全量微调的表达能力？", "answer": "the rank of the pre-trained weight matrices"}
+{"paper": "lora_2106.09685", "chunk_id": "S32", "page": 4, "question": "部署时如何做到不引入额外推理延迟？", "answer": "W = W0 + BA"}
+{"paper": "lora_2106.09685", "chunk_id": "S34", "page": 5, "question": "自注意力模块和MLP模块分别有几个可应用LoRA的权重矩阵？", "answer": "four weight matrices in the self-attention module"}
+{"paper": "lora_2106.09685", "chunk_id": "S35", "page": 5, "question": "在适配下游任务时，研究只调整哪部分权重并冻结哪部分模块？", "answer": "attention weights"}
+{"paper": "lora_2106.09685", "chunk_id": "S36", "page": 5, "question": "对用 Adam 训练的大型 Transformer，当 r ≪dmodel 时 VRAM 使用最多可减少多少？", "answer": "2/3"}
+{"paper": "lora_2106.09685", "chunk_id": "S37", "page": 5, "question": "当 r = 4 且只适配 query 和 value 投影矩阵时，checkpoint 大小约减少多少倍？", "answer": "10,000×"}
+{"paper": "lora_2106.09685", "chunk_id": "S38", "page": 5, "question": "在 GPT-3 175B 上训练时，相比全量微调，LoRA 取得了多少加速？", "answer": "25% speedup"}
+{"paper": "lora_2106.09685", "chunk_id": "S40", "page": 5, "question": "LoRA 在扩展到 GPT-3 175B 之前，评估了哪些模型上的下游任务性能？", "answer": "RoBERTa (Liu et al., 2019), De- BERTa (He et al., 2021), and GPT-2"}
+{"paper": "lora_2106.09685", "chunk_id": "S41", "page": 5, "question": "在 GPT-3 的大规模实验中新增了哪两个数据集？", "answer": "WikiSQL (Zhong et al., 2017) (NL to SQL queries) and SAMSum (Gliwa et al., 2019) (conversation summarization)"}
+{"paper": "lora_2106.09685", "chunk_id": "S42", "page": 5, "question": "在 GPT-2 上只更新最后两层、冻结其余层的微调基线叫什么？", "answer": "FTTop2"}
+{"paper": "lora_2106.09685", "chunk_id": "S43", "page": 5, "question": "GPT-3 175B 全量微调与 LoRA 在相同权重分片下每块 V100 的训练吞吐分别是多少 tokens/s？", "answer": "32.5 tokens/s per V100 GPU"}
+{"paper": "lora_2106.09685", "chunk_id": "S44", "page": 6, "question": "RoBbase 上 BitFit 与全量微调的可训练参数量分别是多少？", "answer": "0.1M"}
+{"paper": "lora_2106.09685", "chunk_id": "S45", "page": 6, "question": "RoBlarge (LoRA) 与 RoBlarge (AdptP)† 6.0M 的可训练参数量分别是多少？", "answer": "0.8M"}
+{"paper": "lora_2106.09685", "chunk_id": "S46", "page": 6, "question": "DeBXXL (FT)* 与 DeBXXL (LoRA) 的可训练参数量分别是多少？", "answer": "1500.0M"}
+{"paper": "lora_2106.09685", "chunk_id": "S47", "page": 6, "question": "GLUE 各任务中，MNLI 报告什么指标、CoLA 报告什么指标？", "answer": "overall (matched and mismatched) accuracy"}
+{"paper": "lora_2106.09685", "chunk_id": "S48", "page": 6, "question": "Prefix-embedding tuning 中，特殊 token 的两种放置方式分别叫什么？", "answer": "prefixing"}
+{"paper": "lora_2106.09685", "chunk_id": "S49", "page": 6, "question": "Prefix-embedding tuning 的可训练参数量公式是什么？", "answer": "|Θ| = dmodel × (lp + li)"}
+{"paper": "lora_2106.09685", "chunk_id": "S50", "page": 6, "question": "Prefix-layer tuning 的可训练参数量公式是什么？", "answer": "|Θ| = L × dmodel × (lp + li)"}
+{"paper": "lora_2106.09685", "chunk_id": "S51", "page": 6, "question": "Lin等人提出的更高效适配器设计叫什么，其适配层只加在什么之后？", "answer": "AdapterL"}
+{"paper": "lora_2106.09685", "chunk_id": "S52", "page": 6, "question": "LoRA在多数实验中仅应用于哪两个权重矩阵？", "answer": "Wq and Wv"}
+{"paper": "lora_2106.09685", "chunk_id": "S55", "page": 7, "question": "GPT-2 L 使用 LoRA 时的可训练参数量是多少？", "answer": "0.77M"}
+{"paper": "lora_2106.09685", "chunk_id": "S56", "page": 7, "question": "在指标比较中，LoRA 相对基线的可训练参数量表现如何？", "answer": "comparable or fewer trainable parameters"}
+{"paper": "lora_2106.09685", "chunk_id": "S57", "page": 7, "question": "实验采用的 RoBERTa base 和 RoBERTa large 参数量分别是多少？", "answer": "125M"}
+{"paper": "lora_2106.09685", "chunk_id": "S58", "page": 7, "question": "与 adapter 基线对比时，LoRA 评估统一使用的序列长度是多少？", "answer": "128"}
+{"paper": "lora_2106.09685", "chunk_id": "S60", "page": 7, "question": "为与 Li & Liang (2021) 直接比较，LoRA 在哪些 NLG 模型上验证是否仍占优？", "answer": "GPT-2 medium and large"}
+{"paper": "lora_2106.09685", "chunk_id": "S61", "page": 7, "question": "因空间限制，本节只展示了哪个数据集的结果，而 WebNLG 和 DART 的结果放在哪一节？", "answer": "E2E NLG Challenge"}
+{"paper": "lora_2106.09685", "chunk_id": "S62", "page": 8, "question": "GPT-3 (LoRA) 的可训练参数为 4.7M 时，WikiSQL 准确率和 MNLI-m 准确率分别是多少？", "answer": "73.4"}
+{"paper": "lora_2106.09685", "chunk_id": "S63", "page": 8, "question": "LoRA 在 WikiSQL 和 MNLI-m 上的波动范围分别是多少？", "answer": "±0.5%"}
+{"paper": "lora_2106.09685", "chunk_id": "S64", "page": 8, "question": "LoRA在GPT-3 175B上对三个数据集的表现与fine-tuning baseline相比如何？", "answer": "matches or exceeds the fine-tuning baseline"}
+{"paper": "lora_2106.09685", "chunk_id": "S65", "page": 8, "question": "prefix-embedding tuning和prefix-layer tuning分别在特殊token超过多少时出现显著性能下降？", "answer": "256 special tokens for prefix-embedding tuning or more than 32 special tokens for prefix-layer tuning"}
+{"paper": "lora_2106.09685", "chunk_id": "S66", "page": 8, "question": "图2比较了GPT-3 175B在哪些数据集上的验证准确率与可训练参数数量的关系？", "answer": "WikiSQL"}
+{"paper": "lora_2106.09685", "chunk_id": "S68", "page": 8, "question": "Transformer 最初是什么架构，又被 Radford 等人如何应用于自回归语言建模？", "answer": "sequence-to-sequence architecture"}
+{"paper": "lora_2106.09685", "chunk_id": "S69", "page": 9, "question": "GPT-3 是迄今训练的最大单一 Transformer 语言模型，其参数量是多少？", "answer": "175B parameters"}
+{"paper": "lora_2106.09685", "chunk_id": "S70", "page": 9, "question": "GPT-3 175B 仅用少量额外训练样本即可调整行为，但结果高度依赖什么？", "answer": "input prompt"}
+{"paper": "lora_2106.09685", "chunk_id": "S71", "page": 9, "question": "GPT-3 175B 的参数量是多少？", "answer": "175B"}
+{"paper": "lora_2106.09685", "chunk_id": "S72", "page": 9, "question": "该方法与 adapter 层的关键功能差异是什么？", "answer": "learned weights can be merged with the main weights during inference"}
+{"paper": "lora_2106.09685", "chunk_id": "S73", "page": 9, "question": "COMPACTER 用什么方式参数化 adapter 层？", "answer": "Kronecker products"}
+{"paper": "lora_2106.09685", "chunk_id": "S74", "page": 9, "question": "在提示中使用更多特殊token进行扩展时，会占用什么？", "answer": "available sequence length for task tokens"}
+{"paper": "lora_2106.09685", "chunk_id": "S75", "page": 9, "question": "对于许多深度学习任务，尤其是具有什么特点的神经网络，训练后会享有低秩性质？", "answer": "heavily over-parametrized neural network"}
+{"paper": "lora_2106.09685", "chunk_id": "S76", "page": 9, "question": "据作者所知，这些显式施加低秩约束的工作都没有考虑什么？", "answer": "low-rank update to a frozen model for adaptation to downstream tasks"}
+{"paper": "lora_2106.09685", "chunk_id": "S77", "page": 9, "question": "哪篇理论结果指出低秩适应可用于对抗训练？", "answer": "Allen-Zhu & Li (2020b)"}
+{"paper": "lora_2106.09685", "chunk_id": "S78", "page": 9, "question": "在哪个模型上实现了可训练参数的最大缩减？", "answer": "GPT-3 175B"}
+{"paper": "lora_2106.09685", "chunk_id": "S79", "page": 9, "question": "在不影响任务表现的前提下，可训练参数最多缩减多少倍？", "answer": "10,000×"}
+{"paper": "lora_2106.09685", "chunk_id": "S81", "page": 10, "question": "在GPT-3 175B上，LoRA的参数预算18M若以FP16存储约合多少MB？", "answer": "35MB"}
+{"paper": "lora_2106.09685", "chunk_id": "S83", "page": 10, "question": "同时适配哪两个权重矩阵能取得最佳结果，而把参数全放在∆Wq或∆Wk中会怎样？", "answer": "adapting both Wq and Wv yields the best result"}
+{"paper": "lora_2106.09685", "chunk_id": "S85", "page": 10, "question": "在MultiNLI上，适配{Wq, Wk, Wv, Wo}在r=2和r=4时的验证准确率分别是多少？", "answer": "91.7 91.7"}
+{"paper": "lora_2106.09685", "chunk_id": "S86", "page": 10, "question": "为支持更新矩阵具有很小“内在秩”的发现，作者检查了不同r取值和不同随机种子所学子空间的什么？", "answer": "overlap"}
+{"paper": "lora_2106.09685", "chunk_id": "S87", "page": 10, "question": "当下游任务语言与预训练语言不同时，哪种设置可能优于小r的LoRA？", "answer": "r = dmodel"}
+{"paper": "lora_2106.09685", "chunk_id": "S88", "page": 11, "question": "比较r=8与r=64的学习适配矩阵子空间相似度时，对矩阵做奇异值分解后得到的是什么？", "answer": "right-singular unitary matrices"}
+{"paper": "lora_2106.09685", "chunk_id": "S89", "page": 11, "question": "φ(Ar=8, Ar=64, i, j) 的取值范围中，1 和 0 分别代表什么？", "answer": "1 represents a complete overlap of subspaces and 0 a complete separation"}
+{"paper": "lora_2106.09685", "chunk_id": "S90", "page": 11, "question": "图3中第三和第四幅图放大了前两幅图的哪个区域，且 r=8 与 r=64 的顶部方向关系如何？", "answer": "lower-left triangle"}
+{"paper": "lora_2106.09685", "chunk_id": "S91", "page": 11, "question": "ΔWv（或ΔWq）在 Ar=8 与 Ar=64 之间共享的子空间维度及归一化相似度阈值是多少？", "answer": "dimension 1 with normalized similarity > 0.5"}
+{"paper": "lora_2106.09685", "chunk_id": "S93", "page": 11, "question": "两个随机高斯矩阵之间是否共享共同的奇异值方向？", "answer": "do not share any common singular value directions"}
+{"paper": "lora_2106.09685", "chunk_id": "S94", "page": 12, "question": "图4左图和中图展示的是哪一层中 ΔWq 与 ΔWv 在两个随机种子间的归一化子空间相似度？", "answer": "48-th layer"}
+{"paper": "lora_2106.09685", "chunk_id": "S95", "page": 12, "question": "为将 W 投影到 ∆W 的 r 维子空间，计算 U⊤WV⊤ 时 U 和 V 分别是什么矩阵？", "answer": "left/right singular-vector matrix of ∆W"}
+{"paper": "lora_2106.09685", "chunk_id": "S96", "page": 12, "question": "在 r=4 时，∆Wq 与 Random 对应的 ∥U⊤WqV⊤∥F 分别是多少？", "answer": "0.32 21.67"}
+{"paper": "lora_2106.09685", "chunk_id": "S97", "page": 12, "question": "r=4 时 ∆W 的放大因子约为多少，由哪两个值相除得到？", "answer": "21.5 ≈6.91/0.32"}
+{"paper": "lora_2106.09685", "chunk_id": "S99", "page": 12, "question": "LoRA 作为高效适配策略，在不引入推理延迟、不缩短输入序列长度的同时，还通过共享什么来实现快速任务切换？", "answer": "the vast majority of the model parameters"}
+{"paper": "lora_2106.09685", "chunk_id": "S100", "page": 12, "question": "LoRA 可与其它高效适配方法结合，可能带来什么类型的改进？", "answer": "orthogonal improvement"}
+{"paper": "lora_2106.09685", "chunk_id": "S101", "page": 13, "question": "关于将 LoRA 应用于哪些权重矩阵，目前主要依赖什么方式选择？", "answer": "heuristics"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S1", "page": 1, "question": "作者来自哪三个机构？", "answer": "Stanford University"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S2", "page": 1, "question": "改变相关信息的位置会导致什么结果？", "answer": "performance can degrade significantly"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S3", "page": 1, "question": "模型在输入上下文的什么位置访问相关信息时性能显著下降？", "answer": "middle of long contexts"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S4", "page": 1, "question": "这些模型主要通过什么方式执行下游任务，且输入上下文可包含数千个什么？", "answer": "prompting"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S5", "page": 1, "question": "图1中改变相关信息的什么位置会导致U形性能曲线，且示例中总检索文档约多少token？", "answer": "~4K tokens"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S6", "page": 1, "question": "模型在输入上下文开头和结尾使用相关信息更好，分别称为什么偏差？", "answer": "primacy bias"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S9", "page": 2, "question": "实验涉及哪些开放和封闭的先进模型？", "answer": "MPT-30B-Instruct, LongChat-13B (16K)"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S12", "page": 2, "question": "在控制输入上下文长度和相关信息位置时，分别通过改变什么来实现？", "answer": "changing the number of documents"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S13", "page": 2, "question": "语言模型性能最高时相关信息出现在输入上下文的什么位置？", "answer": "very beginning (primacy bias) or end"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S15", "page": 2, "question": "扩展上下文模型与其对应模型相比在利用输入上下文方面表现如何？", "answer": "not necessarily better at using their input context"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S16", "page": 2, "question": "key-value retrieval任务通过增加什么来改变输入上下文长度？", "answer": "adding more key-value pairs"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S19", "page": 2, "question": "在合成键值任务上表现近乎完美、但对多文档问答趋势影响甚微的是什么？", "answer": "value pairs"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S20", "page": 3, "question": "给语言模型更长输入上下文时，可能提升下游任务表现，但也会增加什么？", "answer": "the amount of content that the model must reason over"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S22", "page": 3, "question": "检索文档数从20增加到50时，GPT-3.5-Turbo和claude-1.3的性能提升分别是多少？", "answer": "∼1.5% for GPT-3.5-Turbo and ∼1% for claude-1.3"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S24", "page": 3, "question": "在多文档问答任务中，实验对输入上下文的哪两个方面做了受控变化？", "answer": "length of the input context and the position of the relevant information"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S25", "page": 3, "question": "该任务中输入上下文包含几篇文档，其中多少篇包含问题答案？", "answer": "k −1"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S26", "page": 3, "question": "实验中使用了多少条标注长答案为段落的查询，且作为文档的维基百科段落最多包含多少token？", "answer": "2655"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S28", "page": 3, "question": "为调节输入上下文中相关信息的位置，调整文档顺序以改变什么的位置？", "answer": "the document that contains the answer"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S29", "page": 3, "question": "该任务中通过增减什么来调节输入上下文长度？", "answer": "the number of retrieved documents that do not contain the answer"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S30", "page": 3, "question": "在无歧义问题子集上额外实验得到的结果与结论如何？", "answer": "similar results and conclusions"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S31", "page": 4, "question": "首届诺贝尔物理学奖于哪一年颁发给德国的威廉·康拉德·伦琴？", "answer": "1901"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S32", "page": 4, "question": "拉蒙·卡哈尔因何年获得诺贝尔奖？", "answer": "1906"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S33", "page": 4, "question": "谁获得了第一届诺贝尔物理学奖？", "answer": "Wilhelm Conrad Röntgen"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S34", "page": 4, "question": "Ivgi et al. (2023) 比较相关段落放在输入的哪两种位置时的问答表现？", "answer": "at the beginning of the input or (ii) a random position"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S35", "page": 4, "question": "Ivgi 等人发现相关信息的放置位置对哪类模型的性能影响显著？", "answer": "encoder-decoder models"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S36", "page": 4, "question": "提示要求仅使用提供的搜索结果写出高质量答案，并说明其中部分内容可能怎样？", "answer": "some of which might be irrelevant"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S40", "page": 5, "question": "相关信息的出现位置如何影响多文档问答性能？", "answer": "Performance is highest when relevant information occurs at the very start or end of the context"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S41", "page": 5, "question": "GPT-3.5-Turbo (16K) 与 Claude-1.3 (100K) 的最大上下文长度分别是多少？", "answer": "16K tokens"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S42", "page": 5, "question": "实验使用的输入上下文包含哪几种文档总数？", "answer": "10, 20, and 30 total documents"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S43", "page": 5, "question": "在 oracle 设置下，语言模型被给予什么并要求据此回答问题？", "answer": "the single document that contains the answer"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S45", "page": 5, "question": "GPT-3.5-Turbo在闭卷和oracle条件下的准确率分别是多少？", "answer": "56.1% 88.3%"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S47", "page": 5, "question": "在10篇和20篇文档设置下，GPT-3.5-Turbo与其扩展上下文版本的表现如何？", "answer": "performance between them is nearly identical"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S49", "page": 6, "question": "JSON中键\"9f4a92b9-5f69-4725-ba1e-403f08dea695\"对应的值是什么？", "answer": "703a7ce5-f17f-4e6d-b895-5836ba5ec71c"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S50", "page": 6, "question": "键值检索任务中所有键和值采用什么格式？", "answer": "128-bit UUIDs"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S51", "page": 6, "question": "扩展上下文模型在利用输入上下文方面与非扩展对应模型相比如何？", "answer": "not nec- essarily better"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S52", "page": 6, "question": "合成键值检索任务的输入由什么组成？", "answer": "a string-serialized JSON object with k key- value pairs"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S53", "page": 6, "question": "每个JSON对象包含多少个相关键值对和干扰键值对？", "answer": "one relevant key-value pair"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S54", "page": 6, "question": "为去除自然语言语义、避免语言特征干扰，该任务用什么替代？", "answer": "random UUIDs"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S55", "page": 6, "question": "通过改变输入JSON键值对数量k来调节什么？", "answer": "input context length"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S56", "page": 6, "question": "实验使用了哪三种键值对数量的输入上下文？", "answer": "75, 140, and 300 key-value pairs"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S58", "page": 7, "question": "图7中，300个键值对（约16K tokens）设置下，键的检索位置标注了哪些数值？", "answer": "50th 100th 150th 200th 250th 300th"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S59", "page": 7, "question": "哪些模型在该合成任务上表现出完美准确率？", "answer": "Claude-1.3 and Claude-1.3 (100K)"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S60", "page": 7, "question": "在多文档问答和键值检索中，改变相关信息位置会导致什么结果？", "answer": "performance degrades significantly"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S61", "page": 7, "question": "为理解模型架构对语言模型使用上下文的影响，比较了哪两类模型？", "answer": "decoder-only and encoder-decoder"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S62", "page": 7, "question": "Flan-UL2在指令微调前额外用多少token的序列预训练了多少步？", "answer": "1024 tokens"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S63", "page": 7, "question": "Shaham等人发现这两个模型在序列长度达到多少token时仍能表现良好？", "answer": "8K tokens"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S64", "page": 7, "question": "Flan-UL2在其2048-token训练上下文窗口内评估时，最佳与最差性能之间的绝对差异是多少？", "answer": "1.9% absolute difference"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S65", "page": 7, "question": "作者假设编码器-解码器模型能更好利用上下文窗口的原因是什么？", "answer": "bidirectional encoder"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S66", "page": 7, "question": "在多文档问答和键值检索实验中，查询被放在什么位置，导致仅解码器模型无法在上下文化时关注查询token？", "answer": "after the data to process"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S67", "page": 8, "question": "Flan-UL2和Flan-T5-XXL的编码器训练时最大序列长度分别是多少token？", "answer": "2048 and 512 tokens"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S68", "page": 8, "question": "当序列长于训练时见过的长度时，相关信息的性能曲线呈什么形状？", "answer": "U-shaped performance curve"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S72", "page": 8, "question": "在多文档问答任务中，当相关信息位于输入上下文的最开始位置时，性能有何变化？", "answer": "slightly improves performance"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S73", "page": 8, "question": "监督式指令微调数据中，任务说明和/或指令通常放置在输入上下文的什么位置？", "answer": "at the beginning of the input context"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S74", "page": 8, "question": "实验比较了MPT-30B-Instruct与哪个基础模型的性能？", "answer": "MPT-30B"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S75", "page": 9, "question": "MPT-30B-Instruct 与 MPT-30B 在多文档问答中呈现什么形状的性能曲线？", "answer": "U-shaped performance curve"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S76", "page": 9, "question": "MPT-30B-Instruct 与 MPT-30B 的绝对性能和整体性能趋势分别有何关系？", "answer": "uniformly higher than that of MPT-30B"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S77", "page": 9, "question": "指令微调把基模型最好与最差情况之间的性能差距从多少降低到多少？", "answer": "from nearly 10% between the base model best- and worst-case performance to around 4%"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S78", "page": 9, "question": "语言模型在什么数据提示下能够利用更长范围的信息（即输入上下文的开头）？", "answer": "instruction-formatted data"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S79", "page": 9, "question": "实验使用了哪些规模的Llama-2模型来研究额外微调和模型规模的影响？", "answer": "7B, 13B, and 70B"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S80", "page": 9, "question": "哪些Llama-2模型表现出U型性能曲线，而7B模型仅表现出近因偏差？", "answer": "13B and 70B"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S81", "page": 9, "question": "在比较MPT-30B与MPT-30B-Instruct时，对70B模型上的趋势影响如何？", "answer": "minimally affects trends on larger models (70B)"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S82", "page": 9, "question": "语言模型能接收16K tokens时，是否提供16K tokens上下文取决于什么？", "answer": "marginal value of the added context and the model’s ability to effectively use long input contexts"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S84", "page": 9, "question": "在实验中，用于评估检索文档数量k影响的NaturalQuestions-Open子集具有什么特征？", "answer": "the long answer is a paragraph"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S85", "page": 10, "question": "图11中比较了检索器召回率与哪些模型的表现随检索文档数量变化的关系？", "answer": "claude-1.3 claude-1.3-100k gpt-3.5-turbo-16k-0613"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S89", "page": 10, "question": "哪些模型通过卷积和/或线性RNN去除二次序列长度复杂度？", "answer": "RWKV (Peng, 2023), S4 (Gu et al., 2022), or Hyena (Poli et al., 2023)"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S90", "page": 10, "question": "Khandelwal等人（2018）发现小型LSTM语言模型对更长上下文的使用呈现什么趋势？", "answer": "increasingly coarse use of longer-term context"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S91", "page": 10, "question": "Petroni等人（2020）展示了将什么与预训练语言模型结合用于无监督问答的潜力？", "answer": "context from an in- formation retrieval system"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S92", "page": 10, "question": "Sun等人（2021）发现更长上下文仅改善少数token的预测，这与Sharan等人（2018）的什么理论一致？", "answer": "bounded mutual infor- mation"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S93", "page": 10, "question": "长上下文Transformer在多种下游NLP任务上表现出什么偏向且不能有效利用什么？", "answer": "recency-biased"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S94", "page": 11, "question": "Transformer语言模型的自注意力机制在技术上能同等检索上下文中的什么，因此观察到类似序列位置效应令人惊讶？", "answer": "any token"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S95", "page": 11, "question": "模型在必须使用长输入上下文哪一部分的信息时表现往往最低？", "answer": "middle of long input contexts"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S96", "page": 11, "question": "在开放域问答案例研究中，语言模型阅读器的性能与检索器召回率相比呈现什么关系？", "answer": "saturates far before retriever recall"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S97", "page": 11, "question": "作者感谢谁在AmbigQA数据集方面提供的帮助？", "answer": "Sewon Min"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S98", "page": 11, "question": "本研究获得了哪些机构通过API credits grant或学术访问计划提供的支持？", "answer": "OpenAI via an API credits grant to the Stanford CRFM, and by Anthropic via the Claude academic access pro- gram"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S101", "page": 11, "question": "FlashAttention 的论文标题中强调的两个特性分别是什么？", "answer": "Fast and memory-efficient exact attention"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S102", "page": 11, "question": "Maor Ivgi等人2023年论文发表在哪个期刊的第几卷？", "answer": "Transactions of the Association for Computational Linguistics, 11"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S103", "page": 12, "question": "Khandelwal等人2018年论文的标题是什么？", "answer": "Sharp nearby, fuzzy far away: How neural language models use context"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S104", "page": 12, "question": "Kwiatkowski等人2019年提出的问答基准叫什么？", "answer": "Natural Questions"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S105", "page": 12, "question": "Kenton Lee 等人 2019 年论文的标题是什么？", "answer": "Latent retrieval for weakly supervised open domain question answering"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S107", "page": 12, "question": "Bennet B. Murdock Jr. 1962 年论文的期刊卷期号是什么？", "answer": "64(5):482"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S108", "page": 12, "question": "Hao Peng 等人在 2021 年 ICLR 发表的论文标题是什么？", "answer": "Random feature attention"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S111", "page": 13, "question": "哪篇论文提出了长程语言建模的自检索方法，其arXiv编号是什么？", "answer": "ArXiv:2306.13421"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S112", "page": 13, "question": "哪篇论文提出了面向长文本理解的零样本基准，其arXiv编号是什么？", "answer": "ArXiv:2305.14196"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S113", "page": 13, "question": "哪篇论文提出了检索增强的黑盒语言模型，其arXiv编号是什么？", "answer": "ArXiv:2301.12652"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S114", "page": 13, "question": "BlenderBot 3 的论文编号是多少？", "answer": "ArXiv:2208.03188"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S115", "page": 13, "question": "UL2 的论文编号是多少？", "answer": "ArXiv:2205.05131"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S117", "page": 13, "question": "LaMDA 论文的 arXiv 编号是什么？", "answer": "ArXiv:2201.08239"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S118", "page": 13, "question": "LLaMA 论文的 arXiv 编号是什么？", "answer": "ArXiv:2302.13971"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S122", "page": 14, "question": "NaturalQuestions-Open 的检索语料库使用的是哪个时间段的 Wikipedia dump？", "answer": "late 2018"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S123", "page": 14, "question": "NaturalQuestions 标注的答案与维基百科检索语料库中的信息分别是什么？", "answer": "currently a free agent"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S124", "page": 14, "question": "在无歧义问题子集上测试了哪些语言模型？", "answer": "claude-1.3"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S125", "page": 14, "question": "用随机维基百科文档作为干扰项进行多文档问答实验的目的是什么？", "answer": "ablate the impact of retrieved distractors (hard negatives)"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S126", "page": 14, "question": "在多文档问答中，模型即使在该设定下绝对准确率更高，仍表现出什么现象，说明性能下降并非仅因无法识别相关文档？", "answer": "struggle to reason over their entire input context"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S127", "page": 14, "question": "为验证结论不是预训练或指令微调数据中把搜索结果视为按相关性降序排列这一偏见的副产品，实验修改了哪条指令？", "answer": "Write a high-quality answer for the given ques- tion using only the provided search results (some of which might be irrelevant)."}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S128", "page": 15, "question": "使用随机干扰项而非检索干扰项的多文档问答实验中，模型性能曲线呈什么形状，且中间信息导致性能下降？", "answer": "U-shaped performance curve"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S129", "page": 15, "question": "随机化干扰项顺序后，当相关信息位于上下文开头时性能如何变化？", "answer": "slightly decreases performance"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S130", "page": 15, "question": "GPT-4在500个随机多文档QA示例中，每个输入上下文包含多少篇文档？", "answer": "20 total documents"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S131", "page": 15, "question": "Llama-2因分词器产生更长序列而丢弃了多少个示例？", "answer": "20 exam-"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S132", "page": 15, "question": "在展示不同模型检索文档位置影响的图15中，总检索文档数和问题样本量分别是多少？", "answer": "~4K tokens, 500 question sample"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S133", "page": 16, "question": "Llama-2的最大上下文长度是多少tokens，且实验中比较了哪几种参数规模的模型？", "answer": "4096 tokens"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S134", "page": 16, "question": "Llama-2中哪些参数规模的模型表现出U型性能曲线，而7B模型仅表现出什么偏差？", "answer": "recency-biased"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S135", "page": 16, "question": "13B 基础模型在最佳与最差表现之间存在多少点的准确率差距？", "answer": "20-point accuracy disparity"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S136", "page": 16, "question": "对 13B 模型额外微调后，最差情况退化被降低到多少点？", "answer": "10-point worst-case degradation"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S137", "page": 16, "question": "图 16 展示的多文档 QA 性能使用了多少个总文档？", "answer": "20 total documents"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S139", "page": 17, "question": "在 closed-book 设置下，GPT-3.5-Turbo 与 Claude-1.3 的平均 token 数和最大 token 数分别是多少？", "answer": "15.3 ± 2.2 156.0 ± 41.8"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S140", "page": 17, "question": "在 30 docs 设置下，LongChat-13B (16K) 的平均 token 数和最大 token 数分别是多少？", "answer": "5181.9 ± 294.7 7729"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S141", "page": 17, "question": "在 140 KV pairs 设置下，LongChat-13B (16K) 的平均 token 数与最大值分别是多少？", "answer": "5444.5 ± 19.1 5500"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S142", "page": 18, "question": "“Index n”表示答案所在文档位于什么位置，且 index 0 对应什么位置？", "answer": "position n + 1"}
+{"paper": "lost_in_middle_2307.03172", "chunk_id": "S143", "page": 18, "question": "在 10 篇检索文档的多文档 QA 任务中，GPT-3.5-Turbo 在 Index 0 和 Index 4 的准确率分别是多少？", "answer": "76.8% 61.2%"}
+{"paper": "rag_2005.11401", "chunk_id": "S1", "page": 1, "question": "作者列表中同时隶属Facebook AI Research和University College London的是哪两位？", "answer": "Tim Rocktäschel†‡, Sebastian Riedel†‡"}
+{"paper": "rag_2005.11401", "chunk_id": "S2", "page": 1, "question": "大型预训练语言模型在知识密集型任务上表现落后于什么，同时其决策溯源和世界知识更新仍是什么？", "answer": "task-specific architectures"}
+{"paper": "rag_2005.11401", "chunk_id": "S3", "page": 1, "question": "RAG模型的参数化记忆和非参数化记忆分别是什么？", "answer": "pre-trained seq2seq model"}
+{"paper": "rag_2005.11401", "chunk_id": "S4", "page": 1, "question": "在知识密集型NLP任务上，两种RAG公式中哪一种能按token使用不同段落？", "answer": "another which can use different passages per token"}
+{"paper": "rag_2005.11401", "chunk_id": "S6", "page": 1, "question": "预训练神经语言模型作为参数化隐式知识库存在哪些不能轻易做到的能力？", "answer": "cannot easily expand or revise their memory"}
+{"paper": "rag_2005.11401", "chunk_id": "S7", "page": 1, "question": "REALM和ORQA结合了哪两种组件并取得有希望的结果？", "answer": "masked language models with a differentiable retriever"}
+{"paper": "rag_2005.11401", "chunk_id": "S9", "page": 2, "question": "中耳包括哪些结构？", "answer": "tympanic cavity and the three ossicles"}
+{"paper": "rag_2005.11401", "chunk_id": "S10", "page": 2, "question": "作者将结合参数化与非参数化记忆的通用微调方法称为什么？", "answer": "retrieval-augmented generation (RAG)"}
+{"paper": "rag_2005.11401", "chunk_id": "S11", "page": 2, "question": "RAG 中参数化记忆与非参数化记忆分别由什么构成？", "answer": "pre-trained seq2seq transformer"}
+{"paper": "rag_2005.11401", "chunk_id": "S12", "page": 2, "question": "RAG 对潜在文档做边缘化时采用哪两种 top-K 近似方式？", "answer": "per-output basis"}
+{"paper": "rag_2005.11401", "chunk_id": "S13", "page": 2, "question": "与从零训练特定任务的记忆网络等架构相比，本文设置中参数与非参数记忆组件具有什么共同特点？", "answer": "pre-trained and pre-loaded with extensive knowledge"}
+{"paper": "rag_2005.11401", "chunk_id": "S14", "page": 2, "question": "RAG模型在哪些开放问答数据集上取得state-of-the-art结果？", "answer": "Natural Questions , WebQuestions  and CuratedTrec"}
+{"paper": "rag_2005.11401", "chunk_id": "S15", "page": 2, "question": "在FEVER事实核查任务上，RAG的结果与使用强检索监督的state-of-the-art pipeline模型相差多少？", "answer": "within 4.3%"}
+{"paper": "rag_2005.11401", "chunk_id": "S16", "page": 2, "question": "RAG模型的两个组成部分分别是什么？", "answer": "a retriever pη(z|x) with parameters η"}
+{"paper": "rag_2005.11401", "chunk_id": "S18", "page": 3, "question": "RAG-Sequence 模型在生成每个目标 token 时使用几个文档？", "answer": "same document"}
+{"paper": "rag_2005.11401", "chunk_id": "S19", "page": 3, "question": "RAG-Token 与 RAG-Sequence 在预测每个目标 token 时所依据的文档有何不同？", "answer": "different document"}
+{"paper": "rag_2005.11401", "chunk_id": "S20", "page": 3, "question": "RAG-Sequence 通过什么近似方式对检索文档做边缘化以得到 p(y|x)？", "answer": "top-K approximation"}
+{"paper": "rag_2005.11401", "chunk_id": "S21", "page": 3, "question": "生成器在产生答案时，先检索多少个文档，再对每个文档产生下一输出 token 的分布？", "answer": "top K documents"}
+{"paper": "rag_2005.11401", "chunk_id": "S22", "page": 3, "question": "RAG 用于序列分类任务时，目标类别被视为什么长度的目标序列，从而使 RAG-Sequence 与 RAG-Token 等价？", "answer": "length one"}
+{"paper": "rag_2005.11401", "chunk_id": "S23", "page": 3, "question": "计算 top-k(pη(·|x)) 被归为什么问题，并可在什么时间内近似求解？", "answer": "Maximum Inner Product Search (MIPS)"}
+{"paper": "rag_2005.11401", "chunk_id": "S25", "page": 3, "question": "BART生成器参数θ被称为什么？", "answer": "parametric memory"}
+{"paper": "rag_2005.11401", "chunk_id": "S26", "page": 4, "question": "训练时固定文档编码器和索引，只微调哪两个组件？", "answer": "query encoder BERTq and the BART generator"}
+{"paper": "rag_2005.11401", "chunk_id": "S27", "page": 4, "question": "RAG-Token 解码时把什么代入标准 beam decoder？", "answer": "p′ θ(yi|x, y1:i−1)"}
+{"paper": "rag_2005.11401", "chunk_id": "S28", "page": 4, "question": "RAG-Sequence 对每个文档 z 运行 beam search 后，为估计假设 y 的概率要对未出现在 beam 中的文档做什么？", "answer": "run an additional forward pass"}
+{"paper": "rag_2005.11401", "chunk_id": "S29", "page": 4, "question": "为避免大量 forward passes 的近似解码方法被称为什么？", "answer": "Fast Decoding"}
+{"paper": "rag_2005.11401", "chunk_id": "S30", "page": 4, "question": "实验中使用的 Wikipedia dump 被切分成多少词的 chunk，总共产生多少文档？", "answer": "100-word chunks, to make a total of 21M documents"}
+{"paper": "rag_2005.11401", "chunk_id": "S31", "page": 4, "question": "训练时检索的 top k 文档考虑哪些取值，测试时的 k 如何确定？", "answer": "k ∈{5, 10} for training and set k for test time using dev data"}
+{"paper": "rag_2005.11401", "chunk_id": "S32", "page": 4, "question": "RAG 与 Closed-Book QA 在是否利用检索和知识来源上有何不同？", "answer": "do not exploit retrieval, instead relying purely on parametric knowledge"}
+{"paper": "rag_2005.11401", "chunk_id": "S33", "page": 4, "question": "在CT和WQ上，用什么模型初始化CT和WQ模型，并报告什么指标？", "answer": "NQ RAG model"}
+{"paper": "rag_2005.11401", "chunk_id": "S34", "page": 4, "question": "MSMARCO NLG任务v2.1包含哪些组成部分，以及答案是如何标注的？", "answer": "questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages"}
+{"paper": "rag_2005.11401", "chunk_id": "S35", "page": 5, "question": "为什么MSMARCO在不使用gold passages时性能会较低？", "answer": "some questions that cannot be answered in a way that matches the reference answer without access to the gold passages"}
+{"paper": "rag_2005.11401", "chunk_id": "S36", "page": 5, "question": "为评估RAG在非QA设定下的生成能力，研究提出的比标准开放域QA更 demanding 的任务是什么？", "answer": "generating Jeopardy questions"}
+{"paper": "rag_2005.11401", "chunk_id": "S37", "page": 5, "question": "Jeopardy问题生成任务使用的数据划分中，train、dev和test样本数分别是多少？", "answer": "100K train, 14K dev, and 27K test"}
+{"paper": "rag_2005.11401", "chunk_id": "S38", "page": 5, "question": "该任务采用哪个指标进行评估，且该指标相比标准指标在问题生成上与人工判断相关性更高？", "answer": "SQuAD-tuned Q-BLEU-1 metric"}
+{"paper": "rag_2005.11401", "chunk_id": "S40", "page": 5, "question": "FEVER任务需要从哪个来源检索证据并对声明进行分类？", "answer": "Wikipedia"}
+{"paper": "rag_2005.11401", "chunk_id": "S41", "page": 5, "question": "FEVER的类别标签被映射成什么以便直接训练？", "answer": "single output tokens"}
+{"paper": "rag_2005.11401", "chunk_id": "S42", "page": 5, "question": "RAG 在开放域问答上取得新最优结果，且无需哪种昂贵的预训练？", "answer": "salient span masking"}
+{"paper": "rag_2005.11401", "chunk_id": "S43", "page": 5, "question": "RAG 的检索器初始化自哪个在 Natural Questions 和 TriviaQA 上使用检索监督的检索器？", "answer": "DPR’s retriever"}
+{"paper": "rag_2005.11401", "chunk_id": "S44", "page": 5, "question": "文档含有答案线索但不逐字包含答案时，仍可帮助生成正确答案，这体现了哪种方法的局限？", "answer": "standard extractive approaches"}
+{"paper": "rag_2005.11401", "chunk_id": "S45", "page": 6, "question": "在 TQA 的 Closed Book 列中，T5-11B+SSM 与 T5-11B 的分数分别是多少？", "answer": "36.6 - /60.5 44.7"}
+{"paper": "rag_2005.11401", "chunk_id": "S46", "page": 6, "question": "RAG-Seq. 在 Jeopardy 和 MSMARCO 上的 B-1 分数分别是多少？", "answer": "14.7 21.4"}
+{"paper": "rag_2005.11401", "chunk_id": "S47", "page": 6, "question": "RAG-Sequence 在 Open MS-MARCO NLG 上比 BART 高多少 Bleu 点和 Rouge-L 点？", "answer": "2.6 Bleu points and 2.6 Rouge-L points"}
+{"paper": "rag_2005.11401", "chunk_id": "S48", "page": 6, "question": "RAG模型相比BART在生成文本时表现出哪两个优势？", "answer": "hallucinate less and generate factually correct text more often"}
+{"paper": "rag_2005.11401", "chunk_id": "S49", "page": 6, "question": "在452对生成结果的人工评估中，BART比RAG更符合事实的比例和RAG更符合事实的比例分别是多少？", "answer": "7.1% of cases, while RAG was more factual in 42.7% of cases"}
+{"paper": "rag_2005.11401", "chunk_id": "S50", "page": 6, "question": "RAG-Token在Jeopardy问题生成中可能表现最佳的原因是什么？", "answer": "it can generate responses that combine content from several documents"}
+{"paper": "rag_2005.11401", "chunk_id": "S51", "page": 6, "question": "在生成每本书的第一个 token 后，文档后验出现什么变化，并由此推断生成器可以怎样完成标题？", "answer": "flattens"}
+{"paper": "rag_2005.11401", "chunk_id": "S52", "page": 6, "question": "BART 将部分解码“The Sun Also Rises” is a novel by this author of “A 补全为什么内容，从而说明标题存储在 BART 参数中？", "answer": "\"The Sun Also Rises\" is a novel by this author of \"A Farewell to Arms\""}
+{"paper": "rag_2005.11401", "chunk_id": "S53", "page": 6, "question": "在 FEVER 的 3-way classification 上，RAG 的分数与 state-of-the-art 模型相差多少？", "answer": "within 4.3%"}
+{"paper": "rag_2005.11401", "chunk_id": "S54", "page": 7, "question": "在生成“A Farewell to Arms”和“The Sun Also Rises”时，文档后验概率分别在哪两个文档上较高？", "answer": "document 1"}
+{"paper": "rag_2005.11401", "chunk_id": "S55", "page": 7, "question": "生成“A Farewell to Arms”时文档1的后验较高，生成“The Sun Also Rises”时哪个文档的后验较高？", "answer": "document 2"}
+{"paper": "rag_2005.11401", "chunk_id": "S56", "page": 7, "question": "对“define middle ear”，哪个模型回答包含“tympanic cavity and the three ossicles”？", "answer": "RAG-S"}
+{"paper": "rag_2005.11401", "chunk_id": "S58", "page": 7, "question": "RAG在2-way分类任务中与Thorne和Vlachos的模型相比，准确率差距是多少？", "answer": "within 2.7%"}
+{"paper": "rag_2005.11401", "chunk_id": "S60", "page": 7, "question": "RAG-Sequence与RAG-Token的生成多样性相比如何，且二者与BART相比如何？", "answer": "RAG-Sequence’s generations are more diverse than RAG-Token’s"}
+{"paper": "rag_2005.11401", "chunk_id": "S61", "page": 7, "question": "在FEVER任务上哪种检索器表现最好，可能的原因是什么？", "answer": "BM25 performs best"}
+{"paper": "rag_2005.11401", "chunk_id": "S62", "page": 7, "question": "用DrQA的2016年12月维基百科转储构建索引，是为了与什么进行比较？", "answer": "the newer"}
+{"paper": "rag_2005.11401", "chunk_id": "S64", "page": 8, "question": "RAG-Token 在 TQA 和 Jeopardy-QGen 上的 FVR-3 分数分别是多少？", "answer": "43.5 54.8"}
+{"paper": "rag_2005.11401", "chunk_id": "S66", "page": 8, "question": "模型训练时使用多少篇检索到的潜在文档，且测试时检索更多文档对性能有何影响？", "answer": "5 or 10 retrieved latent documents"}
+{"paper": "rag_2005.11401", "chunk_id": "S67", "page": 8, "question": "RAG-Token在检索多少篇文档时性能达到峰值，且检索更多文档对Rouge-L和Bleu-1分别有何影响？", "answer": "10 retrieved documents"}
+{"paper": "rag_2005.11401", "chunk_id": "S68", "page": 8, "question": "图3右侧展示的是哪个数据集上随检索文档数变化的Bleu-1和Rouge-L？", "answer": "MS-MARCO"}
+{"paper": "rag_2005.11401", "chunk_id": "S69", "page": 8, "question": "检索在哪些任务上被单独研究并提升性能？", "answer": "open-domain question answering"}
+{"paper": "rag_2005.11401", "chunk_id": "S70", "page": 9, "question": "单个预训练语言模型在GLUE基准上通过什么方式取得强性能？", "answer": "fine-tuning"}
+{"paper": "rag_2005.11401", "chunk_id": "S71", "page": 9, "question": "BART和T5提出的单一预训练编码器-解码器模型利用什么注意力机制？", "answer": "bi-directional attention"}
+{"paper": "rag_2005.11401", "chunk_id": "S72", "page": 9, "question": "已有工作使用哪三种方式优化检索模块以辅助下游任务？", "answer": "search , reinforcement learning , or a latent variable approach"}
+{"paper": "rag_2005.11401", "chunk_id": "S73", "page": 9, "question": "与并发工作为输入中每个实体检索训练嵌入不同，本文检索的是什么？", "answer": "raw text"}
+{"paper": "rag_2005.11401", "chunk_id": "S74", "page": 9, "question": "本文记忆由原始文本而非分布式表示构成，带来哪两种特性？", "answer": "human-readable"}
+{"paper": "rag_2005.11401", "chunk_id": "S75", "page": 9, "question": "Retrieve-and-edit 方法在哪些领域被证明成功？", "answer": "Machine Translation  and Semantic Parsing"}
+{"paper": "rag_2005.11401", "chunk_id": "S76", "page": 9, "question": "与 retrieve-and-edit 相比，该方法更强调聚合多段检索内容、学习潜在检索以及检索什么？", "answer": "evidence documents rather than related training pairs"}
+{"paper": "rag_2005.11401", "chunk_id": "S77", "page": 9, "question": "RAG 模型在哪个任务上取得了 state of the art 结果，且人们认为它比纯参数化 BART 更 factual 和 specific？", "answer": "open-domain QA"}
+{"paper": "rag_2005.11401", "chunk_id": "S78", "page": 9, "question": "未来工作提出可以从头联合预训练两个组件，可采用哪两种目标之一？", "answer": "denoising objective similar to BART or some another objective"}
+{"paper": "rag_2005.11401", "chunk_id": "S79", "page": 10, "question": "RAG因更强地基于哪类真实事实知识而减少“幻觉”，并提升控制性与可解释性？", "answer": "Wikipedia"}
+{"paper": "rag_2005.11401", "chunk_id": "S80", "page": 10, "question": "RAG可像语言模型一样被使用，因此与哪个模型类似的安全担忧仍然成立？", "answer": "GPT-2"}
+{"paper": "rag_2005.11401", "chunk_id": "S81", "page": 10, "question": "为缓解自动化垃圾邮件/钓鱼内容等风险，可部署AI系统应对哪两类问题？", "answer": "misleading content and automated spam/phishing"}
+{"paper": "rag_2005.11401", "chunk_id": "S82", "page": 10, "question": "作者感谢HuggingFace提供了哪方面的帮助？", "answer": "open-sourcing code to run RAG models"}

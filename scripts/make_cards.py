@@ -82,15 +82,15 @@ CARDS = {
       </table>
     """,
     "result": """
-      <div class="kicker">结果 · 68 道中文题</div>
+      <div class="kicker">结果 · 115 道中文题</div>
       <h1 style="font-size:62px;margin-bottom:10px">更便宜，而且更能指出处</h1>
       <table style="margin-top:34px">
         <tr><th>策略</th><th>准确率</th><th>证据召回</th><th>千次成本</th></tr>
-        <tr><td>全本地 1.5B</td><td>63.2%</td><td>64.5%</td><td>¥0</td></tr>
-        <tr><td>全云端 DeepSeek</td><td>86.8%</td><td>91.9%</td><td>¥1.69</td></tr>
-        <tr><td class="amber">证据门控路由</td><td class="amber">85.3%</td><td class="amber">93.5%</td><td class="amber">¥0.66</td></tr>
+        <tr><td>全本地 1.5B</td><td>73.0%</td><td>69.3%</td><td>¥0</td></tr>
+        <tr><td>全云端 DeepSeek</td><td>89.6%</td><td>91.1%</td><td>¥1.66</td></tr>
+        <tr><td class="amber">证据门控路由</td><td class="amber">87.8%</td><td class="amber">90.1%</td><td class="amber">¥0.51</td></tr>
       </table>
-      <p style="margin-top:36px">准确率与全云端只差 1 题，云端调用只用 39.7%</p>
+      <p style="margin-top:36px">准确率与全云端只差 2 题，云端调用只用 32.2%</p>
     """,
     "context": """
       <div class="kicker">为什么不直接塞进长上下文</div>

@@ -36,6 +36,19 @@ PROMPT = (
     "不要输出其它文字。"
 )
 
+# 第二轮出题：换角度，优先「需要跨句综合」的问题，补充题库用
+PROMPT_CROSS = (
+    "你是论文精读的出题人。对给定的每个原文片段，出 1 道中文问题。规则：\n"
+    "1. 问题要**结合该段里两处以上信息**才能回答（例如某个设置的取值、某个方法的组成、"
+    "两组结果的对比），而不是抄一个孤立名词；\n"
+    "2. 答案必须是原文中**逐字出现**的内容，优先选：带单位的数字、百分比、英文缩写/术语；"
+    "长度不超过 40 个字符；\n"
+    "3. 不要出现「根据上文」「该段」这类元话语；\n"
+    "4. 如果该段没有可提问的确定事实，answer 填 null；\n"
+    "5. 严格输出 JSON 数组，每项 {\"id\": \"S12\", \"question\": \"...\", \"answer\": \"...\"}，"
+    "不要输出其它文字。"
+)
+
 _CITE = re.compile(r"\[\d+(?:\s*[,，]\s*\d+)*\]")
 
 
@@ -43,14 +56,15 @@ def _clean(text: str) -> str:
     return _CITE.sub("", text)
 
 
-def draft(provider, name: str, chunks: list[dict], start: int, limit: int) -> list[dict]:
+def draft(provider, name: str, chunks: list[dict], start: int, limit: int,
+          prompt: str = PROMPT) -> list[dict]:
     out: list[dict] = []
     batch = [c for c in chunks[start : start + limit] if len(c["text"]) >= 200]
     for i in range(0, len(batch), BATCH):
         part = batch[i : i + BATCH]
         body = "\n\n".join(f"[{c['id']}] {_clean(c['text'])}" for c in part)
         messages = [
-            {"role": "system", "content": PROMPT},
+            {"role": "system", "content": prompt},
             {"role": "user", "content": body},
         ]
         try:
@@ -126,11 +140,15 @@ def main() -> int:
     ap.add_argument("--out", default=str(ROOT / "data" / "qa_draft.jsonl"))
     ap.add_argument("--verify", default=None)
     ap.add_argument("--papers", default=str(ROOT / "data" / "papers"))
+    ap.add_argument("--variant", choices=["base", "cross"], default="base",
+                    help="base=第一轮出题；cross=第二轮（跨句综合角度），用于扩题库")
     args = ap.parse_args()
 
     if args.verify:
         good = verify(Path(args.verify), Path(args.papers))
-        out = Path(args.verify).with_name("qa_candidates.jsonl")
+        # 输入 qa_draft.jsonl → 输出 qa_candidates.jsonl；qa_draft_cross.jsonl → qa_candidates_cross.jsonl
+        stem = Path(args.verify).stem.replace("qa_draft", "qa_candidates")
+        out = Path(args.verify).with_name(f"{stem}.jsonl")
         out.write_text("\n".join(json.dumps(g, ensure_ascii=False) for g in good), encoding="utf-8")
         print(f"写入 {out}")
         return 0
@@ -139,13 +157,14 @@ def main() -> int:
         settings.cloud_base_url, settings.cloud_api_key, settings.cloud_model,
         settings.price_of(settings.cloud_model), timeout_s=120,
     )
+    prompt = PROMPT_CROSS if args.variant == "cross" else PROMPT
     root = Path(args.papers)
     names = [args.paper] if args.paper else sorted(p.stem for p in root.glob("*.pdf"))
     rows: list[dict] = []
     for name in names:
         data = json.loads((root / f"{name}.chunks.json").read_text(encoding="utf-8"))
         print(f"[{name}] {len(data['chunks'])} 块，从 {args.start} 开始出 {args.limit} 块", file=sys.stderr)
-        rows.extend(draft(provider, name, data["chunks"], args.start, args.limit))
+        rows.extend(draft(provider, name, data["chunks"], args.start, args.limit, prompt=prompt))
 
     out = Path(args.out)
     mode = "a" if out.exists() else "w"
