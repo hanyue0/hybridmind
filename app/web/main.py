@@ -1,4 +1,4 @@
-﻿"""Web 层：论文精读演示界面 + 只读统计。
+"""Web 层：论文精读演示界面 + 只读统计。
 
 两个入口并存：
 - ``/api/chat``：改造前的通用问答（算术题演示、旧评测仍在用），行为一行未改；
@@ -15,7 +15,7 @@ import re
 from dataclasses import replace
 from pathlib import Path
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import BackgroundTasks, FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse, Response, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
@@ -25,8 +25,8 @@ from ..config import ROOT, settings
 from ..pipeline import HybridPipeline, Ledger
 from ..providers import OpenAICompatProvider, ProviderError, build_local_provider
 from ..rag.anchor import extract_anchors, verify_anchors
+from ..rag.indexer import build_zh_index, load_chunks, load_zh
 from ..rag.parser import parse_pdf, render_page_png
-from ..rag.indexer import build_zh_index
 from ..rag.prompt import build_messages
 from ..rag.qa import PaperQA, PaperStore
 from ..schemas import ChatRequest, ChatResponse
@@ -35,6 +35,10 @@ STATIC_DIR = Path(__file__).parent / "static"
 PAPER_DIR = ROOT / "data" / "papers"
 UPLOAD_DIR = PAPER_DIR / "uploads"
 IMAGE_CACHE = PAPER_DIR / ".cache"
+
+# 建索引是一项分钟级任务，不能占着一次 HTTP 请求（托管平台的网关通常 60 秒就断）。
+# 这里用一个进程内字典记录进度，前端轮询 —— 单实例部署，够用且无需引入任务队列。
+INDEX_JOBS: dict = {}
 
 app = FastAPI(title="HybridMind", version=__version__)
 ledger = Ledger()
@@ -240,18 +244,44 @@ def paper_meta(name: str) -> dict:
 
 
 @app.post("/api/paper/{name}/index")
-def paper_index(name: str, limit: int = 0) -> dict:
+def paper_index(name: str, background: BackgroundTasks, limit: int = 0) -> dict:
     """给论文补中文索引（上传的 PDF 靠这个才能用中文检索）。
 
-    同步执行：一篇 20 页论文约 1–2 分钟。演示时前端会显示进度提示，
-    失败也不影响英文提问（BM25 仍能命中英文原文）。
+    分钟级任务放到后台执行、前端轮询进度：一次 HTTP 请求撑不到 1–2 分钟，
+    托管平台的网关会先断掉连接。失败不影响英文提问（BM25 仍能命中英文原文）。
     """
     name = _safe_paper(name)
     if not settings.cloud_ready:
         raise HTTPException(status_code=400, detail="未配置云端密钥，无法生成中文索引")
-    result = build_zh_index(PAPER_DIR, name, pipeline.cloud, limit=limit or None)
-    store.invalidate(name)
-    return result
+
+    zh = load_zh(PAPER_DIR, name)
+    pending = [c["id"] for c in load_chunks(PAPER_DIR, name) if not zh.get(c["id"])]
+    total = len(pending[: limit or None]) if limit else len(pending)
+    if total == 0:
+        return {"status": "done", "name": name, "total": 0, "done": 0, "cost_cny": 0.0}
+
+    INDEX_JOBS[name] = {"status": "running", "done": 0, "total": total, "cost_cny": 0.0}
+
+    def run() -> None:
+        try:
+            result = build_zh_index(
+                PAPER_DIR, name, pipeline.cloud, limit=limit or None,
+                progress=lambda done, tot: INDEX_JOBS[name].update(done=done, total=tot),
+            )
+            store.invalidate(name)
+            INDEX_JOBS[name] = {"status": "done", **result}
+        except Exception as exc:  # 后台任务异常不能让整个服务挂掉
+            INDEX_JOBS[name] = {"status": "error", "detail": str(exc),
+                                **{k: v for k, v in INDEX_JOBS.get(name, {}).items() if k in ("done", "total")}}
+
+    background.add_task(run)
+    return {"status": "started", "name": name, "total": total}
+
+
+@app.get("/api/paper/{name}/index/status")
+def paper_index_status(name: str) -> dict:
+    name = _safe_paper(name)
+    return INDEX_JOBS.get(name, {"status": "idle"})
 
 
 @app.post("/api/paper/upload")

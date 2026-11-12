@@ -80,14 +80,31 @@ async function buildIndex() {
   if (!state.paper || btn.disabled) return;
   btn.disabled = true;
   const original = btn.textContent;
-  btn.textContent = "建索引中…（约 1–2 分钟）";
+  btn.textContent = "建索引中…";
   $("conn").textContent = "正在逐块生成中文译文，请勿关闭页面…";
   try {
     const res = await fetch(`/api/paper/${encodeURIComponent(state.paper)}/index`, { method: "POST" });
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || `HTTP ${res.status}`);
+    if (data.status === "done") {
+      $("conn").textContent = "这篇论文已经建好索引了";
+      await loadPapers();
+      return;
+    }
+    // 后台任务：每 2 秒查一次进度，直到 done / error
+    let status = data;
+    while (status.status === "running" || status.status === "started") {
+      await new Promise((r) => setTimeout(r, 2000));
+      const s = await fetch(`/api/paper/${encodeURIComponent(state.paper)}/index/status`);
+      status = await s.json();
+      if (status.total) {
+        btn.textContent = `建索引 ${status.done || 0}/${status.total}`;
+        $("conn").textContent = `正在生成中文索引：${status.done || 0}/${status.total} 块…`;
+      }
+    }
+    if (status.status === "error") throw new Error(status.detail || "建索引失败");
+    $("conn").textContent = `索引完成：${status.translated || status.total}/${status.total} 块，成本 ¥${status.cost_cny || 0}`;
     await loadPapers();
-    $("conn").textContent = `索引完成：${data.translated}/${data.chunks} 块，成本 ¥${data.cost_cny}`;
   } catch (err) {
     $("conn").textContent = `建索引失败：${err.message}`;
   } finally {
