@@ -39,3 +39,7 @@ docs/video/
 
 # 模型权重（体积大，按需下载）
 models/
+
+# 人声素材（本地保留，不进仓库）
+data/voiceover_norm/
+data/voiceover_v2/
