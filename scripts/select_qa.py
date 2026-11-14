@@ -1,4 +1,4 @@
-﻿"""从候选草案里挑出正式评测集 ``data/qa_paper.jsonl``。
+"""从候选草案里挑出正式评测集 ``data/qa_paper.jsonl``。
 
 只做「筛选与去重」，不改写答案——答案的合法性已经由 gen_qa_draft 的
 逐字校验保证过（答案必须在源段落里原样出现）。挑选规则：
@@ -104,6 +104,20 @@ def bad_number_answer(ans: str, chunk_text: str) -> bool:
     return re.search(r"[A-Za-z0-9]" + re.escape(ans), chunk_text) is not None
 
 
+def load_chunks(paper: str) -> dict:
+    """读段落文件；缺失时给出可执行的修复步骤，而不是抛 FileNotFoundError。"""
+    src = ROOT / "data" / "papers" / f"{paper}.chunks.json"
+    if not src.exists():
+        raise SystemExit(
+            f"缺少 {src.relative_to(ROOT)}：请先运行\n"
+            "  python scripts/fetch_papers.py\n"
+            "  python scripts/build_paper_index.py\n"
+            "生成段落文件后再重建评测集。"
+        )
+    data = json.loads(src.read_text(encoding="utf-8"))
+    return {c["id"]: c for c in data["chunks"]}
+
+
 def clean_number(ans: str):
     """把 '10,000 times' 这类答案收敛成一个可判分的最小数字串。
 
@@ -141,6 +155,11 @@ def main() -> int:
                 continue
             seen.add(key)
             rows.append(item)
+    if not rows:
+        raise SystemExit(
+            "候选池为空：请先运行 scripts/gen_qa_draft.py 生成 qa_draft*.jsonl 再用 --verify 校验，\n"
+            "或确认 data/qa_candidates*.jsonl 存在（本仓库已附带）"
+        )
     print(f"候选池：{len(rows)} 条（来自 {[p.name for p in pool_files if p.exists()]}）")
     random.seed(20261111)
 
@@ -150,10 +169,7 @@ def main() -> int:
 
     picked: list[dict] = []
     for paper in sorted(by_paper):
-        chunks = json.loads(
-            (ROOT / "data" / "papers" / f"{paper}.chunks.json").read_text(encoding="utf-8")
-        )["chunks"]
-        chunk_text = {c["id"]: c["text"] for c in chunks}
+        chunk_text = {cid: c["text"] for cid, c in load_chunks(paper).items()}
 
         numeric: list[tuple[dict, str]] = []
         facts: list[dict] = []
@@ -265,10 +281,7 @@ def main() -> int:
     chunk_cache: dict = {}
     for paper, cid, question, answer, aliases in manual:
         if paper not in chunk_cache:
-            data = json.loads(
-                (ROOT / "data" / "papers" / f"{paper}.chunks.json").read_text(encoding="utf-8")
-            )
-            chunk_cache[paper] = {c["id"]: c for c in data["chunks"]}
+            chunk_cache[paper] = load_chunks(paper)
         chunk = chunk_cache[paper][cid]
         if answer.lower() not in chunk["text"].lower():
             raise SystemExit(f"人工题答案不在原文：{paper}/{cid}/{answer}")
